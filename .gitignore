@@ -1,3 +1,24 @@
+# Backup database — jangan di-commit, ukurannya berlipat tiap kali bersihkan_db
+# dijalankan. leads.db utama SENGAJA dilacak supaya hasil kerja terekam.
+leads_backup_*.db
+*.db-journal
+
+# Python
 __pycache__/
-*.pyc
-data/leads.db
+*.py[cod]
+.venv/
+venv/
+
+# Editor
+.vscode/
+.idea/
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Kredensial — JANGAN PERNAH di-commit
+.env
+*.key
+credentials.json
+service-account*.json
