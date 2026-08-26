@@ -1,75 +1,94 @@
-# SaleSmart Lead Gen — v1 (Prototype)
+# salesmart-leadgen
 
-## Scope (v1)
+Agen pencari lead B2B untuk Salesmart — proyek belajar AI engineering.
 
-Fields collected per lead:
-- Company name
-- Company main address
-- Company main phone number (business line, not personal direct-dial)
-- Website
-- (Planned, not yet built) AI-generated fit score + reasoning
+Target: menemukan perusahaan Indonesia yang **butuh** platform manajemen tim
+sales lapangan, lengkap dengan nama, telepon kantor, website, dan alamat.
+Semua data bersumber legal, level perusahaan saja (patuh UU PDP).
 
-**Explicitly out of scope for v1:** personal phone numbers, personal
-emails, or any contact info tied to a specific individual. See notes
-below on why.
+**Lihat hasilnya:** buka `docs/index.html` di browser.
 
-## Data source (current)
+## Status
 
-`data/companies_seed.csv` — a small hand-verified set of real Indonesian
-companies, used as a stand-in for a real data provider while there's no
-API budget. All numbers/addresses cross-checked against each company's
-own official contact page where possible.
+| Fase | Status |
+|------|--------|
+| Phase 0 — kalibrasi rubric manual | Selesai |
+| Phase 1 — pipeline data tanpa AI | Berjalan |
+| Phase 2 — ekstraksi sinyal via LLM | Belum |
+| Phase 3 — orkestrasi agen | Belum |
+| Phase 4 — pelacakan hasil & evaluasi pivot | Belum |
 
-This is temporary. The code is structured so this can be swapped for a
-real source (Google Places API, business registry, etc.) later by
-editing only `src/data_source.py` — nothing else in the project needs
-to change.
+Google Places API menunggu verifikasi billing. Sementara ini memakai
+OpenStreetMap via Overpass API sebagai sumber pengganti.
 
-## Why no personal contact info
+## Hasil sejauh ini
 
-1. Indonesia's UU PDP (Personal Data Protection Law) has been fully
-   enforceable since October 2024, with real penalties for processing
-   personal data without a lawful basis. A company's main switchboard
-   number is business information; an individual's personal cell/email
-   is personal data and requires a much higher compliance bar.
-2. There is currently no budget for a data provider (Clearbit, PDL,
-   ZoomInfo, etc.) that could legally source that tier of data.
-3. An LLM cannot look up real personal contact info — asking it to
-   would produce hallucinated (fake) numbers/emails, which is worse
-   than having none.
+| Metrik | Angka |
+|---|---|
+| Entri mentah dipanen | 1.416 |
+| Entri bersih | 991 |
+| Punya nomor telepon | 125 |
+| Punya website | 180 |
+| Dibuang saat pembersihan | 425 |
+| Cocok profil klien ideal | 27 (3,2%) |
 
-If SaleSmart wants personal-level contact data later, that's a
-buy-a-data-provider decision for leadership, not something to build
-around scraping.
+Rincian yang dibuang: 209 mall, 145 duplikat entitas, 48 noise
+gedung/pemerintah, 23 cabang/gerai.
 
-## How to run
+Angka 3,2% itu **baseline pembanding** — dipakai nanti untuk menilai apakah
+query Places API yang tertarget menghasilkan relevansi lebih tinggi.
 
-```bash
-cd src
-python main.py
-```
-
-This will create `data/leads.db` (SQLite) and load the seed companies
-into it.
-
-## Project structure
+## Struktur
 
 ```
-salesmart-leadgen/
-├── README.md
-├── data/
-│   └── companies_seed.csv   <- mock data source, expand this yourself
-├── src/
-│   ├── data_source.py       <- swap this out for a real API later
-│   ├── store.py              <- SQLite storage
-│   └── main.py                <- runs the pipeline end to end
+src/    kode
+data/   database & hasil ekspor CSV
+docs/   dashboard visual (buka index.html)
 ```
 
-## Next steps
+| File | Fungsi |
+|------|--------|
+| `src/discover_osm.py` | Panen dari OSM, 10 kota x 10 kategori, bisa dilanjut |
+| `src/bersihkan_db.py` | Pembersihan retroaktif + dedup entitas, dengan backup |
+| `src/cek_db.py` | Ukur kualitas per kategori, sampel acak |
+| `src/cek_arsip.py` | Audit entri yang dibuang beserta alasannya |
+| `src/rubrik.py` | Aturan penilaian — gerbang kualitas kontak + need score |
+| `src/hitung_prioritas.py` | Urutkan lead berdasarkan kebutuhan |
+| `src/query_plan.py` | 160 query Places API tervalidasi |
+| `src/buat_dashboard.py` | Hasilkan `docs/index.html` dari database |
 
-- [ ] Get manager sign-off on this scope
-- [ ] Expand `companies_seed.csv` to ~15-20 companies (do this by hand —
-      it's worth feeling how slow/inconsistent manual research is,
-      that's the exact problem an eventual real API solves)
-- [ ] Add email discovery (pattern-guessing + verification)
-- [ ] Add AI scoring layer once there's real data to score
+Cara menjalankan: lihat `CARA_JALANKAN.md`.
+
+## Pelajaran utama
+
+**Label spesifik jauh mengalahkan label generik.** Di OSM,
+`office=consulting` punya cakupan telepon 60% sementara `office=company`
+hanya 12%. Pola sama muncul saat validasi query Places: `"pabrik plastik"`
+menghasilkan pabrik asli dengan nomor telepon, sedangkan
+`"perusahaan manufaktur"` hanya menghasilkan iklan lowongan kerja.
+
+**Dedup harus di tingkat entitas, bukan tingkat ID sumber.** Dedup berbasis
+`PRIMARY KEY` meloloskan 145 duplikat karena `PT. Bakti Mandiri Perkasa` dan
+`PT BAKTI MANDIRI PERKASA` punya `osm_id` berbeda meski nomor teleponnya
+sama persis.
+
+**Nomor call-center bukan lead.** Format `1500-xxx` dan `0804-xxx` adalah
+layanan pelanggan, bukan jalur ke pengambil keputusan.
+
+**Ukur kebutuhan, bukan ukuran perusahaan.** Traveloka dan Tokopedia adalah
+perusahaan besar dengan divisi marketing kuat, tapi tidak punya tim sales
+lapangan — sehingga tidak cocok untuk produk ini. Rubric lama tidak bisa
+membedakan mereka dari Wings Group; rubric baru bisa.
+
+**OSM adalah panen sekali jalan, bukan pipeline harian.** Setelah 10 kota
+tersapu, menjalankan ulang menghasilkan ~0 lead baru karena data OSM
+bertambah sangat lambat dari kontribusi sukarelawan.
+
+## Catatan data
+
+`data/leads.db` sengaja dilacak versinya supaya hasil kerja terekam.
+File backup (`leads_backup_*.db`) tidak — lihat `.gitignore`.
+
+Karena git tidak bisa menampilkan perbedaan file binary, isi database juga
+diekspor ke `data/leads_export.csv` dan `data/leads_arsip_export.csv` agar
+perubahannya bisa dibaca lewat riwayat commit.
