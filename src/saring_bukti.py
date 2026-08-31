@@ -278,6 +278,14 @@ def uji(per: dict):
 # --------------------------------------------------------------------------
 
 def main():
+    # Konsol Windows default-nya cp1252 dan akan meledak begitu ketemu emoji
+    # atau aksara non-Latin yang ikut terpanen dari situs orang. Halaman web
+    # memang penuh karakter begitu, jadi ini bukan kasus langka.
+    try:
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    except (AttributeError, OSError):
+        pass
+
     ap = argparse.ArgumentParser()
     ap.add_argument("--db-bukti", default=str(DATA / "bukti.db"))
     ap.add_argument("--uji", action="store_true",
