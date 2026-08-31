@@ -93,6 +93,16 @@ MIN_LINK_HOMEPAGE = 3
 # Penyimpanan
 # --------------------------------------------------------------------------
 
+DDL_LOG = """
+CREATE TABLE IF NOT EXISTS panen_log (
+    nama_normal   TEXT PRIMARY KEY,
+    nama          TEXT NOT NULL,
+    website       TEXT,
+    jml_halaman   INTEGER,
+    dicoba_pada   TEXT DEFAULT CURRENT_TIMESTAMP
+);
+"""
+
 DDL = """
 CREATE TABLE IF NOT EXISTS halaman_bukti (
     nama_normal   TEXT NOT NULL,
@@ -213,6 +223,9 @@ def main():
                          "jadi tidak dilacak git")
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--limit", type=int, default=0)
+    ap.add_argument("--lewati-sudah", action="store_true",
+                    help="lewati perusahaan yang sudah ada di halaman_bukti; "
+                         "dipakai untuk melanjutkan panen yang terputus")
     ap.add_argument("--verbose", action="store_true")
     ap.add_argument("--cache", default="",
                     help="folder cache HTML mentah; kosong = tanpa cache")
@@ -222,6 +235,25 @@ def main():
 
     with open(args.input, newline="", encoding="utf-8") as f:
         rows = list(csv.DictReader(f))
+
+    if args.lewati_sudah:
+        con = sqlite3.connect(args.db)
+        con.execute(DDL_LOG)
+        con.execute(DDL)
+        # Yang dilewati adalah yang sudah DICOBA, bukan yang berhasil.
+        # Mayoritas situs OSM menghasilkan nol halaman; kalau patokannya
+        # keberhasilan, situs mati diulang terus tiap panen dilanjutkan.
+        sudah = {r[0] for r in con.execute("SELECT nama_normal FROM panen_log")}
+        sudah |= {r[0] for r in con.execute(
+            "SELECT DISTINCT nama_normal FROM halaman_bukti")}
+        con.close()
+        semula = len(rows)
+        rows = [r for r in rows
+                if normalisasi_nama(r["nama"].strip()) not in sudah]
+        print(f"melanjutkan: {semula - len(rows)} sudah dipanen, "
+              f"{len(rows)} tersisa")
+        print()
+
     if args.limit:
         rows = rows[: args.limit]
 
@@ -242,6 +274,15 @@ def main():
             per_jenis[h["jenis"]] = per_jenis.get(h["jenis"], 0) + 1
             if not args.dry_run:
                 simpan(args.db, {"nama": nama, "website": root, **h})
+
+        if not args.dry_run:
+            con = sqlite3.connect(args.db)
+            con.execute(DDL_LOG)
+            con.execute("INSERT OR REPLACE INTO panen_log "
+                        "(nama_normal, nama, website, jml_halaman) VALUES (?,?,?,?)",
+                        (normalisasi_nama(nama), nama, root, len(halaman)))
+            con.commit()
+            con.close()
 
         total_hal += len(halaman)
         if not halaman:
