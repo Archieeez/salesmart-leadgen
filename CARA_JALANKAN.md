@@ -12,8 +12,14 @@ dalam `src/`.
 ## Persiapan (sekali saja)
 
 ```
-pip install requests
+pip install requests beautifulsoup4
 ```
+
+Untuk Phase 2 (penilaian kebutuhan via LLM), tambahan:
+```
+pip install anthropic
+```
+Perlu kunci API: `setx ANTHROPIC_API_KEY "sk-ant-..."` lalu buka terminal baru.
 
 ---
 
@@ -86,6 +92,53 @@ Otomatis backup dulu. Yang dibuang dipindah ke tabel `leads_arsip`, tidak
 dihapus permanen.
 
 ### 9. Ulangi langkah 4–6 untuk melihat hasil barunya
+
+---
+
+---
+
+## Kelompok D — menilai KEBUTUHAN perusahaan (Phase 2)
+
+Ini jalur yang penting sekarang: bukan "punya nomor telepon?" tapi
+"perusahaan ini butuh Salesmart atau tidak?".
+
+### 10. Panen halaman bukti
+```
+python src/panen_bukti.py --input data/seed_gapmmi.csv --cache data/.cache_html
+```
+Mengambil halaman Tentang Kami, Bisnis, Distribusi, Produk, dan Karier —
+bukan halaman kontak. Hasilnya masuk tabel `halaman_bukti`.
+
+Halaman karier dipanen dari situs perusahaan sendiri, BUKAN dari papan
+lowongan. JobStreet dan Glints melarang lewat robots.txt; ToS Kalibrr,
+Indeed, dan Karir.com belum bisa diverifikasi. Jangan pakai ketiganya
+sampai ToS-nya dibaca.
+
+### 11. Lihat biaya sebelum keluar duit
+```
+python src/nilai_kebutuhan.py --dry-run
+```
+Menampilkan prompt lengkap dan perkiraan biaya. Belum memanggil API.
+
+### 12. Nilai kebutuhannya
+```
+python src/nilai_kebutuhan.py --limit 5     # coba 5 dulu
+python src/nilai_kebutuhan.py               # semuanya
+```
+Hasil masuk tabel `kebutuhan` di `leads.db`, lengkap dengan kutipan bukti
+tiap penilaian. Bahan mentahnya dibaca dari `bukti.db`.
+
+### 13. Ekspor ke CSV sebelum commit
+```
+python src/ekspor_csv.py
+```
+WAJIB dijalankan tiap kali database berubah. Tanpa ini, riwayat commit
+cuma menampilkan "file binary berubah" dan isinya tidak bisa diperiksa.
+
+Cara memeriksa hasilnya: ke-27 perusahaan di `seed_gapmmi.csv` adalah
+anggota GAPMMI — semuanya produsen makanan-minuman. Jadi `industry_fit`
+seharusnya hampir semuanya `produsen_barang_konsumsi`. Kalau tidak,
+promptnya yang salah, bukan perusahaannya.
 
 ---
 

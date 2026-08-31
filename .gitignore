@@ -22,3 +22,12 @@ Thumbs.db
 *.key
 credentials.json
 service-account*.json
+
+# Cache HTML mentah dari panen_bukti/enrich_kontak — bisa dibuat ulang
+.cache_html/
+data/.cache_html/
+
+# Teks mentah halaman situs. BAHAN, bukan hasil — bisa dipanen ulang kapan
+# saja dengan panen_bukti.py, dan ukurannya membengkak tiap panen.
+# Hasil penilaiannya (tabel `kebutuhan`) ada di leads.db dan ikut dilacak.
+bukti.db

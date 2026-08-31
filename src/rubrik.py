@@ -102,6 +102,132 @@ def hitung_need(komponen):
 
 
 # ===========================================================================
+# BAGIAN 2B: PITA BUKTI  (aturan yang SEBELUMNYA masih tersembunyi)
+# ===========================================================================
+# KENAPA BAGIAN INI ADA:
+# Sama persis dengan alasan file ini dibuat. MAKS_KOMPONEN di atas hanya
+# menyebut angka maksimum tiap komponen — tapi tidak ada satu baris pun yang
+# menjelaskan KENAPA Erajaya dapat dist_model=25 sementara Gojek dapat 15.
+# Kedua puluh baris di companies_scored.csv diisi dengan naluri, lalu
+# angkanya menyusul. Persis pola yang sudah kita bongkar sekali di skor lama.
+#
+# Selama aturannya belum tertulis, dua hal tidak mungkin:
+#   1. Orang lain (atau LLM) tidak bisa mengisi kolom ini konsisten.
+#   2. Tidak ada cara tahu apakah sebuah penilaian SALAH.
+#
+# Pita di bawah ini dibalik-rekayasa dari 20 keputusan yang sudah diambil,
+# lalu diperluas ke bawah supaya bisa menilai perusahaan KECIL — sesuatu
+# yang sampel kalibrasi sekarang tidak punya sama sekali.
+#
+# Tiap pita menyebut BUKTI yang harus terlihat, bukan kesan. Kolom "sumber"
+# menandai di mana bukti itu biasanya ditemukan.
+
+PITA = {
+    # -------------------------------------------------------------------
+    "dist_model": [
+        (35, "jaringan_sendiri",
+         "Punya jaringan distributor/agen/depo sendiri, ATAU memasok ritel "
+         "pihak ketiga secara masif (warung, toko, apotek, modern/general "
+         "trade), ATAU mengoperasikan jaringan gerai/kurir nasional sendiri.",
+         "situs: halaman distribusi/jaringan; laporan tahunan"),
+        (25, "jaringan_terbatas",
+         "Punya jaringan titik fisik tapi lebih sempit — satu kategori "
+         "produk atau segmen ritel tertentu saja.",
+         "situs: daftar toko/cabang"),
+        (15, "lapangan_bukan_barang",
+         "Punya armada atau gerai lapangan yang dikelola, tapi tidak "
+         "mendistribusikan barang bermerek sendiri.",
+         "situs: halaman layanan/lokasi"),
+        (0, "tanpa_distribusi_fisik",
+         "Produk atau jasa digital. Tidak ada barang fisik yang berpindah "
+         "lewat jaringan yang perlu dikelola.",
+         "situs: halaman produk"),
+    ],
+    # -------------------------------------------------------------------
+    "field_sales": [
+        (30, "sales_kanvas",
+         "Ada tim yang MENJUAL di lapangan: salesman, motoris, canvasser, "
+         "medical representative, beauty advisor, area sales manager. "
+         "Inilah orang-orang yang dilacak Salesmart.",
+         "lowongan kerja (paling kuat); situs: halaman karier"),
+        (20, "lapangan_operasional",
+         "Ada tim lapangan besar tapi tugasnya operasional, bukan menjual: "
+         "kurir, staf gerai, kepala cabang.",
+         "lowongan kerja; situs: halaman karier"),
+        (10, "lapangan_minimal",
+         "Ada sebagian staf di luar kantor, tapi bukan struktur lapangan "
+         "yang jelas.",
+         "lowongan kerja"),
+        (0, "tanpa_lapangan",
+         "Seluruh operasi di kantor atau daring.",
+         "lowongan kerja: hanya posisi kantor/teknologi"),
+    ],
+    # -------------------------------------------------------------------
+    # CATATAN PENTING: pita 10, 5, dan 0 BELUM PERNAH TERPAKAI. Kedua puluh
+    # perusahaan di sampel kalibrasi semuanya berskala nasional, jadi
+    # komponen ini belum teruji. Ia baru akan bekerja saat menilai
+    # perusahaan menengah dari BPS atau OSM.
+    "scale": [
+        (20, "nasional",
+         "Hadir di seluruh Indonesia, atau >100 titik operasi, atau "
+         "menyebut 30+ provinsi.",
+         "situs: halaman jaringan; daftar cabang"),
+        (15, "lintas_pulau",
+         "Hadir di banyak provinsi tapi belum menyeluruh (kira-kira 10-33 "
+         "provinsi), atau 20-100 titik.",
+         "situs: daftar cabang; sebaran lowongan"),
+        (10, "multi_kota",
+         "3-9 kota, umumnya masih dalam satu atau dua provinsi.",
+         "situs: daftar cabang; sebaran lowongan"),
+        (5, "dua_kota",
+         "Dua lokasi operasi.",
+         "situs; direktori"),
+        (0, "satu_lokasi",
+         "Satu lokasi saja. Tim lapangannya terlalu kecil untuk butuh "
+         "platform pelacakan.",
+         "direktori BPS/OSM: satu alamat"),
+    ],
+    # -------------------------------------------------------------------
+    # CATATAN: pita 0 juga BELUM PERNAH TERPAKAI, karena kedua puluh
+    # perusahaan sampel semuanya menghadap konsumen.
+    "industry_fit": [
+        (15, "produsen_barang_konsumsi",
+         "Produsen barang konsumsi bermerek: FMCG, makanan-minuman, "
+         "farmasi, kosmetik. Vertikal inti Salesmart.",
+         "KBLI; situs: halaman produk"),
+        (10, "ritel_distribusi_logistik",
+         "Peritel, distributor, atau logistik. Butuh manajemen lapangan, "
+         "tapi bukan pemilik merek yang mendorong produk ke pasar.",
+         "KBLI; situs"),
+        (5, "platform_jasa",
+         "Platform digital atau jasa. Kecocokannya lemah.",
+         "situs"),
+        (0, "tidak_relevan",
+         "B2B berat, jasa profesional, pemerintah, pendidikan. Tidak ada "
+         "produk konsumsi yang didorong lewat jaringan lapangan.",
+         "KBLI; direktori"),
+    ],
+}
+
+
+def nilai_pita(komponen: str, label: str) -> int:
+    """Ubah label pita jadi angka. Salah label = error, bukan diam-diam 0."""
+    for nilai, nama, _, _ in PITA[komponen]:
+        if nama == label:
+            return nilai
+    sah = ", ".join(n for _, n, _, _ in PITA[komponen])
+    raise ValueError(f"label '{label}' tidak dikenal untuk {komponen}. Pilih: {sah}")
+
+
+def label_pita(komponen: str, nilai: int) -> str:
+    """Kebalikannya: angka -> label. Dipakai untuk memeriksa data lama."""
+    for n, nama, _, _ in PITA[komponen]:
+        if n == int(nilai):
+            return nama
+    return None
+
+
+# ===========================================================================
 # BAGIAN 3: KEPUTUSAN AKHIR
 # ===========================================================================
 # Dua sumbu terpisah, sengaja TIDAK dijadikan satu angka:
@@ -185,3 +311,48 @@ if __name__ == "__main__":
     print(f"\nCocok: {cocok}/{len(UJI)}  ({cocok/len(UJI)*100:.0f}%)")
     if tidak == 0:
         print("Aturan tertulis sekarang mereproduksi SEMUA keputusan lama.")
+
+    # -----------------------------------------------------------------
+    # UJI PITA BUKTI terhadap penilaian manual di companies_scored.csv
+    # -----------------------------------------------------------------
+    import csv as _csv
+    import collections as _col
+    from pathlib import Path as _Path
+
+    csv_skor = _Path(__file__).resolve().parent.parent / "data" / "companies_scored.csv"
+    if not csv_skor.exists():
+        raise SystemExit(0)
+
+    baris = list(_csv.DictReader(open(csv_skor, encoding="utf-8")))
+    print(f"\n{'=' * 66}")
+    print("UJI PITA: apakah 20 penilaian manual jatuh di pita yang sah?")
+    print("=" * 66)
+
+    haram = 0
+    terpakai = _col.defaultdict(set)
+    for r in baris:
+        for komp in MAKS_KOMPONEN:
+            lab = label_pita(komp, r[komp])
+            if lab is None:
+                print(f"  DI LUAR PITA: {r['company_name']} {komp}={r[komp]}")
+                haram += 1
+            else:
+                terpakai[komp].add(lab)
+
+    if haram == 0:
+        print(f"  Semua {len(baris) * 4} nilai jatuh di pita yang sah.")
+
+    print("\nCakupan pita — mana yang BELUM PERNAH teruji:")
+    total_kosong = 0
+    for komp in MAKS_KOMPONEN:
+        for nilai, nama, _, _ in PITA[komp]:
+            if nama not in terpakai[komp]:
+                print(f"  BELUM TERUJI  {komp:<14} {nilai:>3}  {nama}")
+                total_kosong += 1
+    if total_kosong == 0:
+        print("  Semua pita sudah pernah terpakai.")
+    else:
+        print(f"\n  {total_kosong} pita belum pernah dipakai — semuanya di ujung")
+        print("  bawah. Sebabnya: 20 perusahaan sampel semuanya berskala")
+        print("  nasional dan menghadap konsumen. Pita bawah baru teruji")
+        print("  setelah perusahaan menengah dari BPS/OSM ikut dinilai.")

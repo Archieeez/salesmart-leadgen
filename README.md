@@ -46,6 +46,13 @@ data/   database & hasil ekspor CSV
 docs/   dashboard visual (buka index.html)
 ```
 
+Dua database, sengaja dipisah:
+
+| File | Dilacak git? | Isi |
+|---|---|---|
+| `data/leads.db` | ya | lead, arsip, kontak, hasil penilaian kebutuhan |
+| `data/bukti.db` | **tidak** | teks mentah halaman situs — bahan, bisa dipanen ulang |
+
 | File | Fungsi |
 |------|--------|
 | `src/discover_osm.py` | Panen dari OSM, 10 kota x 10 kategori, bisa dilanjut |
@@ -56,6 +63,12 @@ docs/   dashboard visual (buka index.html)
 | `src/hitung_prioritas.py` | Urutkan lead berdasarkan kebutuhan |
 | `src/query_plan.py` | 160 query Places API tervalidasi |
 | `src/buat_dashboard.py` | Hasilkan `docs/index.html` dari database |
+| `src/web.py` | Lapisan ambil-halaman bersama: robots.txt, cache, fallback http |
+| `src/enrich_kontak.py` | Cari telepon kantor dari situs resmi (hit rate 33%) |
+| `src/panen_bukti.py` | Panen halaman Tentang/Bisnis/Distribusi/Karier jadi bukti |
+| `src/nilai_kebutuhan.py` | Phase 2: isi 4 komponen Need Score via LLM |
+| `src/ekspor_csv.py` | Ekspor semua tabel ke CSV supaya diff-nya terbaca git |
+| `src/pindah_bukti.py` | Pindahkan `halaman_bukti` ke `bukti.db` (sekali jalan) |
 
 Cara menjalankan: lihat `CARA_JALANKAN.md`.
 
@@ -90,5 +103,9 @@ bertambah sangat lambat dari kontribusi sukarelawan.
 File backup (`leads_backup_*.db`) tidak — lihat `.gitignore`.
 
 Karena git tidak bisa menampilkan perbedaan file binary, isi database juga
-diekspor ke `data/leads_export.csv` dan `data/leads_arsip_export.csv` agar
-perubahannya bisa dibaca lewat riwayat commit.
+diekspor ke CSV agar perubahannya bisa dibaca lewat riwayat commit.
+Jalankan `python src/ekspor_csv.py` setiap kali database berubah — dulu
+langkah ini manual, sekarang ada skripnya supaya tidak terlupa.
+
+Stempel waktu sengaja tidak ikut diekspor. Kalau ikut, tiap kali skrip
+dijalankan seluruh baris terlihat berubah padahal datanya sama.
