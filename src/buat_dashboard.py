@@ -339,7 +339,8 @@ def main():
 <style>{CSS}</style></head><body><div class="wrap">
 
 <h1>salesmart-leadgen</h1>
-<p class="meta">Dashboard hasil pipeline — dibuat otomatis dari data/leads.db</p>
+<p class="meta">Dashboard teknis — kesehatan pipeline, dibuat otomatis dari data/leads.db<br>
+Untuk daftar lead siap telepon, lihat <a href="antrian.html" style="color:#185FA5">Antrian Lead</a>.</p>
 
 <div class="cards">
 {kartu_html}

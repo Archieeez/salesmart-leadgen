@@ -6,7 +6,12 @@ Target: menemukan perusahaan Indonesia yang **butuh** platform manajemen tim
 sales lapangan, lengkap dengan nama, telepon kantor, website, dan alamat.
 Semua data bersumber legal, level perusahaan saja (patuh UU PDP).
 
-**Lihat hasilnya:** buka `docs/index.html` di browser.
+**Lihat hasilnya:** ada dua dashboard, keduanya dibuat otomatis dari database.
+
+| Buka | Untuk siapa | Menjawab |
+|---|---|---|
+| `docs/antrian.html` | orang sales | "siapa yang saya telepon sekarang, dan apa pembukanya?" |
+| `docs/index.html` | yang membangun | "pipeline-nya sehat tidak?" |
 
 ## Status
 
@@ -69,6 +74,8 @@ Dua database, sengaja dipisah:
 | `src/nilai_kebutuhan.py` | Phase 2: isi 4 komponen Need Score via LLM |
 | `src/ekspor_csv.py` | Ekspor semua tabel ke CSV supaya diff-nya terbaca git |
 | `src/pindah_bukti.py` | Pindahkan `halaman_bukti` ke `bukti.db` (sekali jalan) |
+| `src/saring_bukti.py` | Penyaring pola: susun antrian baca dari ratusan situs |
+| `src/buat_antrian.py` | Hasilkan `docs/antrian.html` — dashboard untuk orang sales |
 
 Cara menjalankan: lihat `CARA_JALANKAN.md`.
 

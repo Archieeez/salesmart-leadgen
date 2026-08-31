@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="id"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Antrian Lead Salesmart</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  --kertas:#FAFAF7; --permukaan:#FFFFFF; --permukaan2:#F2F2EC; --garis:#E6E5DD;
+  --garis2:#CFCEC3; --tinta:#16201B; --tinta2:#4E5A53; --tinta3:#8B958D;
+  --merek:#14584E; --merek-lembut:#E2EFEA;
+  --siap:#1B7F4F; --siap-lembut:#E4F2E9;
+  --perlu:#A8620A; --perlu-lembut:#F7EEE1;
+  --arsip:#8B958D; --arsip-lembut:#EFEFEA;
+  --k1:#0F4A42; --k2:#1C7A6B; --k3:#5BA99A; --k4:#A9CFC6;
+  --logo-ink:#FAFAF7;
+  --bayang:0 1px 2px rgba(22,32,27,.05), 0 10px 28px -16px rgba(22,32,27,.22);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --kertas:#0E1311; --permukaan:#161C19; --permukaan2:#1E2521; --garis:#293029;
+    --garis2:#3D463E; --tinta:#E7ECE8; --tinta2:#AFB9B2; --tinta3:#7F8A83;
+    --merek:#5CC0A8; --merek-lembut:#122B26;
+    --siap:#4FBF8B; --siap-lembut:#12271C;
+    --perlu:#D9A24E; --perlu-lembut:#2A2114;
+    --arsip:#7F8A83; --arsip-lembut:#1D231F;
+    --k1:#CFEAE2; --k2:#8FCBBC; --k3:#4E9C8B; --k4:#2C5F55;
+    --logo-ink:#0E1311;
+    --bayang:0 1px 2px rgba(0,0,0,.4), 0 10px 28px -16px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"]{
+  --kertas:#0E1311; --permukaan:#161C19; --permukaan2:#1E2521; --garis:#293029;
+  --garis2:#3D463E; --tinta:#E7ECE8; --tinta2:#AFB9B2; --tinta3:#7F8A83;
+  --merek:#5CC0A8; --merek-lembut:#122B26;
+  --siap:#4FBF8B; --siap-lembut:#12271C;
+  --perlu:#D9A24E; --perlu-lembut:#2A2114;
+  --arsip:#7F8A83; --arsip-lembut:#1D231F;
+  --k1:#CFEAE2; --k2:#8FCBBC; --k3:#4E9C8B; --k4:#2C5F55;
+  --logo-ink:#0E1311;
+  --bayang:0 1px 2px rgba(0,0,0,.4), 0 10px 28px -16px rgba(0,0,0,.7);
+}
+*{box-sizing:border-box}
+body{background:var(--kertas);color:var(--tinta);
+  font-family:"Plus Jakarta Sans",ui-sans-serif,system-ui,-apple-system,sans-serif;
+  font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.app{max-width:1060px;margin:0 auto;padding:0 20px 80px}
+
+.kepala{padding:34px 0 22px}
+.merek{display:flex;align-items:center;gap:10px;margin-bottom:20px}
+.logo{width:26px;height:26px;border-radius:7px;background:var(--merek);
+  display:grid;place-items:center;color:var(--logo-ink);font-weight:700;font-size:13px;flex:none}
+.merek b{font-size:15px;font-weight:700;letter-spacing:-.01em}
+.merek span{color:var(--tinta3);font-size:13px}
+h1{font-size:clamp(1.6rem,4vw,2.05rem);font-weight:700;letter-spacing:-.025em;
+  margin:0 0 6px;line-height:1.15;text-wrap:balance}
+.sub{color:var(--tinta2);margin:0;max-width:54ch;font-size:.95rem}
+
+.ringkas{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+  gap:1px;background:var(--garis);border:1px solid var(--garis);
+  border-radius:12px;overflow:hidden;margin:26px 0 0}
+.rk{background:var(--permukaan);padding:16px 18px}
+.rk .k{font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--tinta3);font-weight:600;margin-bottom:5px}
+.rk .v{font-family:"IBM Plex Mono",monospace;font-size:1.75rem;font-weight:600;
+  line-height:1;font-variant-numeric:tabular-nums}
+.rk .n{font-size:.78rem;color:var(--tinta3);margin-top:4px}
+
+.saring{position:sticky;top:0;z-index:5;background:var(--kertas);
+  padding:18px 0 14px;margin-top:26px;border-bottom:1px solid var(--garis);
+  display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.chip{font:inherit;font-size:.83rem;font-weight:600;padding:7px 14px;border-radius:999px;
+  border:1px solid var(--garis2);background:var(--permukaan);color:var(--tinta2);
+  cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:border-color .12s}
+.chip:hover{border-color:var(--tinta3)}
+.chip:focus-visible{outline:2px solid var(--merek);outline-offset:2px}
+.chip[aria-pressed="true"]{background:var(--merek);border-color:var(--merek);color:var(--logo-ink)}
+.chip .jml{font-family:"IBM Plex Mono",monospace;font-size:.76rem;opacity:.75}
+
+.daftar{margin-top:18px;display:flex;flex-direction:column;gap:9px}
+.lead{background:var(--permukaan);border:1px solid var(--garis);border-radius:12px;
+  overflow:hidden;box-shadow:var(--bayang)}
+.lead.siap{border-left:3px solid var(--siap)}
+.lead.perlu{border-left:3px solid var(--perlu)}
+.lead.arsip{border-left:3px solid var(--arsip)}
+.baris{width:100%;background:none;border:0;font:inherit;color:inherit;
+  text-align:left;cursor:pointer;padding:15px 18px;display:grid;
+  grid-template-columns:1fr auto;gap:10px 18px;align-items:start}
+.baris:hover{background:var(--permukaan2)}
+.baris:focus-visible{outline:2px solid var(--merek);outline-offset:-2px}
+.kiri{min-width:0}
+.nama{font-weight:600;font-size:1rem;letter-spacing:-.01em;display:flex;
+  align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:5px}
+.pil{font-family:"IBM Plex Mono",monospace;font-size:.7rem;font-weight:500;
+  padding:2px 8px;border-radius:5px;letter-spacing:.02em;white-space:nowrap}
+.pil.siap{background:var(--siap-lembut);color:var(--siap)}
+.pil.perlu{background:var(--perlu-lembut);color:var(--perlu)}
+.pil.arsip{background:var(--arsip-lembut);color:var(--arsip)}
+.pil.lantai{background:var(--perlu-lembut);color:var(--perlu);border:1px dashed var(--perlu)}
+.aksi-teks{font-size:.86rem;color:var(--tinta2);margin-bottom:6px}
+.kutip{font-size:.83rem;color:var(--tinta3);line-height:1.5;font-style:italic;
+  overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.kanan{display:flex;align-items:center;gap:16px;flex:none}
+.skor{text-align:right}
+.skor .angka{font-family:"IBM Plex Mono",monospace;font-size:1.5rem;font-weight:600;
+  line-height:1;font-variant-numeric:tabular-nums}
+.skor .lbl{font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--tinta3);font-weight:600;margin-top:3px}
+.komp{display:flex;gap:2px;height:7px;width:96px;border-radius:4px;margin-top:7px}
+.komp i{display:block;border-radius:2px}
+.komp i.k1{background:var(--k1)}
+.komp i.k2{background:var(--k2)}
+.komp i.k3{background:var(--k3)}
+.komp i.k4{background:var(--k4)}
+.panah{color:var(--tinta3);font-size:.8rem;transition:transform .15s;flex:none}
+.lead.buka .panah{transform:rotate(90deg)}
+
+.rinci{display:none;padding:0 18px 18px;border-top:1px solid var(--garis)}
+.lead.buka .rinci{display:block}
+.rinci h4{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--tinta3);font-weight:700;margin:18px 0 9px}
+.kontak{display:flex;flex-wrap:wrap;gap:9px;align-items:center}
+.tel{font-family:"IBM Plex Mono",monospace;font-size:1rem;font-weight:600;
+  color:var(--merek);text-decoration:none;padding:7px 13px;border-radius:8px;
+  background:var(--merek-lembut);display:inline-flex;align-items:center;gap:8px}
+.tel:hover{text-decoration:underline}
+.tel.mati{color:var(--tinta3);background:var(--permukaan2)}
+.bukti-item{border-left:2px solid var(--garis2);padding:2px 0 2px 13px;margin-bottom:11px}
+.bukti-komp{font-family:"IBM Plex Mono",monospace;font-size:.73rem;
+  color:var(--tinta3);margin-bottom:3px}
+.bukti-komp b{color:var(--tinta2);font-weight:600}
+.bukti-teks{font-size:.86rem;color:var(--tinta2);line-height:1.55}
+.nanti{background:var(--permukaan2);border:1px dashed var(--garis2);border-radius:9px;
+  padding:13px 15px;font-size:.85rem;color:var(--tinta3);line-height:1.5}
+.nanti b{color:var(--tinta2)}
+.kosong{text-align:center;padding:56px 20px;color:var(--tinta3)}
+
+.kaki{margin-top:38px;padding:18px 20px;background:var(--permukaan2);
+  border:1px solid var(--garis);border-radius:12px;font-size:.84rem;
+  color:var(--tinta2);line-height:1.6}
+.kaki b{color:var(--tinta)}
+.tautan{margin-left:auto;font-size:.82rem;font-weight:600;color:var(--merek);text-decoration:none}
+.tautan:hover{text-decoration:underline}
+.kaki code{font-family:"IBM Plex Mono",monospace;font-size:.9em}
+@media (max-width:640px){
+  .baris{grid-template-columns:1fr}
+  .kanan{justify-content:space-between;width:100%}
+  .komp{width:120px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head><body>
+<div class="app">
+  <header class="kepala">
+    <div class="merek">
+      <span class="logo">S</span>
+      <b>Salesmart</b><span>&middot;</span><span>Pencari Lead</span><a class="tautan" href="index.html">Dashboard teknis &rarr;</a>
+    </div>
+    <h1>Antrian lead hari ini</h1>
+    <p class="sub">Perusahaan yang bukti di situsnya sendiri menunjukkan mereka punya
+    tim sales lapangan dan jaringan distribusi &mdash; diurutkan dari yang paling butuh.</p>
+    <div class="ringkas" id="ringkas"></div>
+  </header>
+
+  <div class="saring" id="saring" role="group" aria-label="Saring berdasarkan tindakan"></div>
+  <div class="daftar" id="daftar"></div>
+
+  <div class="kaki">
+    <b>Pratinjau tampilan.</b> Semua angka, nomor, dan kutipan di halaman ini data nyata
+    dari pipeline per 31 Agustus 2026 &mdash; tidak ada yang dikarang. Jumlahnya masih 49
+    perusahaan karena penilai AI belum dijalankan; tata letaknya dirancang untuk ratusan.
+    Rekomendasi tindakan dihitung <code>rubrik.py</code>, memadukan seberapa butuh
+    perusahaan itu dengan apakah nomornya bisa dipakai menghubungi pengambil keputusan.
+  </div>
+</div>
+
+<script>
+
+(function(){
+  "use strict";
+  var LEADS = [{"nama": "Wings Group", "sumber": "riset manual", "need": 100, "dist": 35, "field": 30, "scale": 20, "fit": 15, "telepon": "021 4602696", "kelas": "langsung", "aksi": "hubungi_sekarang", "saran": "Telepon langsung. Prioritas tertinggi.", "catatan": "FMCG raksasa; distribusi nasional ke warung/ritel; sales lapangan masif; arketipe klien Salesmart", "tegak": true, "bukti_kuat": 4, "bukti": []}, {"nama": "Kalbe Farma", "sumber": "riset manual", "need": 100, "dist": 35, "field": 30, "scale": 20, "fit": 15, "telepon": "+62 21 4287 3888", "kelas": "langsung", "aksi": "hubungi_sekarang", "saran": "Telepon langsung. Prioritas tertinggi.", "catatan": "Farmasi terbesar SEA; medical representative = sales lapangan klasik; distribusi via Enseval", "tegak": true, "bukti_kuat": 4, "bukti": []}, {"nama": "Paragon Technology and Innovation", "sumber": "riset manual", "need": 100, "dist": 35, "field": 30, "scale": 20, "fit": 15, "telepon": "+62 21 584 9070", "kelas": null, "aksi": "verifikasi_lalu_hubungi", "saran": "Cek nomor di website resmi dulu, baru telepon.", "catatan": "Kosmetik manufaktur (Wardah); beauty advisor + distributor; telepon dari job-board BELUM terverifikasi resmi", "tegak": true, "bukti_kuat": 4, "bukti": []}, {"nama": "Sido Muncul", "sumber": "riset manual", "need": 100, "dist": 35, "field": 30, "scale": 20, "fit": 15, "telepon": "+62 24 7692 8811", "kelas": "langsung", "aksi": "hubungi_sekarang", "saran": "Telepon langsung. Prioritas tertinggi.", "catatan": "Jamu/herbal manufaktur; distribusi nasional; MARKETING OFFICE terpisah ditemukan di Jakarta", "tegak": true, "bukti_kuat": 4, "bukti": []}, {"nama": "Garudafood", "sumber": "bukti situs", "need": 90, "dist": 35, "field": 20, "scale": 20, "fit": 15, "telepon": "62217290110", "kelas": "langsung", "aksi": "hubungi_sekarang", "saran": "Telepon langsung. Prioritas tertinggi.", "catatan": "Bukti paling lengkap di seluruh kumpulan: punya anak usaha distribusi sendiri (SNS), depo, dan armada.", "tegak": true, "bukti_kuat": 4, "bukti": [{"komponen": "dist_model", "label": "jaringan_sendiri", "kutipan": "Kesuksesan Garudafood hingga saat ini tidak terlepas dari dukungan jaringan distribusi berskala nasional & internasional ... Garudafood menjual produk-produknya melalui SNS ke seluruh pelosok Indonesia", "yakin": "tinggi"}, {"komponen": "field_sales", "label": "lapangan_operasional", "kutipan": "peluncuran perdana kendaraan listrik (Electric Vehicle/EV) sebagai armada operasional perusahaan ... di Depo Ciracas, Jakarta Timur", "yakin": "sedang"}, {"komponen": "scale", "label": "nasional", "kutipan": "menjual produk-produknya melalui SNS ke seluruh pelosok Indonesia ... penjualan ekspor ke lebih dari 30 negara", "yakin": "tinggi"}, {"komponen": "industry_fit", "label": "produsen_barang_konsumsi", "kutipan": "rantai pasok makanan dan minuman PT Garudafood Putra Putri Jaya Tbk", "yakin": "tinggi"}]}, {"nama": "Sinar Sosro", "sumber": "bukti situs", "need": 90, "dist": 35, "field": 20, "scale": 20, "fit": 15, "telepon": "628551176776", "kelas": "seluler", "aksi": "verifikasi_lalu_hubungi", "saran": "Cek nomor di website resmi dulu, baru telepon.", "catatan": "Satu-satunya yang memublikasikan peta distribusi lengkap dengan alamat dan telepon tiap depo wilayah, plus daftar Kantor Penjualan.", "tegak": true, "bukti_kuat": 4, "bukti": [{"komponen": "dist_model", "label": "jaringan_sendiri", "kutipan": "Peta Distribusi Nasional ... 'Sumut & NAD', Jl. Raya Tanjung Morawa KM. 14.5 Tj. Morawa, Medan ... 'Sumbagsel & Babel', Palembang ... 'Banten'", "yakin": "tinggi"}, {"komponen": "field_sales", "label": "lapangan_operasional", "kutipan": "Lokasi Kantor Pusat Kantor Pabrik Cakung Kantor Penjualan Cakung Kantor Penjualan Lenteng Agung Kantor Penjualan Wilayah Jakarta", "yakin": "sedang"}, {"komponen": "scale", "label": "nasional", "kutipan": "Peta Distribusi Nasional", "yakin": "tinggi"}, {"komponen": "industry_fit", "label": "produsen_barang_konsumsi", "kutipan": "Teh botol Sosro Fruit Tea Sosro Country Choice Air Mineral Prim-A S-Tee Tebs", "yakin": "tinggi"}]}, {"nama": "PT Bratasena Jaya", "sumber": "bukti situs", "need": 85, "dist": 35, "field": 20, "scale": 20, "fit": 10, "telepon": "+62 21 7658530", "kelas": null, "aksi": "verifikasi_lalu_hubungi", "saran": "Cek nomor di website resmi dulu, baru telepon.", "catatan": "Temuan terbaik dari 170 situs OSM. Perusahaan distribusi murni dengan 600 reseller nasional - mendistribusikan merek orang lain, jadi bukan pemilik merek.", "tegak": true, "bukti_kuat": 4, "bukti": [{"komponen": "dist_model", "label": "jaringan_sendiri", "kutipan": "With over 600 resellers in our nationwide sales distribution network, from premium modern to traditional market resellers, BJ has been able to effectively penetrate the market", "yakin": "tinggi"}, {"komponen": "field_sales", "label": "lapangan_operasional", "kutipan": "We offer extensive support to our resellers with product knowledge and after sales services while sharing modern marketing strategies", "yakin": "sedang"}, {"komponen": "scale", "label": "nasional", "kutipan": "We distribute products to every major city in Indonesia ... With over 1,500 SKUs distributed nationwide", "yakin": "tinggi"}, {"komponen": "industry_fit", "label": "ritel_distribusi_logistik", "kutipan": "a marketing and distribution company for global factories and brands in penetrating Indonesia's vast HOME and HORECA market", "yakin": "tinggi"}]}, {"nama": "PT. Chang Jui Fang Indonesia", "sumber": "bukti situs", "need": 85, "dist": 35, "field": 20, "scale": 20, "fit": 10, "telepon": "+62 21 6685700", "kelas": null, "aksi": "verifikasi_lalu_hubungi", "saran": "Cek nomor di website resmi dulu, baru telepon.", "catatan": "Memublikasikan jaringan distribusi 27 kota lengkap dengan nomor kontak per kota - bukti paling terstruktur setelah Sinar Sosro. Keramik, bukan FMCG.", "tegak": true, "bukti_kuat": 4, "bukti": [{"komponen": "dist_model", "label": "jaringan_sendiri", "kutipan": "Jaringan Distribusi Dalam Negeri: Jakarta, Bekasi, Bogor, Serang, Bandung, Cirebon, Tasikmalaya, Sukabumi, Semarang, Yogyakarta, Purwokerto, Solo, Surabaya, Jember, Kediri, Malang, Bali, Bengkulu, Padang, Lampung, Palembang, Pekanbaru, Makasar, Palu, Kendari, Banjarmasin, Pontianak, Samarinda", "yakin": "tinggi"}, {"komponen": "field_sales", "label": "lapangan_operasional", "kutipan": "tiap kota di jaringan distribusi punya nomor kontaknya sendiri (Jakarta +6287782280507, Bandung +6287782280518, Makasar +6287882143990, dst.)", "yakin": "sedang"}, {"komponen": "scale", "label": "nasional", "kutipan": "27 kota di Jawa, Sumatera, Bali, Sulawesi, dan Kalimantan", "yakin": "tinggi"}, {"komponen": "industry_fit", "label": "ritel_distribusi_logistik", "kutipan": "Ceramic Manufacturer, Importer & Distributor ... fasilitas produksi terkini di area lebih dari 100 hektar dan 1000 tenaga kerja ahli", "yakin": "sedang"}]}, {"nama": "MS Glow", "sumber": "riset manual", "need": 85, "dist": 35, "field": 20, "scale": 15, "fit": 15, "telepon": "(0341) 3022614", "kelas": "langsung", "aksi": "hubungi_sekarang", "saran": "Telepon langsung. Prioritas tertinggi.", "catatan": "Program agen/reseller aktif; Point Reward sangat relevan; email PR resmi ditemukan", "tegak": true, "bukti_kuat": 4, "bukti": []}, {"nama": "Indomaret", "sumber": "riset manual", "need": 85, "dist": 35, "field": 20, "scale": 20, "fit": 10, "telepon": null, "kelas": null, "aksi": "cari_nomor", "saran": "Kebutuhan tinggi tapi nomor belum ada. TARGET UTAMA Places API.", "catatan": "Jaringan waralaba masif; manajemen distribusi ke ribuan gerai; TELEPON BELUM DITEMUKAN", "tegak": true, "bukti_kuat": 4, "bukti": []}, {"nama": "Alfamart", "sumber": "riset manual", "need": 85, "dist": 35, "field": 20, "scale": 20, "fit": 10, "telepon": "1500 959", "kelas": "layanan", "aksi": "cari_nomor_kantor", "saran": "Nomor yang ada hanya call-center. Cari jalur kantor/marketing.", "catatan": "Jaringan waralaba masif; telepon 1500-style call center bukan direct line", "tegak": true, "bukti_kuat": 4, "bukti": []}, {"nama": "J&T Express", "sumber": "riset manual", "need": 85, "dist": 35, "field": 20, "scale": 20, "fit": 10, "telepon": "+62 21 8066 1888", "kelas": "langsung", "aksi": "hubungi_sekarang", "saran": "Telepon langsung. Prioritas tertinggi.", "catatan": "Jaringan agen/drop point luas; operasi lapangan kurir; distribusi terdesentralisasi", "tegak": true, "bukti_kuat": 4, "bukti": []}, {"nama": "SiCepat", "sumber": "riset manual", "need": 85, "dist": 35, "field": 20, "scale": 20, "fit": 10, "telepon": "+62 21 5663 017", "kelas": "langsung", "aksi": "hubungi_sekarang", "saran": "Telepon langsung. Prioritas tertinggi.", "catatan": "Jaringan agen luas; operasi lapangan kurir", "tegak": true, "bukti_kuat": 4, "bukti": []}, {"nama": "JNE", "sumber": "riset manual", "need": 85, "dist": 35, "field": 20, "scale": 20, "fit": 10, "telepon": "+62 21 2927 8888", "kelas": "langsung", "aksi": "hubungi_sekarang", "saran": "Telepon langsung. Prioritas tertinggi.", "catatan": "Jaringan agen nasional; nomor adalah contact center, office line 021-566-5262 juga ada", "tegak": true, "bukti_kuat": 4, "bukti": []}, {"nama": "TIKI", "sumber": "riset manual", "need": 85, "dist": 35, "field": 20, "scale": 20, "fit": 10, "telepon": "1500 125", "kelas": "layanan", "aksi": "cari_nomor_kantor", "saran": "Nomor yang ada hanya call-center. Cari jalur kantor/marketing.", "catatan": "Jaringan agen nasional; 1500-style call center bukan direct line", "tegak": true, "bukti_kuat": 4, "bukti": []}, {"nama": "Wahana Ekspedisi", "sumber": "riset manual", "need": 80, "dist": 35, "field": 20, "scale": 15, "fit": 10, "telepon": "+62 21 7341 688", "kelas": "langsung", "aksi": "hubungi_sekarang", "saran": "Telepon langsung. Prioritas tertinggi.", "catatan": "Kurir skala menengah dengan jaringan agen; jejak web tipis; kasus uji diskriminasi rubric", "tegak": true, "bukti_kuat": 4, "bukti": []}, {"nama": "Erajaya", "sumber": "riset manual", "need": 75, "dist": 25, "field": 20, "scale": 20, "fit": 10, "telepon": "+62 21 690 5788", "kelas": "langsung", "aksi": "hubungi_sekarang", "saran": "Telepon langsung. Prioritas tertinggi.", "catatan": "1.126 outlet ritel; distributor resmi gadget; telepon DIRECT LINE dari halaman resmi - kualitas data terbaik", "tegak": true, "bukti_kuat": 4, "bukti": []}, {"nama": "Kapal Api Global / Santos Jaya Abadi", "sumber": "bukti situs", "need": 70, "dist": 35, "field": 0, "scale": 20, "fit": 15, "telepon": "62213503881", "kelas": "langsung", "aksi": "hubungi_nanti", "saran": "Data siap, kebutuhan sedang. Antrian kedua.", "catatan": "Punya anak usaha distributor sendiri (Fastrata Buana) dan 126 gerai - dua bukti berbeda saling menguatkan.", "tegak": true, "bukti_kuat": 3, "bukti": [{"komponen": "dist_model", "label": "jaringan_sendiri", "kutipan": "PT. Fastrata Buana is a consumer good distributor of Kapal Api Group. It is also the marketer of quality products of top brands such as Kapal Api and Good Day", "yakin": "tinggi"}, {"komponen": "scale", "label": "nasional", "kutipan": "Excelso Cafe has 126 outlets in major cities of Indonesia", "yakin": "tinggi"}, {"komponen": "industry_fit", "label": "produsen_barang_konsumsi", "kutipan": "PT. Santos Jaya Abadi is a multinational company that produces beverages", "yakin": "tinggi"}]}, {"nama": "Gojek", "sumber": "riset manual", "need": 70, "dist": 15, "field": 30, "scale": 20, "fit": 5, "telepon": "+62 21 5084 9000", "kelas": "langsung", "aksi": "hubungi_nanti", "saran": "Data siap, kebutuhan sedang. Antrian kedua.", "catatan": "Tim akuisisi merchant GoFood = canvassing lapangan nyata; tapi bukan distribusi barang fisik", "tegak": true, "bukti_kuat": 4, "bukti": []}, {"nama": "PT Pupuk Indonesia", "sumber": "bukti situs", "need": 65, "dist": 35, "field": 0, "scale": 20, "fit": 10, "telepon": null, "kelas": null, "aksi": "arsipkan", "saran": "Tidak ada nomor dan kebutuhan rendah.", "catatan": "Distribusi pupuk subsidi lewat titik serah dan Command Center. Sasaran akhirnya petani lewat kios, bukan barang konsumsi bermerek.", "tegak": true, "bukti_kuat": 3, "bukti": [{"komponen": "dist_model", "label": "jaringan_sendiri", "kutipan": "proses distribusi dapat dipantau secara real time mulai dari produksi, pergerakan stok, pengiriman, hingga penebusan pupuk subsidi di titik serah", "yakin": "tinggi"}, {"komponen": "scale", "label": "nasional", "kutipan": "Pupuk Indonesia memiliki 10 anak perusahaan, produk kami dipasarkan di seluruh Indonesia", "yakin": "tinggi"}, {"komponen": "industry_fit", "label": "ritel_distribusi_logistik", "kutipan": "salah satu produsen pupuk terbesar di Asia ... Pupuk Indonesia Group juga bergerak di bidang EPC, logistik, utilitas, perdagangan dan bisnis pangan", "yakin": "sedang"}]}, {"nama": "Abang Express - Pengiriman Internasional", "sumber": "bukti situs", "need": 65, "dist": 35, "field": 0, "scale": 20, "fit": 10, "telepon": "+628111361888", "kelas": null, "aksi": "arsipkan", "saran": "Kebutuhan rendah, tidak layak biaya verifikasi.", "catatan": "Ekspedisi ekspor dengan 383 agen nasional. Jaringan agennya perlu dikelola - relevan, meski bukan distribusi barang bermerek sendiri.", "tegak": true, "bukti_kuat": 3, "bukti": [{"komponen": "dist_model", "label": "jaringan_sendiri", "kutipan": "Abang Express memiliki lebih dari 383 agen Tersebar di Seluruh Indonesia & terus bertumbuh", "yakin": "tinggi"}, {"komponen": "scale", "label": "nasional", "kutipan": "Lebih dari 200 Agen tersebar diseluruh Indonesia, dan masih akan bertambah", "yakin": "tinggi"}, {"komponen": "industry_fit", "label": "ritel_distribusi_logistik", "kutipan": "brand jasa pengiriman Internasional ... terdaftar secara bisnis di bawah keanggotaan asosisasi ASPERINDO", "yakin": "tinggi"}]}, {"nama": "Kopi Kenangan", "sumber": "riset manual", "need": 55, "dist": 15, "field": 10, "scale": 20, "fit": 10, "telepon": null, "kelas": null, "aksi": "arsipkan", "saran": "Tidak ada nomor dan kebutuhan rendah.", "catatan": "900+ outlet TAPI milik sendiri bukan jaringan distributor; telepon beredar terlihat dummy - tidak dipakai", "tegak": true, "bukti_kuat": 4, "bukti": []}, {"nama": "Ajinomoto Indonesia", "sumber": "bukti situs", "need": 50, "dist": 35, "field": 0, "scale": 0, "fit": 15, "telepon": null, "kelas": null, "aksi": "arsipkan", "saran": "Tidak ada nomor dan kebutuhan rendah.", "catatan": "Memasok ritel dan food service (hotel/restoran/katering); halaman karier tidak memuat satu pun lowongan.", "tegak": false, "bukti_kuat": 2, "bukti": [{"komponen": "dist_model", "label": "jaringan_sendiri", "kutipan": "Ajinomoto terus berkomitmen membantu perkembangan bisnis kuliner di Indonesia melalui penyediaan produk-produk berkualitas yang berorientasi pada food service seperti hotel, restoran dan katering", "yakin": "sedang"}, {"komponen": "industry_fit", "label": "produsen_barang_konsumsi", "kutipan": "Produk Retail Bisnis Horeka Produk Industri Komitmen Halal", "yakin": "tinggi"}]}, {"nama": "Indofood Sukses Makmur", "sumber": "bukti situs", "need": 50, "dist": 35, "field": 0, "scale": 0, "fit": 15, "telepon": null, "kelas": null, "aksi": "arsipkan", "saran": "Tidak ada nomor dan kebutuhan rendah.", "catatan": "Distribusi adalah salah satu dari empat kelompok usaha resminya - bukti struktural, bukan klaim pemasaran.", "tegak": false, "bukti_kuat": 2, "bukti": [{"komponen": "dist_model", "label": "jaringan_sendiri", "kutipan": "BUSINESS GROUPS ... CONSUMER BRANDED PRODUCTS BOGASARI AGRIBUSINESS DISTRIBUTION", "yakin": "tinggi"}, {"komponen": "industry_fit", "label": "produsen_barang_konsumsi", "kutipan": "NOODLES DAIRY SNACK FOODS FOOD SEASONINGS NUTRITION AND SPECIAL FOODS BEVERAGES", "yakin": "tinggi"}]}, {"nama": "Kino Indonesia", "sumber": "bukti situs", "need": 50, "dist": 35, "field": 0, "scale": 0, "fit": 15, "telepon": "622180821166", "kelas": "langsung", "aksi": "hubungi_nanti", "saran": "Data siap, kebutuhan sedang. Antrian kedua.", "catatan": "Berakar dari bisnis distribusi; menu situsnya punya bagian Jaringan Distribusi sendiri.", "tegak": false, "bukti_kuat": 2, "bukti": [{"komponen": "dist_model", "label": "jaringan_sendiri", "kutipan": "Cikal bakal PT Kino Indonesia Tbk (Kino) dimulai pada tahun 1991 lewat perusahaan yang bernama PT Duta Lestari Sentratama (DLS). DLS pada waktu itu berfokus dalam menjalankan bisnis distribusi", "yakin": "tinggi"}, {"komponen": "industry_fit", "label": "produsen_barang_konsumsi", "kutipan": "30+ Brand 30+ Negara 3900+ Karyawan", "yakin": "tinggi"}]}, {"nama": "Mayora Indah", "sumber": "bukti situs", "need": 50, "dist": 35, "field": 0, "scale": 0, "fit": 15, "telepon": "622180637000", "kelas": "langsung", "aksi": "hubungi_nanti", "saran": "Data siap, kebutuhan sedang. Antrian kedua.", "catatan": "Hanya 3 halaman terpanen karena sertifikatnya rusak; bandingkan dengan nilai manual 100 - selisihnya soal panen, bukan soal perusahaan.", "tegak": false, "bukti_kuat": 2, "bukti": [{"komponen": "dist_model", "label": "jaringan_sendiri", "kutipan": "Business Relations Supplier Distributor", "yakin": "sedang"}, {"komponen": "industry_fit", "label": "produsen_barang_konsumsi", "kutipan": "Kopiko, Far Beyond just a Coffee Candy ... Le Minerale", "yakin": "tinggi"}]}, {"nama": "PT. Kimia Farma, Tbk.", "sumber": "bukti situs", "need": 50, "dist": 35, "field": 0, "scale": 0, "fit": 15, "telepon": null, "kelas": null, "aksi": "arsipkan", "saran": "Tidak ada nomor dan kebutuhan rendah.", "catatan": "Farmasi BUMN dengan anak usaha distribusi sendiri. Halaman yang terpanen menu korporat, jadi skala dan tim lapangannya belum terbukti.", "tegak": false, "bukti_kuat": 2, "bukti": [{"komponen": "dist_model", "label": "jaringan_sendiri", "kutipan": "Anak Perusahaan: PT Kimia Farma Trading & Distribution ... PT Kimia Farma Apotek ... BISNIS: Distribusi dan Perdagangan, Ritel Farmasi", "yakin": "tinggi"}, {"komponen": "industry_fit", "label": "produsen_barang_konsumsi", "kutipan": "PRODUK: Generik, OTC & Herbal, Etikal, Kosmetik ... Fasilitas Produksi Manufaktur", "yakin": "tinggi"}]}, {"nama": "Blue Bird Group", "sumber": "riset manual", "need": 50, "dist": 15, "field": 10, "scale": 20, "fit": 5, "telepon": "+62 21 7989 000", "kelas": "langsung", "aksi": "hubungi_nanti", "saran": "Data siap, kebutuhan sedang. Antrian kedua.", "catatan": "Armada taksi dikelola sendiri TAPI tidak mendistribusikan barang bermerek - pita lapangan_bukan_barang, sama dengan Gojek dan Kopi Kenangan. Dikoreksi dari 0 setelah audit terhadap pita bukti di rubrik.py.", "tegak": true, "bukti_kuat": 4, "bukti": []}, {"nama": "Nutrifood Indonesia", "sumber": "bukti situs", "need": 40, "dist": 25, "field": 0, "scale": 0, "fit": 15, "telepon": "622129635700", "kelas": "langsung", "aksi": "arsipkan", "saran": "Data bagus tapi kemungkinan tidak butuh produk ini.", "catatan": "Menyebut mendistribusikan produknya, tapi tidak ada bukti jaringan titik fisik; lowongan yang terpampang hanya MT dan manufaktur.", "tegak": false, "bukti_kuat": 2, "bukti": [{"komponen": "dist_model", "label": "jaringan_terbatas", "kutipan": "Founded in Semarang, Indonesia, Nutrifood has been distributing the products all across more than 30 countries", "yakin": "rendah"}, {"komponen": "field_sales", "label": "tanpa_lapangan", "kutipan": "Vacancy ... Management Trainee 2026 ... Manufacturing Graduate Program 2026", "yakin": "sedang"}, {"komponen": "industry_fit", "label": "produsen_barang_konsumsi", "kutipan": "our very own distinctive and premium brands: Tropicana Slim, NutriSari, L-Men, HiLo, W'dank, dan Lokalate", "yakin": "tinggi"}]}, {"nama": "Biznet", "sumber": "bukti situs", "need": 40, "dist": 15, "field": 0, "scale": 20, "fit": 5, "telepon": "+62 361 221917", "kelas": null, "aksi": "arsipkan", "saran": "Kebutuhan rendah, tidak layak biaya verifikasi.", "catatan": "300 kantor cabang di 185 kota - jaringan lapangan nyata, tapi yang dijual layanan internet, bukan barang yang didistribusikan.", "tegak": true, "bukti_kuat": 3, "bukti": [{"komponen": "dist_model", "label": "lapangan_bukan_barang", "kutipan": "+185 KOTA +300 KANTOR CABANG +100.000km SERAT OPTIK", "yakin": "sedang"}, {"komponen": "scale", "label": "nasional", "kutipan": "+185 KOTA +300 KANTOR CABANG", "yakin": "tinggi"}, {"komponen": "industry_fit", "label": "platform_jasa", "kutipan": "perusahaan infrastruktur digital terintegrasi di Indonesia yang menyediakan layanan Internet, Kabel Bawah Laut, Data Center, Cloud Computing dan IPTV", "yakin": "tinggi"}]}, {"nama": "Blibli", "sumber": "riset manual", "need": 40, "dist": 0, "field": 10, "scale": 20, "fit": 10, "telepon": "0804-1-871-871", "kelas": "layanan", "aksi": "arsipkan", "saran": "Call-center + kebutuhan rendah.", "catatan": "Platform e-commerce; akuisisi seller mayoritas digital bukan lapangan; telepon call-center", "tegak": true, "bukti_kuat": 4, "bukti": []}, {"nama": "Tokopedia", "sumber": "riset manual", "need": 35, "dist": 0, "field": 10, "scale": 20, "fit": 5, "telepon": "+62 21 5369 1015", "kelas": "langsung", "aksi": "arsipkan", "saran": "Data bagus tapi kemungkinan tidak butuh produk ini.", "catatan": "Marketplace murni digital; akuisisi seller lewat platform bukan lapangan", "tegak": true, "bukti_kuat": 4, "bukti": []}, {"nama": "Traveloka", "sumber": "riset manual", "need": 25, "dist": 0, "field": 0, "scale": 20, "fit": 5, "telepon": "0804-1500-308", "kelas": "layanan", "aksi": "arsipkan", "saran": "Call-center + kebutuhan rendah.", "catatan": "OTA murni digital; TIDAK ADA operasi sales lapangan sama sekali; telepon 1500-style call center", "tegak": true, "bukti_kuat": 4, "bukti": []}, {"nama": "AIM Food", "sumber": "bukti situs", "need": 15, "dist": 0, "field": 0, "scale": 0, "fit": 15, "telepon": "622129618989", "kelas": "langsung", "aksi": "arsipkan", "saran": "Data bagus tapi kemungkinan tidak butuh produk ini.", "catatan": "Produsen kontrak OEM/ODM - membuat produk untuk merek lain, jadi tidak punya jaringan distribusi sendiri.", "tegak": false, "bukti_kuat": 1, "bukti": [{"komponen": "industry_fit", "label": "produsen_barang_konsumsi", "kutipan": "Aimfood - Manufacturing Indonesia ... ALL IN ONE SERVICE OEM & ODM ... PRIVATE LABEL MANUFACTURER", "yakin": "sedang"}]}, {"nama": "Coca-Cola Indonesia", "sumber": "bukti situs", "need": 15, "dist": 0, "field": 0, "scale": 0, "fit": 15, "telepon": null, "kelas": null, "aksi": "arsipkan", "saran": "Tidak ada nomor dan kebutuhan rendah.", "catatan": "Situsnya SPA - 14 alamat berbeda mengembalikan halaman merek yang sama; tidak ada halaman distribusi yang bisa dibaca.", "tegak": false, "bukti_kuat": 1, "bukti": [{"komponen": "industry_fit", "label": "produsen_barang_konsumsi", "kutipan": "Menyediakan pilihan Nol Kalori untuk konsumen ... Jelajahi Merek Kami", "yakin": "tinggi"}]}, {"nama": "Danone Indonesia", "sumber": "bukti situs", "need": 15, "dist": 0, "field": 0, "scale": 0, "fit": 15, "telepon": null, "kelas": null, "aksi": "arsipkan", "saran": "Tidak ada nomor dan kebutuhan rendah.", "catatan": "Yang terpanen situs korporat global Danone, bukan entitas Indonesia.", "tegak": false, "bukti_kuat": 1, "bukti": [{"komponen": "industry_fit", "label": "produsen_barang_konsumsi", "kutipan": "Danone is a leading global food and beverage company", "yakin": "tinggi"}]}, {"nama": "Frisian Flag Indonesia", "sumber": "bukti situs", "need": 15, "dist": 0, "field": 0, "scale": 0, "fit": 15, "telepon": "62218410945", "kelas": "langsung", "aksi": "arsipkan", "saran": "Data bagus tapi kemungkinan tidak butuh produk ini.", "catatan": "Tujuh halaman terpanen tapi semuanya produk dan karier; tidak ada halaman jaringan distribusi.", "tegak": false, "bukti_kuat": 1, "bukti": [{"komponen": "industry_fit", "label": "produsen_barang_konsumsi", "kutipan": "Kental Manis dan Susu Kental Manis ... Susu UHT ... Susu Bubuk Keluarga", "yakin": "tinggi"}]}, {"nama": "Glico Indonesia", "sumber": "bukti situs", "need": 15, "dist": 0, "field": 0, "scale": 0, "fit": 15, "telepon": null, "kelas": null, "aksi": "arsipkan", "saran": "Tidak ada nomor dan kebutuhan rendah.", "catatan": "Halaman karier menampilkan Sales (0) - nol lowongan; profil perusahaan hanya menyebut satu alamat kantor Jakarta.", "tegak": true, "bukti_kuat": 3, "bukti": [{"komponen": "field_sales", "label": "tanpa_lapangan", "kutipan": "Career Areas ... Sales (0) Supply Chain (0)", "yakin": "sedang"}, {"komponen": "scale", "label": "satu_lokasi", "kutipan": "PT Glico Indonesia CIBIS NINE, 9th floor ... Jakarta Selatan 12560", "yakin": "sedang"}, {"komponen": "industry_fit", "label": "produsen_barang_konsumsi", "kutipan": "Produk Pocky Pejoy PRETZ", "yakin": "tinggi"}]}, {"nama": "Mondelez Indonesia", "sumber": "bukti situs", "need": 15, "dist": 0, "field": 0, "scale": 0, "fit": 15, "telepon": null, "kelas": null, "aksi": "arsipkan", "saran": "Tidak ada nomor dan kebutuhan rendah.", "catatan": "Sepuluh halaman terpanen tapi semuanya korporat global; 'Supply Chain Expectations' itu kebijakan pemasok, bukan jaringan distribusi.", "tegak": false, "bukti_kuat": 1, "bukti": [{"komponen": "industry_fit", "label": "produsen_barang_konsumsi", "kutipan": "Our Brands See All Brands Chocolate ... Biscuits Barni belVita Chips Ahoy", "yakin": "tinggi"}]}, {"nama": "So Good Food", "sumber": "bukti situs", "need": 15, "dist": 0, "field": 0, "scale": 0, "fit": 15, "telepon": "628041509006", "kelas": "layanan", "aksi": "arsipkan", "saran": "Call-center + kebutuhan rendah.", "catatan": "Empat halaman terpanen, semuanya produk dan resep; satu-satunya jejak penjualan adalah 'Belanja Marketplace'.", "tegak": false, "bukti_kuat": 1, "bukti": [{"komponen": "industry_fit", "label": "produsen_barang_konsumsi", "kutipan": "So Good fokus kepada penyediaan makanan praktis kaya akan protein berkualitas ... produk daging dan produk daging olahan", "yakin": "tinggi"}]}, {"nama": "BT Cocoa", "sumber": "bukti situs", "need": 10, "dist": 0, "field": 0, "scale": 0, "fit": 10, "telepon": null, "kelas": null, "aksi": "arsipkan", "saran": "Tidak ada nomor dan kebutuhan rendah.", "catatan": "Halaman yang terbaca semuanya korporat global Olam; pemasok bahan baku B2B, bukan merek konsumen.", "tegak": false, "bukti_kuat": 1, "bukti": [{"komponen": "industry_fit", "label": "ritel_distribusi_logistik", "kutipan": "Our Leadership ... guiding Olam Group and our operating groups - Olam Food Ingredients and Olam Agri", "yakin": "sedang"}]}, {"nama": "PT Epson Indonesia", "sumber": "bukti situs", "need": 10, "dist": 0, "field": 0, "scale": 0, "fit": 10, "telepon": "+62 21 8086 6766", "kelas": null, "aksi": "arsipkan", "saran": "Kebutuhan rendah, tidak layak biaya verifikasi.", "catatan": "Halaman yang terpanen katalog produk semua; tidak ada satu pun yang membahas jaringan distribusi di Indonesia.", "tegak": false, "bukti_kuat": 1, "bukti": [{"komponen": "industry_fit", "label": "ritel_distribusi_logistik", "kutipan": "Business Printers, Projectors, Scanners, Industrial Robots ... Solusi Korporat", "yakin": "sedang"}]}, {"nama": "DSV Contract Logistics Indonesia - Headoffice", "sumber": "bukti situs", "need": 10, "dist": 0, "field": 0, "scale": 0, "fit": 10, "telepon": null, "kelas": null, "aksi": "arsipkan", "saran": "Tidak ada nomor dan kebutuhan rendah.", "catatan": "Yang terpanen situs korporat global DSV, bukan entitas Indonesianya. Perlu dipanen ulang dari halaman Indonesia kalau mau dinilai serius.", "tegak": false, "bukti_kuat": 1, "bukti": [{"komponen": "industry_fit", "label": "ritel_distribusi_logistik", "kutipan": "Transport solutions: Air freight, Road transport, Sea freight, Rail freight ... Contract logistics", "yakin": "tinggi"}]}, {"nama": "Smart GPS Bandung", "sumber": "bukti situs", "need": 5, "dist": 0, "field": 0, "scale": 0, "fit": 5, "telepon": "+62 811 6687272; +62 811 6697272", "kelas": null, "aksi": "arsipkan", "saran": "Kebutuhan rendah, tidak layak biaya verifikasi.", "catatan": "BUKAN LEAD - ini pesaing. Menjual pelacakan armada kendaraan, wilayah produk yang sama dengan Salesmart.", "tegak": false, "bukti_kuat": 1, "bukti": [{"komponen": "industry_fit", "label": "platform_jasa", "kutipan": "penjualan produk GPS Tracker dan penyedia jasa layanan aplikasi manajemen online gps tracking monitoring system", "yakin": "tinggi"}]}, {"nama": "PT Multi Areal Planing Indonesia (MAPID)", "sumber": "bukti situs", "need": 5, "dist": 0, "field": 0, "scale": 0, "fit": 5, "telepon": null, "kelas": null, "aksi": "arsipkan", "saran": "Tidak ada nomor dan kebutuhan rendah.", "catatan": "BUKAN LEAD - pesaing juga. Menjual pengumpulan data lapangan dan perencanaan sales, persis wilayah Salesmart.", "tegak": false, "bukti_kuat": 1, "bukti": [{"komponen": "industry_fit", "label": "platform_jasa", "kutipan": "Platform: Collect and manage field data in real time ... Solutions by Usecase: Sales Planning, Business Branch Expansion", "yakin": "tinggi"}]}, {"nama": "Sinar Mas", "sumber": "bukti situs", "need": 0, "dist": 0, "field": 0, "scale": 0, "fit": 0, "telepon": "622150288869", "kelas": "langsung", "aksi": "arsipkan", "saran": "Data bagus tapi kemungkinan tidak butuh produk ini.", "catatan": "Halaman yang terbaca soal telekomunikasi, pusat data, energi, dan kimia - bukan pangan. Persis kehati-hatian yang Anda tulis sendiri di seed CSV: 'holding - cek entitas pangan spesifik'.", "tegak": false, "bukti_kuat": 1, "bukti": [{"komponen": "industry_fit", "label": "tidak_relevan", "kutipan": "PT XLSMART Telecom Sejahtera Tbk. memperkuat penetrasi pasar Business-to-Business (B2B) ... DSSA ... energi, infrastruktur digital, teknologi, hingga bahan kimia", "yakin": "sedang"}]}, {"nama": "Balon Tepuk Supporter", "sumber": "bukti situs", "need": 0, "dist": 0, "field": 0, "scale": 0, "fit": 0, "telepon": null, "kelas": null, "aksi": "arsipkan", "saran": "Tidak ada nomor dan kebutuhan rendah.", "catatan": "Penyaring memberinya skor 95 - salah tangkap tertinggi. Nama kota bertebaran ('Balon Tepuk Jakarta', 'Balon Tepuk Medan') itu halaman SEO, bukan jaringan distribusi.", "tegak": false, "bukti_kuat": 1, "bukti": [{"komponen": "industry_fit", "label": "tidak_relevan", "kutipan": "vendor profesional, menyediakan layanan jual balon tepuk, balon untuk suporter, dan layanan custom logo", "yakin": "sedang"}]}, {"nama": "Balon Tepuk Suporter", "sumber": "bukti situs", "need": 0, "dist": 0, "field": 0, "scale": 0, "fit": 0, "telepon": "+62 878 7888 9787", "kelas": null, "aksi": "arsipkan", "saran": "Kebutuhan rendah, tidak layak biaya verifikasi.", "catatan": "Usaha yang sama dengan entri di atas, situs berbeda. Kata 'Sales Representative' di halamannya ternyata satu nomor HP di daftar kontak, bukan tim lapangan.", "tegak": false, "bukti_kuat": 1, "bukti": [{"komponen": "industry_fit", "label": "tidak_relevan", "kutipan": "Kami Adalah Vendor Balon Tepuk dengan Spesialis Pembuatan Balon Tepuk di Indonesia", "yakin": "sedang"}]}, {"nama": "Toko Balon", "sumber": "bukti situs", "need": 0, "dist": 0, "field": 0, "scale": 0, "fit": 0, "telepon": null, "kelas": null, "aksi": "arsipkan", "saran": "Tidak ada nomor dan kebutuhan rendah.", "catatan": "Usaha balon yang sama lagi, situs ketiga. Tiga entri untuk satu usaha kecil - dedup per domain tidak menangkap ini karena domainnya memang beda.", "tegak": false, "bukti_kuat": 1, "bukti": [{"komponen": "industry_fit", "label": "tidak_relevan", "kutipan": "Temukan berbagai pilihan balon untuk berbagai keperluan: pesta ulang tahun, pernikahan, hingga event promosi", "yakin": "sedang"}]}];
+  var AKSI = {"hubungi_sekarang": ["siap", "Telepon sekarang"], "hubungi_nanti": ["siap", "Antrian kedua"], "verifikasi_lalu_hubungi": ["perlu", "Cek nomor dulu"], "cari_nomor_kantor": ["perlu", "Cari jalur kantor"], "cari_nomor": ["perlu", "Cari nomor"], "arsipkan": ["arsip", "Arsipkan"]};
+  var KOMP = [["dist","Model distribusi"],["field","Tim sales lapangan"],
+              ["scale","Skala operasi"],["fit","Kecocokan industri"]];
+  var saringAktif = "aktif";
+
+  function grup(l){ return AKSI[l.aksi][0]; }
+
+  function hitung(){
+    var n = {semua:LEADS.length, aktif:0, siap:0, perlu:0, arsip:0};
+    LEADS.forEach(function(l){
+      var g = grup(l);
+      n[g]++;
+      if (g !== "arsip") { n.aktif++; }
+    });
+    return n;
+  }
+
+  function ringkas(){
+    var n = hitung();
+    var siapTel = LEADS.filter(function(l){ return grup(l) === "siap" && l.telepon; }).length;
+    var tegak = LEADS.filter(function(l){ return l.tegak; }).length;
+    var kartu = [
+      ["Siap ditelepon", siapTel, "punya nomor jalur kantor"],
+      ["Perlu dilengkapi", n.perlu, "butuh nomor atau verifikasi"],
+      ["Nilai tegak", tegak, "bukti cukup untuk dipercaya"],
+      ["Total lead", n.semua, "dari pipeline sejauh ini"]
+    ];
+    document.getElementById("ringkas").innerHTML = kartu.map(function(k){
+      return '<div class="rk"><div class="k">' + k[0] + '</div><div class="v">' +
+             k[1] + '</div><div class="n">' + k[2] + '</div></div>';
+    }).join("");
+  }
+
+  function chips(){
+    var n = hitung();
+    var d = [["aktif","Perlu ditindak",n.aktif],["siap","Siap ditelepon",n.siap],
+             ["perlu","Perlu dilengkapi",n.perlu],["arsip","Arsip",n.arsip],
+             ["semua","Semua",n.semua]];
+    document.getElementById("saring").innerHTML = d.map(function(x){
+      return '<button class="chip" type="button" data-f="' + x[0] + '" aria-pressed="' +
+             (x[0] === saringAktif) + '">' + x[1] +
+             ' <span class="jml">' + x[2] + '</span></button>';
+    }).join("");
+  }
+
+  function labelKelas(k){
+    if (k === "langsung") { return "jalur kantor"; }
+    if (k === "layanan")  { return "call center"; }
+    if (k === "seluler")  { return "nomor HP"; }
+    return "belum jelas";
+  }
+
+  function render(){
+    var wadah = document.getElementById("daftar");
+    var tampil = LEADS.filter(function(l){
+      var g = grup(l);
+      if (saringAktif === "semua") { return true; }
+      if (saringAktif === "aktif") { return g !== "arsip"; }
+      return g === saringAktif;
+    });
+
+    if (!tampil.length){
+      wadah.innerHTML = '<div class="kosong">Tidak ada lead di saringan ini.</div>';
+      return;
+    }
+
+    wadah.innerHTML = tampil.map(function(l){
+      var g = grup(l);
+      var seg = KOMP.map(function(k, j){
+        return l[k[0]] > 0 ? '<i class="k' + (j+1) + '" style="flex:' + l[k[0]] + ' 1 0"></i>' : '';
+      }).join("");
+      var kutip = l.bukti.length
+        ? '<div class="kutip">\u201C' + l.bukti[0].kutipan + '\u201D</div>'
+        : '<div class="kutip">' + (l.catatan || "") + '</div>';
+      var pilLantai = l.tegak ? ''
+        : '<span class="pil lantai">bukti ' + l.bukti_kuat + '/4</span>';
+
+      var rinciBukti = l.bukti.length
+        ? l.bukti.map(function(b){
+            var judul = b.komponen;
+            KOMP.forEach(function(k){
+              if (b.komponen.indexOf(k[0]) === 0) { judul = k[1]; }
+            });
+            return '<div class="bukti-item"><div class="bukti-komp"><b>' + judul +
+              '</b> &middot; ' + b.label + ' &middot; keyakinan ' + b.yakin +
+              '</div><div class="bukti-teks">\u201C' + b.kutipan + '\u201D</div></div>';
+          }).join("")
+        : '<div class="bukti-teks">' + (l.catatan || "Belum ada kutipan.") + '</div>';
+
+      var tel = l.telepon
+        ? '<a class="tel" href="tel:' + l.telepon.replace(/[^0-9+]/g, "") + '">' +
+          l.telepon + '</a><span class="pil ' +
+          (l.kelas === "langsung" ? "siap" : "perlu") + '">' + labelKelas(l.kelas) + '</span>'
+        : '<span class="tel mati">Nomor belum ada</span>';
+
+      return '<article class="lead ' + g + '">' +
+        '<button class="baris" type="button" aria-expanded="false">' +
+          '<div class="kiri">' +
+            '<div class="nama">' + l.nama + pilLantai + '</div>' +
+            '<div class="aksi-teks">' + l.saran + '</div>' + kutip +
+          '</div>' +
+          '<div class="kanan">' +
+            '<div class="skor"><div class="angka">' + l.need + '</div>' +
+              '<div class="lbl">butuh</div><div class="komp">' + seg + '</div></div>' +
+            '<span class="panah" aria-hidden="true">&#9654;</span>' +
+          '</div>' +
+        '</button>' +
+        '<div class="rinci">' +
+          '<h4>Hubungi</h4><div class="kontak">' + tel + '</div>' +
+          '<h4>Kenapa perusahaan ini butuh Salesmart</h4>' + rinciBukti +
+          '<h4>Pembuka percakapan</h4>' +
+          '<div class="nanti"><b>Belum aktif.</b> Nanti disusun otomatis oleh penilai AI ' +
+            'dari kutipan di atas &mdash; supaya telepon pertama tidak terdengar dingin.</div>' +
+          '<h4>Sumber</h4><div class="bukti-teks">' + l.sumber + ' &middot; skor ' +
+            l.need + '/100 &middot; ' +
+            (l.tegak ? 'bukti cukup' : 'bukti ' + l.bukti_kuat + '/4, angka ini lantai') +
+          '</div>' +
+        '</div>' +
+      '</article>';
+    }).join("");
+  }
+
+  document.addEventListener("click", function(e){
+    var chip = e.target.closest(".chip");
+    if (chip){ saringAktif = chip.dataset.f; chips(); render(); return; }
+    var b = e.target.closest(".baris");
+    if (b){
+      var buka = b.parentNode.classList.toggle("buka");
+      b.setAttribute("aria-expanded", buka ? "true" : "false");
+    }
+  });
+
+  ringkas(); chips(); render();
+})();
+
+</script>
+</body></html>

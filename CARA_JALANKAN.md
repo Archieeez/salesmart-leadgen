@@ -63,8 +63,15 @@ asli di situ, filternya salah buang.
 ### 6. Buat dashboard visual
 ```
 python src/buat_dashboard.py
+python src/buat_antrian.py
 ```
-Menghasilkan `docs/index.html`. Klik dua kali untuk membukanya di browser.
+Menghasilkan dua file di `docs/`, klik dua kali untuk membukanya:
+
+- `antrian.html` — daftar lead siap telepon, untuk orang sales
+- `index.html` — kesehatan pipeline, untuk yang membangun
+
+Keduanya membaca dari database dan CSV. Tidak ada angka yang diketik di
+dalam kode, jadi jalankan ulang setiap data berubah.
 
 ---
 
