@@ -114,6 +114,25 @@ lowongan. JobStreet dan Glints melarang lewat robots.txt; ToS Kalibrr,
 Indeed, dan Karir.com belum bisa diverifikasi. Jangan pakai ketiganya
 sampai ToS-nya dibaca.
 
+### 10b. Panen bukti untuk lead OSM yang punya website
+
+Dari 991 lead OSM, hanya 180 yang punya alamat website — dan setelah
+domain duplikat dibuang, tersisa 170 situs unik. Itulah batas atas berapa
+banyak lead OSM yang bisa dinilai dengan cara ini.
+
+Bikin daftarnya dulu:
+```
+python -c "import sqlite3,csv;from urllib.parse import urlparse;c=sqlite3.connect('data/leads.db');rows=c.execute(\"select osm_id,name,category,city,website from leads where website is not null and website!='' order by name\").fetchall();seen={};[seen.setdefault(urlparse(w if w.startswith('http') else 'https://'+w).netloc.lower().replace('www.',''),dict(nama=n.strip(),website=w if w.startswith('http') else 'https://'+w,sumber='osm',kategori=k,kota=ci or '',osm_id=o)) for o,n,k,ci,w in rows];out=list(seen.values());f=open('data/seed_osm_website.csv','w',newline='',encoding='utf-8');wr=csv.DictWriter(f,fieldnames=['nama','website','sumber','kategori','kota','osm_id']);wr.writeheader();wr.writerows(out);print(len(out))"
+```
+
+Lalu panen:
+```
+python src/panen_bukti.py --input data/seed_osm_website.csv --cache data/.cache_html
+```
+Butuh 1–3 jam. Aman ditinggal: halaman yang sudah diambil masuk cache,
+jadi kalau mati di tengah jalan, jalankan lagi dan yang sudah selesai
+tidak diunduh ulang.
+
 ### 11. Lihat biaya sebelum keluar duit
 ```
 python src/nilai_kebutuhan.py --dry-run
