@@ -93,6 +93,58 @@ dipakai untuk menjual. Kalau yang berlaku syarat non-komersial, seluruh
 rencana ini gugur. Kalau yang berlaku syarat situs, ia justru sangat
 terbuka.
 
+### PEMBARUAN 1 Sep 2026 (sore) — larangan ada DI DALAM PDF-nya
+
+Bryan membuka sendiri halaman syarat penggunaan di peramban, dan
+mengutipnya: konten situs BPS diberikan gratis "untuk tujuan (i)
+penggunaan data, baik untuk kepentingan komersial maupun nonkomersial;
+(ii) penyalinan, pendistribusian... (iii) pemanfaatan konten... kepada
+pihak ketiga dengan cara apa pun." Terbaca sangat terbuka.
+
+PDF direktorinya lalu diunduh (`direktori-industri-manufaktur-2025.pdf`,
+22,5 MB, 1.379 halaman, Volume 14). **Di halaman keterangan terbitannya
+tertulis larangan yang berlawanan:**
+
+> "Dilarang mereproduksi dan/atau menggandakan sebagian atau seluruh isi
+> buku ini **untuk tujuan komersial** tanpa izin tertulis dari Badan
+> Pusat Statistik"
+>
+> "It is prohibited to reproduce and/or duplicate part or all of this book
+> for **commercial purpose** without permission from BPS-Statistics
+> Indonesia"
+
+Ini bukan syarat umum situs, melainkan syarat yang dicetak DI DALAM
+terbitan yang mau dipakai. Yang khusus lebih menentukan daripada yang
+umum, dan sekarang dua dari tiga sumber (syarat API + terbitan itu
+sendiri) sama-sama menutup penggunaan komersial.
+
+**Kesimpulan: mengekstrak isi direktori ini untuk Salesmart memerlukan
+IZIN TERTULIS dari BPS lebih dulu.** Bukan jalan buntu — kalimatnya
+sendiri menyebut "tanpa izin tertulis", jadi izinnya memang bisa diminta.
+Kanalnya PPID BPS (ppid.bps.go.id).
+
+**Sampai izin itu ada, jangan bangun pengekstraknya.**
+
+Tindakan pengamanan yang sudah diambil: `*.pdf` dan `data/*.pdf`
+dimasukkan ke .gitignore. Repo ini PUBLIK — meng-commit PDF-nya sama
+dengan menerbitkan ulang terbitan berhak cipta itu ke internet.
+
+### Bentuk datanya (untuk menimbang layak-tidaknya mengejar izin)
+
+- 1.379 halaman, PDF teks (bukan pindaian), bisa dibaca `pdftotext`
+- Tata letak TIGA KOLOM per halaman
+- Per perusahaan: NAMA (berikut bentuk badan usaha: PT, CV, UD) dan
+  ALAMAT lengkap sampai kecamatan, kabupaten, provinsi, kode pos
+- Di halaman contoh TIDAK terlihat kode KBLI maupun jumlah tenaga kerja
+  per baris — kemungkinan KBLI dipakai sebagai pengelompokan bab, bukan
+  kolom. Perlu diperiksa lagi kalau izin sudah keluar.
+- Ada watermark "https://www.bps.go.id" yang ikut terbaca sebagai teks
+  dan menyisip ke tengah data — harus dibersihkan
+- Isinya nyata dan relevan: di satu halaman contoh saja sudah muncul
+  CALBEE WINGS FOOD PT dan CAMPINA ICE CREAM INDUSTRY PT
+- TIDAK ADA alamat situs web. Jadi dist_model dan field_sales tetap harus
+  dicari dari situs perusahaan, seperti sekarang.
+
 ### Yang perlu dilakukan manusia (tidak bisa saya kerjakan)
 
 1. **Buka sendiri di peramban** `https://www.bps.go.id/id/term-of-use`.

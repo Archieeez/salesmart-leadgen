@@ -31,3 +31,11 @@ data/.cache_html/
 # saja dengan panen_bukti.py, dan ukurannya membengkak tiap panen.
 # Hasil penilaiannya (tabel `kebutuhan`) ada di leads.db dan ikut dilacak.
 bukti.db
+
+# Publikasi BPS yang diunduh manusia. JANGAN PERNAH di-commit:
+# repo ini PUBLIK, dan tiap terbitan BPS memuat larangan tegas
+#   "Dilarang mereproduksi dan/atau menggandakan sebagian atau seluruh
+#    isi buku ini untuk tujuan komersial tanpa izin tertulis dari BPS"
+# Meng-commit-nya ke repo publik = menerbitkan ulang. Simpan lokal saja.
+data/*.pdf
+*.pdf
