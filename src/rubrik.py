@@ -228,6 +228,110 @@ def label_pita(komponen: str, nilai: int) -> str:
 
 
 # ===========================================================================
+# BAGIAN 2C: ATURAN TAFSIR  (aturan yang SEBELUMNYA cuma ada di kepala)
+# ===========================================================================
+# Dua aturan di bawah ini sudah dipakai diam-diam waktu menilai, tapi tidak
+# pernah ditulis. Akibatnya keduanya diperdebatkan ulang tiap kali ketemu
+# kasus yang sama. Ditulis di sini supaya berhenti jadi perdebatan.
+
+
+# --- Aturan 1: SATU FAKTA, SATU KOMPONEN -----------------------------------
+#
+# Sebuah fakta hanya boleh menaikkan SATU komponen. Kalau fakta yang sama
+# dipakai di dua tempat, need score-nya kelihatan besar padahal buktinya
+# cuma satu.
+#
+# Kasus yang memaksa aturan ini ditulis — MS Glow:
+#   Program agen/reseller-nya sudah dinilai di dist_model = 35, karena pita
+#   itu memang berbunyi "punya jaringan distributor/agen/reseller sendiri".
+#   Muncul usulan menaikkan field_sales dari 20 ke 30 (sales_kanvas) dengan
+#   alasan "seller-nya kan menjual". Tapi itu fakta yang PERSIS SAMA,
+#   dihitung dua kali. Kalau diterima, MS Glow jadi 95 hanya karena satu
+#   program reseller disebut dua kali.
+#
+#   field_sales-nya berdiri di atas bukti LAIN, dan cuma itu yang boleh
+#   dihitung: sub-brand Aesthetic Clinic — gerai fisik dengan stafnya
+#   sendiri. Itu lapangan_operasional = 20. Jadi 20, bukan 30.
+#
+# Praktisnya: sebelum memberi nilai, tanya "apakah kutipan ini sudah saya
+# pakai untuk komponen lain?" Kalau ya, komponen kedua harus punya
+# kutipannya sendiri atau turun pita.
+
+
+def periksa_dobel_hitung(rincian: dict) -> list:
+    """Cari satu fakta yang dinilai di dua komponen sekaligus.
+
+    Membandingkan kutipan antar komponen: kalau dua komponen memakai
+    kutipan yang sama — atau salah satu memuat yang lain — nilainya
+    berdiri di atas fakta yang sama dan salah satu harus turun.
+
+    INI PENYARING, BUKAN HAKIM. Ia hanya menangkap dobel hitung yang
+    kutipannya kebetulan sama persis. Dobel hitung yang diparafrase
+    berbeda tetap lolos, dan itu memang tidak bisa ditangkap mesin.
+    """
+    peringatan = []
+    isi = {}
+    for komp, nilai in rincian.items():
+        if isinstance(nilai, dict):
+            isi[komp] = (nilai.get("kutipan") or "").strip().lower()
+
+    # Kutipan pendek diabaikan: terlalu mudah kebetulan sama.
+    komp = [k for k, v in isi.items() if len(v) >= 40]
+    for i, a in enumerate(komp):
+        for b in komp[i + 1:]:
+            ta, tb = isi[a], isi[b]
+            if ta == tb or ta in tb or tb in ta:
+                peringatan.append(
+                    f"{a} dan {b} berdiri di atas kutipan yang sama")
+    return peringatan
+
+
+# --- Aturan 2: VERTIKAL YANG SENGAJA DITUTUP -------------------------------
+#
+# Beberapa industri punya tim penjual lapangan yang besar dan nyata, tapi
+# TETAP dinilai industry_fit = 0. Ini keputusan, bukan kelalaian rubrik.
+#
+# Kalau tidak ditulis, tiap sesi penilaian akan mengulang perdebatan yang
+# sama: "AIA punya ribuan Life Planner, masa 0?"
+
+VERTIKAL_DITUTUP = {
+    "asuransi_keuangan": (
+        "Asuransi, penjaminan, sekuritas, multifinance.",
+        # Kenapa ditutup:
+        "Tim lapangannya nyata — AIA punya halaman Jalur Distribusi dan "
+        "merekrut Life Planner, Asuransi Bintang memisahkan jalur karier "
+        "Agen dari Karyawan dan punya kantor pemasaran sampai Samarinda, "
+        "Makassar, dan Batam. Tapi yang mereka bawa ke lapangan adalah "
+        "polis, bukan barang: tidak ada stok, tidak ada outlet yang "
+        "dikunjungi, tidak ada rute ke toko. Agen asuransi mendatangi "
+        "ORANG, salesman FMCG mendatangi TOKO — alur kerjanya beda, dan "
+        "produk yang dibangun untuk kanvasing toko tidak otomatis cocok. "
+        "Rubrik sudah menahannya lewat dist_model = 0 (komponen terbesar, "
+        "35 poin), jadi asuransi tidak akan pernah menembus ambang tanpa "
+        "aturan khusus. industry_fit = 0 membuat penolakan itu disengaja, "
+        "bukan kebetulan.",
+        # Kapan keputusan ini layak ditinjau ulang:
+        "Kalau Salesmart nanti punya modul manajemen keagenan — bukan "
+        "kunjungan outlet — vertikal ini dibuka lagi. Sampai saat itu, "
+        "jangan dinilai ulang satu per satu.",
+    ),
+}
+
+
+def vertikal_ditutup(catatan: str = "") -> str:
+    """Nama vertikal tertutup yang cocok, atau string kosong.
+
+    Sengaja TIDAK otomatis: penilai yang memutuskan sebuah perusahaan
+    masuk vertikal tertutup, fungsi ini hanya menyediakan alasannya
+    supaya kalimatnya seragam di semua catatan.
+    """
+    for nama, (_, alasan, _) in VERTIKAL_DITUTUP.items():
+        if nama in catatan:
+            return alasan
+    return ""
+
+
+# ===========================================================================
 # BAGIAN 3: KEPUTUSAN AKHIR
 # ===========================================================================
 # Dua sumbu terpisah, sengaja TIDAK dijadikan satu angka:
