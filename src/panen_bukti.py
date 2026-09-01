@@ -42,7 +42,8 @@ import time
 from urllib.parse import urljoin
 
 import web
-from web import JEDA_ANTAR_SITUS, ambil_html, ambil_teks_polos, boleh_ambil, cari_link, jeda_halaman, log
+from web import (JEDA_ANTAR_SITUS, ambil_html, boleh_ambil, cari_link,
+                 jeda_halaman, log, teks_dari_html)
 
 # --------------------------------------------------------------------------
 # Halaman apa yang dicari
@@ -154,6 +155,7 @@ def panen_situs(website: str) -> list[dict]:
     root, path_seed = web.akar(website)
     hasil: list[dict] = []
     diperiksa: set[str] = set()
+    html_halaman: dict[str, str] = {}
 
     def ambil(url: str, jenis: str) -> bool:
         url = url.split("#")[0]
@@ -165,8 +167,15 @@ def panen_situs(website: str) -> list[dict]:
             log(f"robots melarang {url}")
             return False
 
-        teks = ambil_teks_polos(url)
+        html, alasan = ambil_html(url)
+        log(f"GET {url} -> {alasan}")
         jeda_halaman(url)
+        if html is None:
+            return False
+        # Disimpan supaya halaman ini bisa dipakai sebagai sumber link
+        # tanpa meminta ulang ke server.
+        html_halaman[url] = html
+        teks = teks_dari_html(html)
         if not teks or len(teks) < MIN_PANJANG_TEKS:
             return False
 
@@ -179,12 +188,26 @@ def panen_situs(website: str) -> list[dict]:
     ambil(beranda, "beranda")
 
     # 2. Path yang ditunjuk seed CSV, kalau memang menunjuk halaman dalam.
+    url_seed = ""
     if path_seed not in ("", "/"):
-        ambil(urljoin(root, path_seed), "seed")
+        url_seed = urljoin(root, path_seed)
+        ambil(url_seed, "seed")
 
-    # 3. Kumpulkan sumber link. Homepage dulu; kalau ternyata cangkang,
-    #    pintu alternatif ikut dipakai.
+    # 3. Kumpulkan sumber link.
+    #
+    #    HALAMAN SEED DIDAHULUKAN, dan ini bukan soal selera.
+    #    Sebelumnya link cuma digali dari homepage. Akibatnya seed yang
+    #    menunjuk mondelezinternational.com/indonesia TETAP menghasilkan
+    #    sepuluh halaman korporat GLOBAL: halaman Indonesia-nya memang ikut
+    #    terambil, tapi link untuk ditelusuri diambil dari homepage global.
+    #    Danone dan DSV kena persis hal yang sama, dan ketiganya berakhir
+    #    di need score 10-15 karena bukti Indonesianya tidak pernah terbaca.
+    #
+    #    Seed ditaruh di depan supaya jatah MAKS_PER_JENIS habis untuk
+    #    halaman Indonesia dulu, baru sisanya dari homepage.
     sumber_html: list[str] = []
+    if url_seed and url_seed in html_halaman:
+        sumber_html.append(html_halaman[url_seed])
     html, _ = ambil_html(beranda)
     if html:
         sumber_html.append(html)

@@ -214,16 +214,27 @@ def ambil_teks(url: str) -> str | None:
     return sup.get_text(" ", strip=True) + " " + tel + " " + " ".join(jsonld)
 
 
+def teks_dari_html(html: str) -> str:
+    """HTML -> teks polos.
+
+    Dipisah dari ambil_teks_polos() supaya pemanggil yang SUDAH memegang
+    HTML halaman tidak perlu memintanya lagi ke server. Tanpa ini,
+    panen_bukti.py harus mengambil halaman seed dua kali: sekali untuk
+    teksnya, sekali untuk menggali linknya.
+    """
+    sup = BeautifulSoup(html, "html.parser")
+    for tag in sup(["script", "style", "noscript"]):
+        tag.decompose()
+    return sup.get_text(" ", strip=True)
+
+
 def ambil_teks_polos(url: str) -> str | None:
     """Teks halaman apa adanya, tanpa tambahan telepon. Untuk panen bukti."""
     html, alasan = ambil_html(url)
     log(f"GET {url} -> {alasan}")
     if html is None:
         return None
-    sup = BeautifulSoup(html, "html.parser")
-    for tag in sup(["script", "style", "noscript"]):
-        tag.decompose()
-    return sup.get_text(" ", strip=True)
+    return teks_dari_html(html)
 
 
 def jeda_halaman(url: str):
@@ -235,6 +246,25 @@ def jeda_halaman(url: str):
 # --------------------------------------------------------------------------
 # Penemuan link
 # --------------------------------------------------------------------------
+
+def _domain_sama(a: str, b: str) -> bool:
+    """Apakah dua URL berada di situs yang sama, mengabaikan awalan www.
+
+    KENAPA PERLU: perbandingan netloc apa adanya membuat SELURUH link
+    internal danone.co.id terbuang. Seed-nya ditulis www.danone.co.id,
+    sementara link di halamannya ditulis tanpa www — jadi tiap link
+    dianggap keluar domain. Akibatnya homepage terbaca "0 link", tidak
+    ada apa pun yang bisa ditelusuri, dan yang tersimpan cuma beranda.
+
+    Ini penyaring yang sengaja sempit: hanya awalan www yang diabaikan.
+    Subdomain lain (mis. karir.perusahaan.co.id) tetap dianggap situs
+    lain, karena menyamakan semua subdomain bisa menyeret crawler ke
+    tempat yang tidak diniatkan.
+    """
+    def inti(h):
+        return urlparse(h).netloc.lower().removeprefix("www.")
+    return inti(a) == inti(b)
+
 
 def cari_link(html: str, root: str, pola: re.Pattern) -> list[str]:
     """
@@ -250,7 +280,7 @@ def cari_link(html: str, root: str, pola: re.Pattern) -> list[str]:
         if not (pola.search(a.get_text(" ", strip=True)) or pola.search(href)):
             continue
         url = urljoin(root, href)
-        if urlparse(url).netloc != urlparse(root).netloc:
+        if not _domain_sama(url, root):
             continue
         url = url.split("#")[0]
         if url in terlihat:
