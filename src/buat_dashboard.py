@@ -1,7 +1,7 @@
 """
 buat_dashboard.py
 =================
-Baca data/leads.db (dan data/bukti.db kalau ada), hasilkan docs/index.html —
+Baca data/leads.db (dan data/bukti.db kalau ada), hasilkan docs/teknis.html —
 dashboard visual yang bisa dibuka langsung di browser (klik dua kali, tidak
 perlu server).
 
@@ -29,7 +29,7 @@ BASE = Path(__file__).resolve().parent.parent
 DB = BASE / "data" / "leads.db"
 DB_BUKTI = BASE / "data" / "bukti.db"
 CSV_SKOR = BASE / "data" / "companies_scored.csv"
-OUT = BASE / "docs" / "index.html"
+OUT = BASE / "docs" / "teknis.html"
 
 # --------------------------------------------------------------------------
 # Warna — dipertahankan dari versi sebelumnya supaya dashboard tetap terasa
@@ -340,7 +340,7 @@ def main():
 
 <h1>salesmart-leadgen</h1>
 <p class="meta">Dashboard teknis — kesehatan pipeline, dibuat otomatis dari data/leads.db<br>
-Untuk daftar lead siap telepon, lihat <a href="antrian.html" style="color:#185FA5">Antrian Lead</a>.</p>
+Untuk daftar lead siap telepon, lihat <a href="./" style="color:#185FA5">Antrian Lead</a>.</p>
 
 <div class="cards">
 {kartu_html}
