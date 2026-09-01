@@ -138,10 +138,39 @@ PITA = {
          "Punya armada atau gerai lapangan yang dikelola, tapi tidak "
          "mendistribusikan barang bermerek sendiri.",
          "situs: halaman layanan/lokasi"),
-        (0, "tanpa_distribusi_fisik",
-         "Produk atau jasa digital. Tidak ada barang fisik yang berpindah "
-         "lewat jaringan yang perlu dikelola.",
-         "situs: halaman produk"),
+        # Pita ini menampung 29 dari 49 penilaian, dan namanya yang lama
+        # ("tanpa_distribusi_fisik", "Produk atau jasa digital") KELIRU
+        # untuk mayoritas penghuninya: Coca-Cola, Mondelez, Frisian Flag,
+        # dan perkebunan sawit Dharma Satya semuanya barang fisik.
+        #
+        # Yang sebenarnya diukur pita ini bukan "adakah barang fisik",
+        # melainkan "adakah JARINGAN TITIK yang perlu dikelola". Lima
+        # bentuk berbeda jatuh ke sini, dan membedakannya penting karena
+        # tindak lanjutnya beda:
+        #
+        #   a. Produk atau jasa digital        - Accurate, R2plan, WebHozz
+        #   b. Jasa non-fisik lain             - asuransi, penjaminan
+        #   c. Barang fisik B2B langsung dari  - Grahaesa, Elkadaya,
+        #      satu titik, tanpa jaringan        Magna Perkasa, Epson
+        #   d. Produsen kontrak OEM/ODM        - AIM Food. Barangnya masuk
+        #      ke jaringan MEREK LAIN, bukan jaringan sendiri.
+        #   e. Jaringannya BELUM TERBUKTI,     - Coca-Cola, Mondelez,
+        #      bukan tidak ada                   Frisian Flag, So Good Food
+        #
+        # Bentuk (e) adalah jebakan paling berbahaya di seluruh rubrik.
+        # Coca-Cola jelas punya jaringan distribusi raksasa; ia dapat 0
+        # karena situsnya SPA dan tidak bisa dipanen, bukan karena
+        # jaringannya tidak ada. Pita tidak bisa membedakan keduanya —
+        # yang membedakan kolom `status_nilai` (bukti_belum_cukup vs
+        # nilai_tegak). JANGAN pernah membaca 0 di sini sebagai bukti
+        # ketiadaan tanpa memeriksa status_nilai lebih dulu.
+        (0, "tanpa_jaringan_distribusi",
+         "Tidak ada jaringan titik fisik yang perlu dikelola. Bisa karena "
+         "produknya digital, karena barangnya dikirim langsung B2B dari "
+         "satu titik, karena ia produsen kontrak yang barangnya masuk "
+         "jaringan merek lain, ATAU karena jaringannya belum terbukti — "
+         "periksa status_nilai untuk membedakan yang terakhir.",
+         "situs: halaman produk; ketiadaan halaman jaringan/distribusi"),
     ],
     # -------------------------------------------------------------------
     "field_sales": [
@@ -210,8 +239,17 @@ PITA = {
 }
 
 
+# Label lama -> label sekarang. Penilaian yang sudah tertulis sebelum
+# 1 Sep 2026 memakai nama lama; alias ini membuatnya tetap terbaca tanpa
+# harus menulis ulang riwayat. Jangan dipakai untuk penilaian baru.
+ALIAS_PITA = {
+    ("dist_model", "tanpa_distribusi_fisik"): "tanpa_jaringan_distribusi",
+}
+
+
 def nilai_pita(komponen: str, label: str) -> int:
     """Ubah label pita jadi angka. Salah label = error, bukan diam-diam 0."""
+    label = ALIAS_PITA.get((komponen, label), label)
     for nilai, nama, _, _ in PITA[komponen]:
         if nama == label:
             return nilai
