@@ -446,17 +446,57 @@ if __name__ == "__main__":
     if haram == 0:
         print(f"  Semua {len(baris) * 4} nilai jatuh di pita yang sah.")
 
-    print("\nCakupan pita — mana yang BELUM PERNAH teruji:")
-    total_kosong = 0
+    # -----------------------------------------------------------------
+    # Pita yang dipakai penilaian BERBASIS BUKTI (tabel `kebutuhan`).
+    #
+    # KENAPA INI HARUS IKUT DIBACA: laporan di bawah pernah menyatakan
+    # multi_kota, dua_kota, satu_lokasi, dan tidak_relevan "BELUM TERUJI"
+    # padahal keempatnya sudah dipakai puluhan kali. Sebabnya laporan itu
+    # cuma melihat companies_scored.csv - sampel kalibrasi lama yang
+    # isinya perusahaan nasional semua. Laporan yang keliru tentang
+    # dirinya sendiri lebih berbahaya daripada tidak ada laporan, karena
+    # ia menyuruh orang mengejar cakupan yang sebenarnya sudah tercapai.
+    # -----------------------------------------------------------------
+    import sqlite3 as _sq
+
+    terpakai_bukti = {k: set() for k in MAKS_KOMPONEN}
+    n_bukti = 0
+    db = _Path(__file__).resolve().parent.parent / "data" / "leads.db"
+    if db.exists():
+        try:
+            con = _sq.connect(f"file:{db}?mode=ro", uri=True)
+            for row in con.execute("SELECT dist_model, field_sales, scale, "
+                                   "industry_fit FROM kebutuhan"):
+                n_bukti += 1
+                for komp, nilai in zip(MAKS_KOMPONEN, row):
+                    lab = label_pita(komp, nilai)
+                    if lab:
+                        terpakai_bukti[komp].add(lab)
+            con.close()
+        except _sq.Error:
+            pass   # tabel belum ada - laporan tetap jalan, cuma tanpa kolom ini
+
+    print(f"\nCakupan pita - dari 2 sumber: {len(baris)} penilaian manual "
+          f"(companies_scored.csv), {n_bukti} penilaian bukti (tabel kebutuhan)")
+    kosong, cuma_bukti = 0, 0
     for komp in MAKS_KOMPONEN:
         for nilai, nama, _, _ in PITA[komp]:
-            if nama not in terpakai[komp]:
-                print(f"  BELUM TERUJI  {komp:<14} {nilai:>3}  {nama}")
-                total_kosong += 1
-    if total_kosong == 0:
-        print("  Semua pita sudah pernah terpakai.")
+            if nama in terpakai[komp]:
+                continue
+            if nama in terpakai_bukti[komp]:
+                print(f"  teruji lewat bukti  {komp:<14} {nilai:>3}  {nama}")
+                cuma_bukti += 1
+            else:
+                print(f"  BELUM TERUJI        {komp:<14} {nilai:>3}  {nama}")
+                kosong += 1
+
+    if kosong == 0 and cuma_bukti == 0:
+        print("  Semua pita sudah terpakai di sampel manual.")
     else:
-        print(f"\n  {total_kosong} pita belum pernah dipakai — semuanya di ujung")
-        print("  bawah. Sebabnya: 20 perusahaan sampel semuanya berskala")
-        print("  nasional dan menghadap konsumen. Pita bawah baru teruji")
-        print("  setelah perusahaan menengah dari BPS/OSM ikut dinilai.")
+        if cuma_bukti:
+            print(f"\n  {cuma_bukti} pita tidak ada di sampel manual tapi SUDAH")
+            print("  terpakai di penilaian bukti. Itu pita ujung bawah, yang")
+            print("  memang baru muncul setelah perusahaan menengah dari OSM")
+            print("  ikut dinilai - bukan lubang.")
+        if kosong:
+            print(f"\n  {kosong} pita benar-benar belum pernah dipakai di mana pun.")
