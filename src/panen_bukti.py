@@ -95,11 +95,16 @@ MIN_LINK_HOMEPAGE = 3
 
 DDL_LOG = """
 CREATE TABLE IF NOT EXISTS panen_log (
-    nama_normal   TEXT PRIMARY KEY,
-    nama          TEXT NOT NULL,
-    website       TEXT,
-    jml_halaman   INTEGER,
-    dicoba_pada   TEXT DEFAULT CURRENT_TIMESTAMP
+    nama_normal     TEXT PRIMARY KEY,
+    nama            TEXT NOT NULL,
+    website         TEXT,
+    jml_halaman     INTEGER,
+    dicoba_pada     TEXT DEFAULT CURRENT_TIMESTAMP,
+    -- Diisi diagnosa_panen.py, bukan modul ini. Kolomnya ikut di sini
+    -- supaya database baru punya bentuk yang sama dengan yang lama.
+    sebab           TEXT,
+    sebab_detail    TEXT,
+    didiagnosa_pada TEXT
 );
 """
 
@@ -278,9 +283,25 @@ def main():
         if not args.dry_run:
             con = sqlite3.connect(args.db)
             con.execute(DDL_LOG)
-            con.execute("INSERT OR REPLACE INTO panen_log "
-                        "(nama_normal, nama, website, jml_halaman) VALUES (?,?,?,?)",
-                        (normalisasi_nama(nama), nama, root, len(halaman)))
+            con.execute(
+                """INSERT INTO panen_log
+                       (nama_normal, nama, website, jml_halaman, dicoba_pada)
+                   VALUES (?,?,?,?,datetime('now'))
+                   ON CONFLICT(nama_normal) DO UPDATE SET
+                       nama        = excluded.nama,
+                       website     = excluded.website,
+                       jml_halaman = excluded.jml_halaman,
+                       dicoba_pada = excluded.dicoba_pada,
+                       -- Diagnosis lama dibuang HANYA kalau panen kali
+                       -- ini berhasil; sebab kegagalan lama jadi basi.
+                       sebab           = CASE WHEN excluded.jml_halaman > 0
+                                              THEN NULL ELSE panen_log.sebab END,
+                       sebab_detail    = CASE WHEN excluded.jml_halaman > 0
+                                              THEN NULL ELSE panen_log.sebab_detail END,
+                       didiagnosa_pada = CASE WHEN excluded.jml_halaman > 0
+                                              THEN NULL ELSE panen_log.didiagnosa_pada END
+                """,
+                (normalisasi_nama(nama), nama, root, len(halaman)))
             con.commit()
             con.close()
 
