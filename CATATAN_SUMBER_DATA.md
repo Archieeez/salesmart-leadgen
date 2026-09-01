@@ -129,6 +129,31 @@ Tindakan pengamanan yang sudah diambil: `*.pdf` dan `data/*.pdf`
 dimasukkan ke .gitignore. Repo ini PUBLIK — meng-commit PDF-nya sama
 dengan menerbitkan ulang terbitan berhak cipta itu ke internet.
 
+### STATUS: PERMOHONAN SUDAH DIKIRIM — 1 September 2026
+
+Permohonan izin diajukan lewat e-PPID BPS (`ppid.bps.go.id`), kategori
+**Informasi Publik** (bukan "Data Statistik" — yang diminta izin, bukan
+file; publikasinya sudah diunduh).
+
+Isian yang dipakai ada di `surat/permohonan-izin-bps.md`. Cara memperoleh
+informasi dipilih "Mendapatkan salinan (softcopy)" lewat **email**, supaya
+izinnya berbentuk dokumen tertulis yang bisa disimpan sebagai bukti.
+
+Balasan formulir: **"pengajuan informasi akan direspon maksimal 3 hari
+kerja"**. Tenggat menurut UU 14/2008 lebih longgar (10 hari kerja, dapat
+diperpanjang 7 hari kerja), jadi 3 hari kerja itu janji layanan BPS
+sendiri.
+
+**Perkiraan jawaban: sekitar 4 September 2026.**
+
+Kalau lewat tenggat dan belum ada kabar, ajukan keberatan lewat kanal
+yang sama. Begitu jawabannya datang, SALIN ISINYA KE BERKAS INI — apa pun
+jawabannya — supaya keputusan ini tidak perlu diperdebatkan lagi.
+
+**Sampai jawaban itu ada, `data/direktori-industri-manufaktur-2025.pdf`
+TIDAK DISENTUH.** Tidak ada pengekstrak yang dibangun, tidak ada isinya
+yang dipindahkan ke database.
+
 ### Bentuk datanya (untuk menimbang layak-tidaknya mengejar izin)
 
 - 1.379 halaman, PDF teks (bukan pindaian), bisa dibaca `pdftotext`
