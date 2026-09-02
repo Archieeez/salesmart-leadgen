@@ -179,6 +179,106 @@ Pemberitahuan Tertulis, barulah ajukan keberatan.
 TIDAK DISENTUH.** Tidak ada pengekstrak yang dibangun, tidak ada isinya
 yang dipindahkan ke database.
 
+### JAWABAN BPS SUDAH DATANG — 2 September 2026
+
+Pemberitahuan Tertulis No. **202609007**, ditandatangani PPID BPS RI,
+tertanggal 2 September 2026. Datang **1 hari kerja** setelah permohonan,
+jauh lebih cepat dari perkiraan 10 hari kerja.
+
+**Berkas aslinya TIDAK dimasukkan ke repo ini.** Formulirnya memuat
+alamat rumah, nomor telepon pribadi, dan surel pribadi Bryan; repo ini
+publik. Yang disalin di bawah hanya substansinya.
+
+#### Isi jawabannya
+
+**Bagian A — "Informasi Dapat Diberikan"** (terisi):
+
+| Butir | Isi |
+|---|---|
+| Penguasaan informasi | **Kami** (BPS), bukan badan publik lain |
+| Bentuk fisik tersedia | Softcopy |
+| Biaya | Rp 0 |
+| Waktu penyediaan | 1 hari kerja |
+| Penghitaman informasi | tidak ada |
+
+Kolom keterangan butir pertama seluruhnya berupa **pengalihan**:
+
+> "Untuk permohonan informasi terkait data statistik, silakan untuk
+> menghubungi: Pelayanan Statistik Terpadu BPS (pst.bps.go.id) atau
+> nomor telepon 021-3507057."
+
+disusul petunjuk pemakaian `pst.bps.go.id` dan empat standar layanannya:
+perpustakaan (cari data mandiri), konsultasi, **produk berbayar** (beli
+data mikro dan peta digital), dan rekomendasi kegiatan statistik.
+
+**Bagian B — "Informasi tidak dapat diberikan karena"**: ketiga kotaknya
+**KOSONG**. Tidak dicentang "belum dikuasai", tidak dicentang "belum
+didokumentasikan", tidak dicentang "alasan lainnya".
+
+#### Pembacaan yang jujur: BUKAN DITOLAK, TAPI JUGA BUKAN IZIN
+
+Ini yang harus dipegang, dan jangan dibaca lebih longgar dari
+seharusnya.
+
+**Permohonannya menanyakan tiga hal** (lihat `surat/permohonan-izin-bps.md`,
+angka 5):
+
+1. izin tertulis mereproduksi nama + alamat perusahaan untuk tujuan
+   komersial;
+2. kalau tidak bisa, adakah mekanisme sah lain — misalnya pembelian data
+   atau perjanjian penggunaan data;
+3. ketentuan mana yang berlaku saat T&C laman BPS dan larangan di dalam
+   terbitan saling bertentangan.
+
+**Tidak satu pun dijawab secara substansi.** Kata "izin", "komersial",
+"reproduksi", dan "hak cipta" tidak muncul sama sekali di seluruh
+dokumen. Permohonan sengaja diajukan di kategori "Informasi Publik"
+justru supaya tidak dibaca sebagai permintaan data — tapi PPID tetap
+menanganinya sebagai permintaan data statistik dan mengalihkannya ke
+meja layanan data.
+
+Artinya, secara formal permohonan **dilayani dan tidak ditolak**, tapi
+**larangan di halaman keterangan terbitan masih berdiri utuh**:
+
+> "Dilarang mereproduksi ... untuk tujuan komersial tanpa izin tertulis
+> dari Badan Pusat Statistik"
+
+Surat ini bukan izin tertulis itu. Ia tidak memberi hak apa pun atas isi
+publikasi.
+
+**Maka aturannya TIDAK berubah: `data/direktori-industri-manufaktur-2025.pdf`
+tetap tidak disentuh, dan pengekstrak tetap tidak dibangun.**
+
+#### Yang justru berguna dari jawaban ini
+
+Pengalihannya bukan jalan buntu — ia menunjuk kanal yang sebelumnya tidak
+diketahui. Standar layanan (c) berbunyi **"Layanan produk berbayar, jika
+sudah paham dan akan membeli data mikro dan peta digital"**. Keberadaan
+kanal jual-beli data resmi adalah jawaban parsial untuk pertanyaan nomor
+2 di atas: mekanisme komersial memang ADA di BPS, hanya belum jelas
+apakah direktori ini termasuk di dalamnya.
+
+#### Langkah berikutnya — dua jalur, tidak saling meniadakan
+
+**Jalur 1 (disarankan lebih dulu): tanya PST.** Ini kanal yang ditunjuk
+BPS sendiri, jadi tidak bisa dibilang salah alamat. Pertanyaannya harus
+dipersempit ke satu hal supaya tidak dialihkan lagi: *apakah izin
+penggunaan komersial atas isi Direktori Industri Manufaktur 2025 bisa
+diperoleh, dan lewat layanan yang mana.* Draf ada di
+`surat/pertanyaan-lisensi-pst.md`.
+Kontak: pst.bps.go.id atau 021-3507057.
+
+**Jalur 2 (cadangan): keberatan ke PPID.** UU 14/2008 Pasal 35 ayat (1)
+huruf e memberi dasar keberatan untuk *"permintaan informasi ditanggapi
+tidak sebagaimana yang diminta"* — dan itu persis yang terjadi. Tenggat
+pengajuan keberatan 30 hari kerja sejak Pemberitahuan Tertulis diterima,
+jadi **paling lambat sekitar 15 Oktober 2026**.
+
+Jalur 2 sebaiknya ditahan dulu sampai PST menjawab. Mengajukan keberatan
+atas surat yang secara formal "tidak menolak" lebih lemah posisinya
+daripada menunjukkan bahwa kanal yang mereka tunjuk sendiri pun tidak
+menyelesaikan pertanyaannya.
+
 ### Bentuk datanya (untuk menimbang layak-tidaknya mengejar izin)
 
 - 1.379 halaman, PDF teks (bukan pindaian), bisa dibaca `pdftotext`

@@ -490,7 +490,9 @@ Untuk daftar lead siap telepon, lihat <a href="./" style="color:#185FA5">Antrian
 <b>Yang sedang menghambat pipeline: izin BPS</b>
 <ul>
 <li>Direktori Industri Manufaktur BPS (~31.795 perusahaan) adalah sumber data berikutnya, tapi terbitannya melarang reproduksi <b>untuk tujuan komersial</b> tanpa izin tertulis.</li>
-<li>Permohonan izin dikirim lewat e-PPID BPS <b>1 September 2026</b>. Respon pertama (2 Sep): permohonan diterima, <b>"Pemberitahuan Tertulis maksimal 10 hari kerja"</b> &mdash; jatuh tempo sekitar <b>15 September 2026</b>, bisa mulur ke ~24 Sep kalau perpanjangan UU 14/2008 dipakai.</li>
+<li>Permohonan izin dikirim lewat e-PPID BPS <b>1 September 2026</b>. <b>Pemberitahuan Tertulis No. 202609007 sudah datang 2 September</b> &mdash; dalam 1 hari kerja, bukan 10.</li>
+<li><b>Jawabannya bukan penolakan, tapi juga bukan izin.</b> Bagian "informasi tidak dapat diberikan" kosong seluruhnya, tapi tiga hal yang ditanyakan surat &mdash; izin komersial, mekanisme pembelian data, dan ketentuan mana yang berlaku saat T&amp;C laman bertentangan dengan larangan di dalam terbitan &mdash; tak satu pun dijawab. Kata "izin", "komersial", dan "reproduksi" tidak muncul sama sekali; isinya pengalihan ke Pelayanan Statistik Terpadu (pst.bps.go.id).</li>
+<li>Larangan di halaman keterangan terbitan karena itu <b>masih berdiri utuh</b>. Langkah berikutnya: bertanya ke PST lewat kanal yang BPS tunjuk sendiri (draf di <code>surat/pertanyaan-lisensi-pst.md</code>); cadangannya keberatan ke PPID atas dasar UU 14/2008 Pasal 35 ayat (1) huruf e, tenggat ~15 Oktober 2026.</li>
 <li>Sampai izin itu ada, PDF-nya <b>tidak disentuh</b> dan tidak ada pengekstrak yang dibangun. Lihat <code>CATATAN_SUMBER_DATA.md</code>.</li>
 <li>Panen otomatis dari bps.go.id tetap tertutup permanen &mdash; robots.txt mereka menyebut ClaudeBot secara harfiah.</li>
 </ul>
