@@ -421,6 +421,35 @@ _POLA_PENOLAKAN = re.compile(
     r"(bukan\s+lead|pesaing|kompetitor|jangan\s+(?:diprospek|ditelepon|dihubungi)"
     r"|penolakan|calon\s+mitra)", re.I)
 
+# Kata yang MEMBALIK arti penanda di atas kalau muncul tepat sebelumnya.
+#
+# KENAPA PERLU: penanda dicari di dalam catatan yang ditulis bebas oleh
+# pembaca, dan pembaca yang teliti justru menulis kalimat penyangkalan —
+# "Bukan pesaing dan bukan vertikal tertutup, boleh ditelepon".
+# Pencarian kata telanjang membaca itu sebagai PENOLAKAN.
+#
+# Ini bukan kemungkinan teoretis. PT Arta Boga Cemerlang (85, bukti 4/4)
+# — lead terbaik yang baru pulih hari itu — langsung tertandai
+# jangan-telepon karena catatannya memuat frasa "Bukan pesaing".
+# Penanda yang memakai kata "bukan lead" sengaja TIDAK ikut dinegasikan
+# di sini karena bentuknya memang sudah mengandung "bukan".
+_POLA_SANGKAL = re.compile(r"(bukan|tidak|non-?|belum)\s*$", re.I)
+
+# BATASNYA, ditulis supaya tidak dikira lebih pintar dari yang sebenarnya:
+# penyangkalan hanya dikenali kalau MENEMPEL di depan penanda. Kalimat
+# seperti "tidak ada indikasi pesaing di sini" tetap salah tertandai,
+# karena ada dua kata di antaranya.
+#
+# Melebarkan jendelanya justru berbahaya — "pesaing" dan "tidak" bisa
+# berjauhan dalam satu kalimat panjang tanpa saling menyangkal.
+#
+# Obat yang benar bukan regex yang lebih pintar, melainkan membuat
+# pembaca mengisi FIELD TERSENDIRI (mis. boolean "pesaing") di skema
+# keluarannya, sehingga statusnya tidak perlu ditebak dari prosa. Sampai
+# itu dikerjakan, salah-tanda tetap terlihat: dashboard teknis
+# menampilkan SELURUH lead bertanda jangan-telepon beserta alasannya,
+# jadi yang keliru bisa ditemukan dengan membaca daftar itu.
+
 
 def tandai_penolakan(need, industry_fit, catatan=""):
     """Kembalikan alasan penolakan (str) atau None kalau ini lead sungguhan.
@@ -440,9 +469,15 @@ def tandai_penolakan(need, industry_fit, catatan=""):
     Skor rendah tidak perlu ditandai: ia sudah jatuh ke arsip sendiri.
     """
     if catatan:
-        m = _POLA_PENOLAKAN.search(catatan)
-        if m:
-            return f"ditandai pembaca: {m.group().lower()}"
+        for m in _POLA_PENOLAKAN.finditer(catatan):
+            frasa = m.group().lower()
+            # "bukan lead" memang sudah berbentuk penyangkalan; jangan
+            # dinegasikan lagi.
+            if not frasa.startswith("bukan"):
+                sebelum = catatan[max(0, m.start() - 12):m.start()]
+                if _POLA_SANGKAL.search(sebelum):
+                    continue          # "bukan pesaing" = justru lead sah
+            return f"ditandai pembaca: {frasa}"
     if industry_fit == 0 and need >= AMBANG_NEED_SEDANG:
         return ("industry_fit 0 tapi skor tinggi — operasi lapangannya nyata "
                 "tapi tidak mendorong barang konsumsi")
