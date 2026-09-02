@@ -268,6 +268,31 @@ diperoleh, dan lewat layanan yang mana.* Draf ada di
 `surat/pertanyaan-lisensi-pst.md`.
 Kontak: pst.bps.go.id atau 021-3507057.
 
+#### STATUS JALUR 1: SUDAH DIKIRIM — 2 September 2026, 15:47 WIB
+
+**ID Transaksi PST: #50964**, jenis "Konsultasi Data", media Layanan
+Online, cakupan Nasional. Status saat dicatat: **Menunggu**.
+Balasan dijanjikan lewat **email**.
+
+Yang dikirim: pertanyaan tunggal soal cara memperoleh izin tertulis
+penggunaan komersial, dibuka dengan pernyataan tegas bahwa datanya
+SUDAH dimiliki dan ini bukan permintaan data. Dilampiri PDF
+Pemberitahuan Tertulis 202609007 sebagai bukti bahwa PST-lah yang
+ditunjuk PPID, bukan alamat yang dipilih sendiri.
+
+Catatan pengisian yang berpengaruh, kalau nanti perlu diulang:
+- **Kategori institusi: Swasta.** Bukan "Lembaga Penelitian &
+  Pendidikan" walau itu terlihat lebih mudah aksesnya — mendaftar
+  sebagai lembaga penelitian lalu meminta izin KOMERSIAL saling
+  bertabrakan, dan bisa membatalkan izin yang sudah keluar karena
+  dasarnya keliru.
+- **Tag: Industri**, bukan "Komunikasi" (sempat salah pilih). Tag
+  menentukan meja mana yang menangani; salah tag berarti dioper lagi.
+
+**Sampai ada jawaban tertulis, tidak ada yang berubah: PDF tidak
+disentuh, pengekstrak tidak dibangun.** Jawaban lisan lewat telepon
+tidak dihitung — kalau positif, minta dikirim lewat surel.
+
 **Jalur 2 (cadangan): keberatan ke PPID.** UU 14/2008 Pasal 35 ayat (1)
 huruf e memberi dasar keberatan untuk *"permintaan informasi ditanggapi
 tidak sebagaimana yang diminta"* — dan itu persis yang terjadi. Tenggat
