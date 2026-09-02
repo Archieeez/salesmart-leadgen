@@ -413,3 +413,82 @@ diperbaiki", biayanya sudah diketahui (21 situs, ~9 detik per situs,
 **Kesimpulan: tumpukan panen gagal sudah habis.** Jangan dicoba ulang
 tanpa alasan baru yang konkret, misalnya seed URL-nya terbukti salah
 (bukan situsnya yang mati).
+
+
+---
+
+## robots.txt: 23 situs pernah salah dicap "melarang" — diperbaiki 2 Sep 2026
+
+Selama ini 29 situs tercatat `robots_larang` dan dianggap tertutup
+permanen. Setelah diperiksa ulang dengan pengurai yang benar, **hanya 6
+yang benar-benar tertutup.**
+
+### Penyebabnya: robots.txt diambil pakai user-agent yang salah
+
+`RobotFileParser.read()` bawaan Python mengambil robots.txt memakai
+**user-agent default urllib** (`Python-urllib/3.x`), bukan `USER_AGENT`
+yang kita deklarasikan. Situs ber-WAF (Cloudflare dsb.) menolak urllib
+dengan HTTP 403. urllib menafsirkan 403 sebagai `disallow_all`, dan
+pipeline mencatatnya:
+
+> "robots.txt melarang User-Agent kita"
+
+Pernyataan itu salah dua kali: robots.txt-nya **tidak pernah terbaca**,
+dan yang diblokir **bukan agen kita**.
+
+Contoh paling telanjang: `artaboga.com/robots.txt` menjawab HTTP 200
+dengan isi `<script>location.href='https://www.artaboga.com/ID/';</script>`
+— itu halaman pengalih, bukan robots.txt. Tidak ada satu pun aturan
+larangan di sana.
+
+`web._muat_robots()` sekarang mengambilnya lewat `requests` dengan
+USER_AGENT kita, lalu menyerahkan isinya ke `RobotFileParser.parse()`.
+
+### Hitungan yang benar
+
+| Kategori | Jumlah |
+|---|---|
+| Benar-benar melarang robots.txt | **5** — EST Jakarta, facebook.com, most.co.id, powercableindonesia.com, pln.co.id |
+| Ditolak Content-Signal (`ai-train=no`) | **1** — acibademinternational.com |
+| Tidak pernah diblokir | **23** |
+
+### Yang paling mahal dari kesalahan ini
+
+**PT Arta Boga Cemerlang** — lengan distribusi FMCG Orang Tua Group,
+distributor sungguhan dan profil sasaran paling inti — tercatat sejak
+31 Agustus sebagai *"diblokir robots.txt, kehilangan nyata, tutup
+buku"*. Ia tidak pernah tertutup. Setelah dipanen: skor pola 65.
+
+**TransTRACK.ID** juga pulih dengan skor pola 90 — tapi ia PESAING,
+jadi tetap tidak boleh ditelepon.
+
+### Pelajaran yang lebih umum
+
+"Diblokir" adalah kesimpulan, bukan pengamatan. Yang benar-benar
+diamati waktu itu cuma "sebuah permintaan HTTP gagal". Menyimpan
+kesimpulan sebagai fakta permanen — lalu menandainya "tutup buku" —
+membuat kesalahan alat menjadi kesalahan data yang tidak pernah
+ditinjau ulang. Catat pengamatannya (status HTTP, agen yang dipakai),
+bukan tafsirannya.
+
+## Content-Signal sekarang dijalankan mesin
+
+robots.txt `bps.go.id` memberi `Allow: /` untuk `User-agent: *`, dan
+hanya melarang bot ber-nama AI (ClaudeBot, GPTBot, CCBot,
+Google-Extended, meta-externalagent, dst). Agen kita bernama
+`salesmart-leadgen`, jadi ia jatuh ke grup `*` dan **secara harfiah
+diizinkan**.
+
+Keputusan 1 September sudah menyatakan bahwa memakai nama sendiri untuk
+mengambil apa yang mereka tutup bagi AI adalah pengelakan — tapi
+keputusan itu hanya tertulis di dokumen ini. Kodenya tetap akan memanen
+bps.go.id kalau ada yang menaruhnya di seed.
+
+Sekarang `web.boleh_ambil()` memungut `Content-Signal` dari robots.txt
+dan menolak situs yang menyatakan `ai-train=no` atau `ai-input=no`,
+berapa pun bunyi baris `Allow`-nya. Pipeline ini memasukkan teks
+terpanen ke model bahasa untuk dinilai — itu persis "ai-input", jadi
+sinyalnya memang mengenai kita.
+
+**Aturan yang tidak dijalankan mesin cepat atau lambat dilanggar tanpa
+ada yang sengaja melanggarnya.**
