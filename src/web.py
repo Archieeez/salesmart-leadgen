@@ -116,13 +116,48 @@ def dari_cache(url: str) -> bool:
     return bool(jalur and os.path.exists(jalur))
 
 
+def _host_lain(host: str) -> str:
+    """Pasangan www dari sebuah host: www.x <-> x."""
+    return host[4:] if host.startswith("www.") else "www." + host
+
+
 def _varian_http(url: str) -> list[str]:
     """URL http yang layak dicoba saat https gagal karena sertifikat."""
     p = urlparse(url)
-    host = p.netloc
-    lain = host[4:] if host.startswith("www.") else "www." + host
     sisa = p.path + (("?" + p.query) if p.query else "")
-    return [f"http://{host}{sisa}", f"http://{lain}{sisa}"]
+    return [f"http://{p.netloc}{sisa}",
+            f"http://{_host_lain(p.netloc)}{sisa}"]
+
+
+def _varian_www(url: str) -> list[str]:
+    """URL varian www yang layak dicoba saat SAMBUNGANNYA yang gagal.
+
+    KENAPA TERPISAH DARI _varian_http:
+        Fallback www selama ini HANYA menyala pada SSLError. Pada
+        ConnectionError — yaitu DNS tidak menjawab — tidak ada yang
+        dicoba ulang sama sekali. Padahal domain yang hanya mendaftarkan
+        salah satu varian adalah salah konfigurasi yang lazim.
+
+        Diukur pada 33 situs mati proyek ini (2 Sep 2026): hanya SATU
+        domain yang varian www-nya menjawab DNS (carsworld.co.id gagal,
+        www.carsworld.co.id menjawab) — dan yang satu itu pun TIDAK
+        terpanen, karena robots.txt-nya melarang (dan origin-nya balas
+        HTTP 530).
+
+        Jadi hasil bersih tambalan ini di data yang ada: NOL situs.
+        Ia tetap dipasang karena celahnya memang salah — fallback www
+        seharusnya tidak bergantung pada JENIS kegagalan sambungan —
+        tapi jangan berharap ia menemukan apa-apa. Kalau ada yang
+        mengusulkan panen ulang massal dengan alasan "sekarang fallback
+        www-nya sudah benar", angka di atas jawabannya.
+
+    Pemeriksaan robots.txt TETAP berlaku di jalur ini. Varian www adalah
+    host yang berbeda, jadi izinnya harus ditanyakan lagi — bukan
+    diwarisi dari host asal.
+    """
+    p = urlparse(url)
+    sisa = p.path + (("?" + p.query) if p.query else "")
+    return [f"{p.scheme}://{_host_lain(p.netloc)}{sisa}"]
 
 
 def ambil_html(url: str) -> tuple[str | None, str]:
@@ -163,6 +198,22 @@ def ambil_html(url: str) -> tuple[str | None, str]:
                 try:
                     r = _get(kandidat)
                     imbuhan = " (turun ke http, sertifikat https bermasalah)"
+                    break
+                except requests.RequestException:
+                    continue
+            if r is None:
+                raise
+        except requests.exceptions.ConnectionError:
+            # DNS tidak menjawab, atau sambungan ditolak. Coba varian www
+            # sekali — lihat _varian_www() untuk kenapa dan seberapa
+            # sering ini menolong.
+            r = None
+            for kandidat in _varian_www(url):
+                if not boleh_ambil(kandidat):
+                    continue
+                try:
+                    r = _get(kandidat)
+                    imbuhan = " (varian www, host asli tidak menjawab)"
                     break
                 except requests.RequestException:
                     continue
