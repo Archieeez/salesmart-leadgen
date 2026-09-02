@@ -98,6 +98,16 @@ def _muat_robots(root: str):
             rp.parse(r.text.splitlines())
             _cache_robots[root] = rp
             _robots_terbit[root] = True
+            # Content-Signal tidak dikenali RobotFileParser, jadi dipungut
+            # sendiri. Diambil dari SELURUH berkas, bukan cuma grup "*":
+            # sinyal ini pernyataan tentang KONTEN situsnya, bukan tentang
+            # satu agen tertentu.
+            sinyal = " ".join(
+                b.split(":", 1)[1].strip().lower()
+                for b in r.text.splitlines()
+                if b.strip().lower().startswith("content-signal:"))
+            if sinyal:
+                _cache_sinyal[root] = sinyal
             return
         if r.status_code in (401, 403):
             # Server MENOLAK menyerahkan robots.txt. Ini bukan kebijakan
@@ -115,14 +125,65 @@ def _muat_robots(root: str):
         _robots_terbit[root] = False
 
 
+# --------------------------------------------------------------------------
+# Content-Signal: sinyal yang robots.txt sendiri tidak bisa nyatakan
+# --------------------------------------------------------------------------
+# robots.txt cuma bisa bilang "boleh diambil / tidak" PER NAMA AGEN. Ia tidak
+# bisa bilang "boleh diambil, tapi jangan dimasukkan ke model AI". Untuk itu
+# ada Content-Signal, dan sejumlah situs sudah memakainya.
+#
+# KENAPA INI HARUS ADA DI KODE, BUKAN CUMA DI CATATAN:
+#     robots.txt bps.go.id berbunyi:
+#         User-agent: *
+#         Content-Signal: search=yes,ai-train=no,use=reference
+#         Allow: /
+#     lalu Disallow: / untuk ClaudeBot, GPTBot, CCBot, Google-Extended, dst.
+#
+#     Agen kita bernama "salesmart-leadgen", jadi ia jatuh ke grup "*" dan
+#     SECARA HARFIAH DIIZINKAN. Proyek ini sudah memutuskan sejak 1 Sep
+#     bahwa memakai nama sendiri untuk mengambil apa yang mereka tutup bagi
+#     AI adalah PENGELAKAN, bukan kepatuhan — tapi keputusan itu selama ini
+#     hanya tertulis di CATATAN_SUMBER_DATA.md. Kodenya tetap akan memanen
+#     bps.go.id kalau ada yang menaruhnya di seed.
+#
+#     Aturan yang tidak dijalankan mesin cepat atau lambat dilanggar tanpa
+#     ada yang sengaja melanggarnya. Jadi sekarang dijalankan mesin.
+#
+# Pipeline ini memasukkan teks yang dipanen ke model bahasa untuk dinilai.
+# Itu persis "ai-input". Jadi situs yang menyatakan ai-train=no atau
+# ai-input=no dihormati, berapa pun bunyi Allow-nya.
+
+_SINYAL_MENOLAK = ("ai-train=no", "ai-input=no")
+_cache_sinyal: dict[str, str] = {}
+
+
+def _sinyal_menolak(root: str) -> str:
+    """Kembalikan sinyal yang menolak, atau string kosong."""
+    s = _cache_sinyal.get(root, "")
+    for tolak in _SINYAL_MENOLAK:
+        if tolak in s.replace(" ", ""):
+            return tolak
+    return ""
+
+
 def boleh_ambil(url: str) -> bool:
     """
     Cek robots.txt. Kalau robots.txt tidak bisa dibaca sama sekali,
     ANGGAP BOLEH — itu perilaku standar — tapi tetap dicatat di log.
+
+    Content-Signal ikut dihormati: situs yang menyatakan ai-train=no atau
+    ai-input=no TIDAK dipanen, walau baris Allow-nya mengizinkan agen
+    kita. Lihat catatan di atas.
     """
     parsed = urlparse(url)
     root = f"{parsed.scheme}://{parsed.netloc}"
     _muat_robots(root)
+
+    tolak = _sinyal_menolak(root)
+    if tolak:
+        log(f"DITOLAK Content-Signal ({tolak}): {root}")
+        return False
+
     rp = _cache_robots[root]
     if rp is None:
         return True
