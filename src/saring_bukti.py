@@ -189,7 +189,15 @@ POLA = {
             # -- lapis Inggris --
             r"|\bdairy\b|confectionery|personal\s+care\s+products?"
             r"|household\s+products?|packaged\s+(?:food|goods)"
-            r"|nutrition\s+(?:company|products?)|\bbeverages\b)", re.I)),
+            r"|nutrition\s+(?:company|products?)|\bbeverages\b"
+            # Cat dekoratif bermerek masuk pita ini — keputusan tertulis
+            # di rubrik.py (kasus Nippon Paint). Polanya menuntut kata
+            # produk cat sungguhan, bukan sekadar "paint" (nama PT asing
+            # sering mengandung kata itu).
+            r"|cat\s+(?:tembok|interior|eksterior|dekoratif|kayu|besi"
+            r"|genteng|plafon|semprot|rumah)|warna\s+cat"
+            r"|(?:decorative|interior|exterior|wall|textured)\s+paints?"
+            r"|paints?\s+(?:and|&)\s+coatings?)", re.I)),
         ("ritel_distribusi_logistik", re.compile(
             r"(\britel\b|\bretail\b|\bekspedisi\b|\blogistik\b|logistics"
             r"|pengiriman\s+barang|jasa\s+kurir|supply\s+chain"

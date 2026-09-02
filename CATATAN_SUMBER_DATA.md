@@ -150,6 +150,31 @@ Kalau lewat tenggat dan belum ada kabar, ajukan keberatan lewat kanal
 yang sama. Begitu jawabannya datang, SALIN ISINYA KE BERKAS INI — apa pun
 jawabannya — supaya keputusan ini tidak perlu diperdebatkan lagi.
 
+### PEMBARUAN 2 Sep 2026 — respon pertama BPS: tenggat mundur ke ~15 Sep
+
+Bryan menerima balasan dari BPS (disalin apa adanya):
+
+> "Terima kasih telah melakukan permohonan informasi. Pemberitahuan
+> Tertulis akan kami berikan maksimal 10 hari kerja."
+
+Artinya:
+
+- Ini **penerimaan permohonan**, bukan jawaban. Permohonannya masuk dan
+  diproses — bukan ditolak, bukan diabaikan.
+- BPS memakai tenggat **UU 14/2008 (10 hari kerja)**, bukan janji "3 hari
+  kerja" dari formulirnya. Dihitung dari 1 September:
+  **jatuh tempo sekitar 15 September 2026** (2–4, 7–11, 14–15 Sep;
+  tidak ada hari libur nasional di rentang itu).
+- Frasa "Pemberitahuan Tertulis" adalah istilah UU KIP — bentuknya
+  dokumen resmi, persis yang diminta (izin tertulis yang bisa disimpan).
+- UU yang sama membolehkan perpanjangan 7 hari kerja lagi; kalau dipakai,
+  paling lambat ~24 September 2026.
+
+Konsekuensi untuk rencana kerja: **jangan menunggu-nunggu 4 September.**
+Pekerjaan yang tidak butuh BPS (penyaringan, pembacaan antrian,
+pelengkapan kontak) jalan terus. Kalau **15 September** lewat tanpa
+Pemberitahuan Tertulis, barulah ajukan keberatan.
+
 **Sampai jawaban itu ada, `data/direktori-industri-manufaktur-2025.pdf`
 TIDAK DISENTUH.** Tidak ada pengekstrak yang dibangun, tidak ada isinya
 yang dipindahkan ke database.

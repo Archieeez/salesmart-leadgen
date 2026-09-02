@@ -222,7 +222,10 @@ PITA = {
     "industry_fit": [
         (15, "produsen_barang_konsumsi",
          "Produsen barang konsumsi bermerek: FMCG, makanan-minuman, "
-         "farmasi, kosmetik. Vertikal inti Salesmart.",
+         "farmasi, kosmetik. Termasuk cat dekoratif bermerek — ditetapkan "
+         "lewat kasus Nippon Paint (dinilai manual 1 Sep 2026): cat ritel "
+         "didorong ke pasar lewat depo dan toko persis seperti FMCG. "
+         "Vertikal inti Salesmart.",
          "KBLI; situs: halaman produk"),
         (10, "ritel_distribusi_logistik",
          "Peritel, distributor, atau logistik. Butuh manajemen lapangan, "
