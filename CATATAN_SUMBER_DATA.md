@@ -240,3 +240,51 @@ Dilarang ToS. Tidak ada pengecualian.
 ## Database telepon bulk — ditutup
 
 Risiko UU PDP. Hanya data kontak level perusahaan yang boleh.
+
+---
+
+## Panen ulang situs gagal — diuji 2 September 2026, HASIL NOL
+
+Dari 81 percobaan panen yang gagal, 39 berkategori `situs_mati` (33) dan
+`http_error` (6) — sisanya `robots_larang` (29, tertutup permanen) dan
+`js_render` (13, sudah diputuskan tidak sepadan).
+
+**Ke-39 itu dicoba ulang. Hasilnya nol halaman, tanpa kecuali.**
+
+### Cara pengujiannya
+
+1. **Saring lewat DNS dulu**, supaya tidak membebani server yang jelas
+   mati. Dari 39, **21 masih menjawab DNS** dan 18 benar-benar hilang.
+2. **21 itu dipanen ulang** dengan `web.py` yang sudah ditambal
+   (fallback varian www kini menyala juga pada ConnectionError, bukan
+   cuma pada SSLError).
+3. Hasil: **21 dari 21 tetap 0 halaman.** Alasan gagalnya identik
+   persis dengan yang tercatat 31 Agustus: ConnectTimeout 5,
+   ConnectionError 4, SSLError 3, http 403 3, http 404 3, ReadTimeout 2.
+
+### Kenapa hasilnya nol, padahal DNS menjawab
+
+DNS menjawab ≠ situs hidup. Yang menjawab kebanyakan parkir domain,
+Cloudflare tanpa origin, atau server yang menolak sambungan. Contoh
+paling jelas: `www.carsworld.co.id` menjawab DNS, tapi robots.txt-nya
+melarang DAN origin-nya balas HTTP 530.
+
+### Kenapa ini tetap layak dikerjakan
+
+Karena sebelumnya jawabannya "kemungkinan besar tidak berguna" —
+sebuah dugaan. Sekarang jawabannya angka. Kalau nanti ada yang
+mengusulkan panen ulang lagi dengan alasan "kan crawler-nya sudah
+diperbaiki", biayanya sudah diketahui (21 situs, ~9 detik per situs,
+~3 menit) dan hasilnya juga.
+
+### Yang TIDAK diuji, dan kenapa
+
+- **29 `robots_larang`** — tertutup permanen, bukan soal teknis.
+- **13 `js_render`** — butuh headless browser, sudah diputuskan tidak
+  sepadan (bedah 81 kegagalan, 1 Sep: dari 13 hanya 7 aplikasi JS
+  sungguhan, dan cuma 1 yang mungkin lead).
+- **18 yang DNS-nya mati** — tidak ada yang bisa disambungi.
+
+**Kesimpulan: tumpukan panen gagal sudah habis.** Jangan dicoba ulang
+tanpa alasan baru yang konkret, misalnya seed URL-nya terbukti salah
+(bukan situsnya yang mati).
