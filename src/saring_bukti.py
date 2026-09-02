@@ -50,6 +50,7 @@ import sqlite3
 import sys
 from pathlib import Path
 
+import gazetteer
 import rubrik
 
 BASE = Path(__file__).resolve().parent
@@ -63,6 +64,27 @@ DATA = BASE.parent / "data"
 #
 # Semua pola diambil dari kalimat yang BENAR-BENAR muncul waktu 17 halaman
 # GAPMMI dibaca manual, bukan dikarang.
+#
+# LAPIS INGGRIS (ditambahkan 2 Sep 2026)
+# -------------------------------------
+# Aturan di atas hampir seluruhnya berbahasa Indonesia, dengan beberapa
+# kata Inggris yang kebetulan ikut ("distributor", "fleet", "merchandiser").
+# Itu bukan pilihan sadar — cuma akibat dari sumbernya: 17 halaman GAPMMI
+# yang memang berbahasa Indonesia.
+#
+# Waktu 108 situs terpanen dihitung, 41 di antaranya DOMINAN INGGRIS.
+# Termasuk Indofood, Mayora, Frisian Flag, Musim Mas, Mondelez — persis
+# profil yang dicari, karena perusahaan yang memegang principal asing
+# memang menulis situsnya dalam bahasa Inggris.
+#
+# PT United Dico Citas adalah buktinya: distributor farmasi sungguhan
+# dengan enam kantor cabang, dibaca manusia 80, tapi hanya dapat skor pola
+# 25 — karena kalimatnya berbunyi "distribute for our principals ... to
+# local vendors, convenience stores, pharmacies" dan "an armada of UDC
+# truck and motorcycle drivers", yang tidak satu pun punya padanan aturan.
+#
+# Tiap tambahan di bawah ini adalah padanan Inggris dari pita yang SUDAH
+# ada — bukan pita baru dan bukan pelonggaran ambang.
 
 POLA = {
     "dist_model": [
@@ -78,13 +100,29 @@ POLA = {
             r"|melayani[^.]{0,40}(?:outlet|toko|warung|gerai|apotek)"
             r"|food\s*service|\bhoreka\b"
             r"|(?:hotel|restoran|restaurant)[^.]{0,30}(?:katering|catering)"
-            r"|produk\s+retail)", re.I)),
+            r"|produk\s+retail"
+            # -- lapis Inggris --
+            r"|distribution\s+(?:channel|coverage|infrastructure|service"
+            r"|centers?|centres?|points?|arm)"
+            r"|nationwide\s+distribution|integrated\s+distribution"
+            r"|our\s+principals?\b|the\s+principals?\s+we"
+            r"|(?:sole|exclusive|appointed|authoriz|authoris)\w*\s+distributor"
+            r"|distribut\w+[^.]{0,60}(?:convenience\s+stores?|traditional\s+trade"
+            r"|retail\s+outlets?|pharmac(?:y|ies)|kiosks?|wholesalers?)"
+            r"|(?:convenience\s+stores?|traditional\s+trade)[^.]{0,60}distribut"
+            r"|point\s+of\s+sale\s+network)", re.I)),
         ("jaringan_terbatas", re.compile(
             r"(\bdistributor\b|\bdealer\b|authorized\s+dealer|\breseller\b"
-            r"|mitra\s+penjualan|jaringan\s+mitra)", re.I)),
+            r"|mitra\s+penjualan|jaringan\s+mitra"
+            # -- lapis Inggris --
+            r"|dealer\s+network|agent\s+network|channel\s+partners?"
+            r"|sales\s+partners?|distribution\s+partners?)", re.I)),
         ("lapangan_bukan_barang", re.compile(
             r"(\barmada\b|\bfleet\b|gerai\s+kami|outlet\s+kami"
-            r"|\d+\s*(?:outlet|gerai|cabang)\b|cabang\s+kami)", re.I)),
+            r"|\d+\s*(?:outlet|gerai|cabang)\b|cabang\s+kami"
+            # -- lapis Inggris --
+            r"|our\s+(?:outlets?|stores?|branches|vehicles)"
+            r"|\d+\s*(?:branches|stores|outlets)\b)", re.I)),
     ],
     "field_sales": [
         ("sales_kanvas", re.compile(
@@ -92,29 +130,53 @@ POLA = {
             r"|area\s+sales|sales\s+area|\bsalesman\b|\bmotoris\b"
             r"|canvass?er|kanvas(?:ing)?|sales\s+promotion|\bSPG\b"
             r"|beauty\s+advisor|merchandiser|sales\s+force|tenaga\s+penjual"
-            r"|sales\s+executive|account\s+executive)", re.I)),
+            r"|sales\s+executive|account\s+executive"
+            # -- lapis Inggris --
+            r"|field\s+sales|sales\s+officers?|territory\s+(?:manager|sales)"
+            r"|sales\s+supervisors?|\bdetailers?\b)", re.I)),
         ("lapangan_operasional", re.compile(
             r"(kantor\s+penjualan|kepala\s+cabang|branch\s+manager"
             r"|\bkurir\b|\bcourier\b|teknisi\s+lapangan|field\s+(?:engineer|technician)"
-            r"|petugas\s+lapangan|tim\s+lapangan|driver\s+(?:mitra|kami))", re.I)),
+            r"|petugas\s+lapangan|tim\s+lapangan|driver\s+(?:mitra|kami)"
+            # -- lapis Inggris --
+            r"|(?:truck|motorcycle|van|delivery|our)\s+(?:and\s+\w+\s+)?drivers?"
+            r"|delivery\s+(?:team|crew|personnel|staff)"
+            r"|field\s+(?:staff|team|force|personnel)"
+            r"|branch\s+offices?|sales\s+offices?)", re.I)),
         ("lapangan_minimal", re.compile(
             r"(divisi\s+penjualan|departemen\s+penjualan|tim\s+sales"
-            r"|sales\s+(?:&|dan)\s+marketing)", re.I)),
+            r"|sales\s+(?:&|dan)\s+marketing"
+            # -- lapis Inggris --
+            r"|sales\s+(?:&|and)\s+marketing\s+(?:team|division|department)"
+            r"|sales\s+department)", re.I)),
     ],
     "scale": [
         ("nasional", re.compile(
             r"(seluruh\s+indonesia|ke\s+seluruh\s+pelosok|nationwide"
             r"|3[0-9]\s+provinsi|seluruh\s+provinsi"
             r"|\b[1-9]\d{2,}\s*(?:outlet|gerai|cabang|titik|kota)\b"
-            r"|skala\s+nasional|berskala\s+nasional)", re.I)),
+            r"|skala\s+nasional|berskala\s+nasional"
+            # -- lapis Inggris --
+            r"|(?:throughout|across|all\s+over|all\s+around)\s+"
+            r"(?:indonesia|the\s+country|the\s+archipelago)"
+            r"|3[0-9]\s+provinces|all\s+provinces"
+            r"|\b[1-9]\d{2,}\s*(?:outlets|stores|branches|points|cities)\b)",
+            re.I)),
         ("lintas_pulau", re.compile(
             r"(\b[1-9]\d\s*(?:outlet|gerai|cabang|titik|kota)\b"
             r"|\b(?:1[0-9]|2[0-9])\s+provinsi\b"
             r"|sumatera[^.]{0,60}(?:jawa|kalimantan|sulawesi)"
-            r"|jawa[^.]{0,60}(?:sumatera|kalimantan|sulawesi|papua))", re.I)),
+            r"|jawa[^.]{0,60}(?:sumatera|kalimantan|sulawesi|papua)"
+            # -- lapis Inggris --
+            r"|\b[1-9]\d\s*(?:outlets|stores|branches|points|cities"
+            r"|distribution\s+centers?|warehouses?)\b"
+            r"|\b(?:1[0-9]|2[0-9])\s+provinces\b)", re.I)),
         ("multi_kota", re.compile(
             r"(\b[3-9]\s*(?:cabang|kantor\s+cabang|kota)\b"
-            r"|beberapa\s+kota|beberapa\s+cabang)", re.I)),
+            r"|beberapa\s+kota|beberapa\s+cabang"
+            # -- lapis Inggris --
+            r"|\b[3-9]\s*(?:branches|branch\s+offices|cities)\b"
+            r"|several\s+(?:cities|branches))", re.I)),
     ],
     "industry_fit": [
         ("produsen_barang_konsumsi", re.compile(
@@ -123,11 +185,18 @@ POLA = {
             r"|\bfarmasi\b|pharmaceutical|\bkosmetik\b|cosmetic"
             r"|produsen[^.]{0,40}(?:makanan|minuman|obat|kosmetik)"
             r"|memproduksi[^.]{0,40}(?:makanan|minuman|obat|kosmetik|snack)"
-            r"|manufactur[^.]{0,30}(?:food|beverage|consumer))", re.I)),
+            r"|manufactur[^.]{0,30}(?:food|beverage|consumer)"
+            # -- lapis Inggris --
+            r"|\bdairy\b|confectionery|personal\s+care\s+products?"
+            r"|household\s+products?|packaged\s+(?:food|goods)"
+            r"|nutrition\s+(?:company|products?)|\bbeverages\b)", re.I)),
         ("ritel_distribusi_logistik", re.compile(
             r"(\britel\b|\bretail\b|\bekspedisi\b|\blogistik\b|logistics"
             r"|pengiriman\s+barang|jasa\s+kurir|supply\s+chain"
-            r"|rantai\s+pasok|pergudangan|warehouse)", re.I)),
+            r"|rantai\s+pasok|pergudangan|warehouse"
+            # -- lapis Inggris --
+            r"|freight\s+forward|courier\s+service|\b3PL\b"
+            r"|distribution\s+company|wholesale)", re.I)),
         ("platform_jasa", re.compile(
             r"(platform\s+digital|aplikasi\s+kami|marketplace"
             r"|software|perangkat\s+lunak|\bSaaS\b|layanan\s+digital)", re.I)),
@@ -155,8 +224,14 @@ def kalimat_sekitar(teks: str, m: re.Match, lebar: int = 130) -> str:
     return re.sub(r"\s+", " ", potong)
 
 
-def saring(teks: str, kategori: str = "") -> dict:
-    """Return {komponen: {'label','nilai','kutipan','pola'}}."""
+def saring(teks: str, kategori: str = "", halaman: list[str] | None = None) -> dict:
+    """Return {komponen: {'label','nilai','kutipan','pola'}}.
+
+    `halaman` (opsional): teks per halaman terpisah. Dipakai gazetteer
+    untuk membuang halaman formulir alamat sebelum menghitung sebaran —
+    lihat gazetteer.formulir_alamat(). Pola frasa tetap membaca `teks`
+    gabungan.
+    """
     hasil = {}
     for komponen, aturan in POLA.items():
         pilih = None
@@ -174,6 +249,23 @@ def saring(teks: str, kategori: str = "") -> dict:
             pilih = {"label": terendah[1], "nilai": terendah[0],
                      "kutipan": "", "pola": ""}
         hasil[komponen] = pilih
+
+    # Sebaran nama tempat, untuk halaman yang MENDAFTAR lokasinya tanpa
+    # pernah menyebut jumlahnya. Lihat gazetteer.py.
+    #
+    # HANYA MENAIKKAN, tidak pernah menurunkan. Kalau pola frasa sudah
+    # menemukan pita yang lebih tinggi, itu yang dipakai — daftar nama
+    # tempat bukti yang lebih lemah daripada kalimat yang menyatakannya.
+    #
+    # Ini tidak melanggar "satu fakta satu komponen": sebaran hanya
+    # menyentuh `scale`, tidak pernah dist_model atau field_sales.
+    sb = gazetteer.sebaran(halaman if halaman is not None else teks)
+    pita = gazetteer.pita_scale(sb)
+    if pita and pita[0] > hasil["scale"]["nilai"]:
+        nilai, label, alasan = pita
+        hasil["scale"] = {"label": label, "nilai": nilai,
+                          "kutipan": gazetteer.ringkas(sb),
+                          "pola": "sebaran:" + alasan}
 
     # Kategori OSM hanya dipakai kalau teks bungkam soal industri.
     if kategori and not hasil["industry_fit"]["kutipan"]:
@@ -197,12 +289,15 @@ def muat_teks(db_bukti: Path) -> dict:
     con.row_factory = sqlite3.Row
     per = {}
     for r in con.execute("SELECT nama_normal, nama, jenis, teks FROM halaman_bukti"):
-        p = per.setdefault(r["nama_normal"], {"nama": r["nama"], "teks": [], "hal": 0})
-        p["teks"].append(r["teks"] or "")
+        p = per.setdefault(r["nama_normal"], {"nama": r["nama"], "teks": [],
+                                              "halaman": [], "hal": 0})
+        p["halaman"].append(r["teks"] or "")
         p["hal"] += 1
     con.close()
     for p in per.values():
-        p["teks"] = " ".join(p["teks"])
+        # `teks` gabungan untuk pola frasa; `halaman` terpisah untuk
+        # gazetteer, yang perlu membuang halaman formulir alamat utuh.
+        p["teks"] = " ".join(p["halaman"])
     return per
 
 
@@ -242,7 +337,7 @@ def uji(per: dict):
         cocok_nama = next((k for k, v in per.items() if v["nama"] == nama), None)
         if not cocok_nama:
             continue
-        h = saring(per[cocok_nama]["teks"])
+        h = saring(per[cocok_nama]["teks"], halaman=per[cocok_nama]["halaman"])
         n_sepakat = 0
         for komponen in rubrik.MAKS_KOMPONEN:
             total_komp += 1
@@ -306,15 +401,43 @@ def main():
         return
 
     kategori = muat_kategori()
+
+    # Yang SUDAH dinilai tegak tidak perlu dibaca ulang — antrian ini
+    # antrian BACA, bukan papan skor. Yang statusnya bukti_belum_cukup
+    # tetap masuk (bertanda ~), karena sinyal baru justru alasan untuk
+    # membacanya lagi.
+    con = sqlite3.connect(DATA / "leads.db")
+    status_nilai = dict(con.execute("SELECT nama, status_nilai FROM kebutuhan"))
+    need_manusia = dict(con.execute("SELECT nama, need_score FROM kebutuhan"))
+    con.close()
+    # 20 perusahaan sampel pra-pipeline (companies_prioritas.csv) juga
+    # sudah dinilai manusia lengkap dengan catatan — Blue Bird dan MS Glow
+    # ada di sana, bukan di tabel kebutuhan.
+    f_prio = DATA / "companies_prioritas.csv"
+    if f_prio.exists():
+        for r in csv.DictReader(open(f_prio, encoding="utf-8")):
+            status_nilai.setdefault(r["company_name"].strip(), "nilai_tegak")
+
     antrian = []
     for nn, p in per.items():
-        h = saring(p["teks"], kategori.get(p["nama"], ""))
+        h = saring(p["teks"], kategori.get(p["nama"], ""), halaman=p["halaman"])
         skor = sum(h[k]["nilai"] for k in rubrik.MAKS_KOMPONEN)
         bukti = sum(1 for k in h if h[k]["kutipan"])
         antrian.append((skor, bukti, p["nama"], p["hal"], h))
 
     antrian.sort(reverse=True, key=lambda x: (x[0], x[1]))
-    lolos = [a for a in antrian if a[0] >= args.ambang]
+    tegak = [a for a in antrian if status_nilai.get(a[2]) == "nilai_tegak"]
+    belum = [a for a in antrian if status_nilai.get(a[2]) != "nilai_tegak"]
+    lolos = [a for a in belum if a[0] >= args.ambang]
+
+    # Sebaran menonjol di bawah ambang: perusahaan yang MENDAFTAR
+    # lokasinya secara masif (>= lintas_pulau, dengan kata jaringan di
+    # dekatnya) tapi komponen lain bungkam. Daftar lokasi sepanjang itu
+    # hampir selalu berarti ada halaman jaringan yang belum terbaca pola.
+    menonjol = [a for a in belum
+                if a[0] < args.ambang
+                and a[4]["scale"]["pola"].startswith("sebaran:")
+                and a[4]["scale"]["nilai"] >= 15]
 
     print(f"{'perusahaan':<40}{'hal':>4}{'skor':>6}{'bukti':>7}  bukti terkuat")
     print("-" * 112)
@@ -324,11 +447,25 @@ def main():
             if h[k]["kutipan"] and not h[k]["kutipan"].startswith("["):
                 kut = h[k]["kutipan"][:56]
                 break
-        print(f"{nama[:39]:<40}{hal:>4}{skor:>6}{bukti:>5}/4  {kut}")
+        if status_nilai.get(nama) == "bukti_belum_cukup":
+            # need bacaan manusia yang lama ikut dicetak, supaya baris
+            # seperti toko balon (pola 95, manusia 0) langsung ketahuan.
+            tanda = f"~{need_manusia.get(nama, ''):>3}"
+        else:
+            tanda = "    "
+        print(f"{tanda}{nama[:37]:<38}{hal:>4}{skor:>6}{bukti:>5}/4  {kut}")
 
-    print(f"\n  disaring   {len(antrian)} perusahaan")
-    print(f"  lolos      {len(lolos)}  (skor pola >= {args.ambang})")
-    print(f"  tersaring  {len(antrian) - len(lolos)}")
+    if menonjol:
+        print(f"\n  SEBARAN MENONJOL di bawah ambang (daftar lokasi masif, "
+              f"komponen lain bungkam):")
+        for skor, bukti, nama, hal, h in menonjol:
+            print(f"   {nama[:38]:<39}{skor:>5}  {h['scale']['kutipan'][:60]}")
+
+    print(f"\n  disaring       {len(antrian)} perusahaan")
+    print(f"  sudah tegak    {len(tegak)}  (tidak ditampilkan — sudah dibaca manusia)")
+    print(f"  lolos          {len(lolos)}  (skor pola >= {args.ambang}; "
+          f"~ = pernah dibaca, bukti belum cukup)")
+    print(f"  tersaring      {len(belum) - len(lolos)}")
 
     if args.keluar:
         with open(args.keluar, "w", newline="", encoding="utf-8") as f:
