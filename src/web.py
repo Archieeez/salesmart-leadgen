@@ -75,6 +75,44 @@ def log(pesan: str):
 # --------------------------------------------------------------------------
 
 _cache_robots: dict[str, RobotFileParser | None] = {}
+# root -> True kalau host itu BENAR-BENAR menerbitkan robots.txt yang bisa
+# dibaca (HTTP 200). False kalau ia menolak menerbitkannya (401/403).
+_robots_terbit: dict[str, bool] = {}
+
+
+def _muat_robots(root: str):
+    """Ambil robots.txt satu host, catat apakah ia benar-benar terbit.
+
+    Dipisah dari boleh_ambil() supaya STATUS-nya bisa diketahui, bukan
+    cuma hasil boleh/tidaknya. Bedanya menentukan — lihat
+    host_alternatif().
+    """
+    if root in _cache_robots:
+        return
+    rp = RobotFileParser()
+    rp.set_url(urljoin(root, "/robots.txt"))
+    try:
+        r = requests.get(urljoin(root, "/robots.txt"),
+                         headers={"User-Agent": USER_AGENT}, timeout=TIMEOUT)
+        if r.status_code == 200:
+            rp.parse(r.text.splitlines())
+            _cache_robots[root] = rp
+            _robots_terbit[root] = True
+            return
+        if r.status_code in (401, 403):
+            # Server MENOLAK menyerahkan robots.txt. Ini bukan kebijakan
+            # perayapan — ia tidak menyatakan apa pun. Perilaku standar
+            # (dan yang dipakai di sini) tetap menganggapnya larangan.
+            rp.disallow_all = True
+            _cache_robots[root] = rp
+            _robots_terbit[root] = False
+            return
+        # 404 dan sisanya: tidak ada robots.txt = tidak ada larangan.
+        _cache_robots[root] = None
+        _robots_terbit[root] = False
+    except requests.RequestException:
+        _cache_robots[root] = None
+        _robots_terbit[root] = False
 
 
 def boleh_ambil(url: str) -> bool:
@@ -84,20 +122,69 @@ def boleh_ambil(url: str) -> bool:
     """
     parsed = urlparse(url)
     root = f"{parsed.scheme}://{parsed.netloc}"
-
-    if root not in _cache_robots:
-        rp = RobotFileParser()
-        rp.set_url(urljoin(root, "/robots.txt"))
-        try:
-            rp.read()
-            _cache_robots[root] = rp
-        except Exception:
-            _cache_robots[root] = None
-
+    _muat_robots(root)
     rp = _cache_robots[root]
     if rp is None:
         return True
     return rp.can_fetch(USER_AGENT, url)
+
+
+def host_alternatif(website: str) -> tuple[str, str] | None:
+    """Kalau host seed tidak menerbitkan kebijakan, coba pasangan www-nya.
+
+    Kembalikan (url_baru, alasan) atau None.
+
+    ATURANNYA SEMPIT, DAN KESEMPITANNYA YANG PENTING:
+
+        Varian hanya dicoba kalau host asal **menolak menerbitkan
+        robots.txt** (HTTP 401/403). Host yang begitu tidak menyatakan
+        kebijakan perayapan apa pun — 403-nya setelan server, dan yang
+        membacanya sebagai "larang semua" adalah pustaka kita sendiri,
+        secara konservatif.
+
+        Kalau host asal MENERBITKAN robots.txt yang melarang, varian
+        TIDAK pernah dicoba. Itu kebijakan sungguhan dan harus dipatuhi,
+        titik. Termasuk kalau larangannya menyebut agen kita secara
+        harfiah — kasus bps.go.id yang menyebut ClaudeBot.
+
+        Varian pun tetap harus MENERBITKAN robots.txt sendiri yang
+        mengizinkan. Kalau ia juga menolak menerbitkan, berhenti.
+
+    KENAPA ADA:
+        indomaret.co.id/robots.txt menjawab 403 — tidak ada kebijakan.
+        www.indomaret.co.id/robots.txt menjawab 200 dengan berkas KOSONG,
+        yang artinya izinkan semua. Situsnya hidup di host www; host apex
+        cuma memantul. Tanpa aturan ini, Indomaret (need 85) terus
+        tercatat "0 halaman" padahal situsnya terbuka.
+
+    SEBERAPA SERING MENOLONG: sedikit sekali, dan itu sudah diukur.
+        Dari 29 situs bertanda robots_larang (2 Sep 2026), 23 MENERBITKAN
+        robots.txt sungguhan yang melarang — tertutup, tidak disentuh.
+        Hanya 2 yang menolak menerbitkan, dan keduanya bukan profil
+        sasaran. Jadi jangan pakai aturan ini sebagai alasan menyisir
+        ulang tumpukan robots_larang; sudah dicoba, hasilnya nihil.
+    """
+    if not website.startswith(("http://", "https://")):
+        website = "https://" + website
+    p = urlparse(website)
+    root = f"{p.scheme}://{p.netloc}"
+    _muat_robots(root)
+    if _robots_terbit.get(root, False):
+        return None                      # ia menerbitkan kebijakan: hormati
+    if boleh_ambil(website):
+        return None                      # tidak diblokir, tidak perlu varian
+
+    lain = _host_lain(p.netloc)
+    root_lain = f"{p.scheme}://{lain}"
+    _muat_robots(root_lain)
+    if not _robots_terbit.get(root_lain, False):
+        return None                      # varian juga tidak menerbitkan
+    sisa = p.path + (("?" + p.query) if p.query else "")
+    url_lain = f"{root_lain}{sisa}"
+    if not boleh_ambil(url_lain):
+        return None                      # varian menerbitkan, dan melarang
+    return url_lain, (f"host {p.netloc} tidak menerbitkan robots.txt "
+                      f"(401/403); {lain} menerbitkan dan mengizinkan")
 
 
 # --------------------------------------------------------------------------

@@ -295,6 +295,16 @@ def main():
         if not website:
             continue
 
+        # Sebagian situs hidup di host www sementara host apex-nya cuma
+        # memantul 403 — termasuk untuk robots.txt-nya sendiri, sehingga
+        # terbaca "melarang" padahal ia tidak menyatakan apa pun. Lihat
+        # web.host_alternatif() untuk aturannya, yang sengaja sempit:
+        # host yang MENERBITKAN larangan tidak pernah dilewati.
+        alt = web.host_alternatif(website)
+        if alt:
+            website, alasan = alt
+            print(f"      pindah host: {alasan}")
+
         halaman = panen_situs(website)
         root, _ = web.akar(website)
 
