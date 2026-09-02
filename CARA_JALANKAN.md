@@ -177,3 +177,56 @@ python src/bersihkan_db.py
 ```
 
 Jangan hapus `leads_backup_*.db` sampai yakin hasil barunya benar.
+
+---
+
+## Kelompok E — membaca kandidat dengan agen (alur 3 langkah)
+
+Ini jalur yang dipakai sejak 2 Sep 2026 untuk menilai perusahaan dari
+bukti situsnya. **Jangan dipotong jadi satu langkah** — alasannya
+ditulis panjang di dalam `src/baca/siapkan.py`.
+
+### 1. Rakit bahan bacanya
+
+```
+python src/baca/siapkan.py --nama "Alfamart" "TIKI" --keluar kerja/b1
+```
+
+Menghasilkan satu `.md` per perusahaan, plus `aturan.md` yang
+dibangkitkan dari `rubrik.PITA` (jadi tidak mungkin melenceng dari
+rubrik) dan `daftar.json`.
+
+### 2. Jalankan dua lapis agen
+
+**PEMBACA** menilai keempat komponen, wajib mengutip verbatim dari
+bagian "TEKS HALAMAN TERPANEN".
+**PEMERIKSA** diberi satu tugas: **MEMBANTAH** penilaian pembaca —
+bukan meninjau, bukan menyempurnakan.
+
+Simpan hasil akhirnya sebagai `kerja/b1/hasil.json`.
+
+Kenapa dua lapis: pembaca tunggal terbukti berulang kali mengklaim
+melebihi buktinya. Nutrifood turun 80→70 (kalimat kesediaan penempatan
+pelamar dikira klaim cakupan), Alfamart 85→70 (instruksi ke konsumen
+dikira bukti tim lapangan), TransTRACK pola 90 → bacaan 15 (statistik
+pelanggan dikira statistik perusahaan).
+
+### 3. Verifikasi mesin, lalu tulis
+
+```
+python src/baca/terapkan.py --dir kerja/b1            # periksa dulu
+python src/baca/terapkan.py --dir kerja/b1 --tulis    # baru tulis
+```
+
+Lapis ketiga: tiap kutipan dicek benar-benar ADA di dokumen. Mode
+`--tulis` **menolak jalan** kalau ada satu saja kutipan yang gagal —
+penilaian yang kutipannya tidak bisa ditemukan tidak bisa
+dipertanggungjawabkan waktu orang sales ditanya "dari mana Anda tahu?".
+
+### 4. Bangkitkan ulang tampilannya
+
+```
+python src/buat_antrian.py
+python src/buat_dashboard.py
+python src/ekspor_csv.py
+```
