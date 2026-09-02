@@ -455,6 +455,19 @@ def tentukan_aksi(need, kualitas_telepon, industry_fit=None, catatan=""):
     `industry_fit` dan `catatan` opsional supaya pemanggil lama tetap jalan.
     Kalau diisi, tandai_penolakan() dijalankan dulu dan hasilnya MENIMPA
     rekomendasi apa pun — lihat Aturan 3 di atas.
+
+    PITA SEDANG DULU DIABAIKAN DI TIGA DARI EMPAT CABANG (diperbaiki
+    2 Sep 2026). `sedang` dihitung tapi hanya dipakai kalau nomornya
+    sudah 'langsung_resmi'. Di tiga cabang lain, need 50-74 jatuh ke
+    arsip berlabel "kebutuhan rendah" — pernyataan yang jelas salah
+    untuk angka 70.
+
+    Ini baru terasa mahal setelah 19 kandidat antrian dibaca dan
+    beberapa mendarat persis di pita itu: PT. Kimia Farma 70 (bukti
+    3/4), Nippon Paint 70, Indofood 65, PT Pupuk Indonesia 65 — semuanya
+    diarsipkan dengan alasan "kebutuhan rendah" hanya karena nomornya
+    belum ada. Padahal "belum ada nomor" adalah pekerjaan yang bisa
+    dikerjakan, bukan alasan membuang lead.
     """
     if industry_fit is not None:
         alasan = tandai_penolakan(need, industry_fit, catatan)
@@ -474,18 +487,27 @@ def tentukan_aksi(need, kualitas_telepon, industry_fit=None, catatan=""):
         if butuh:
             return "verifikasi_lalu_hubungi", \
                    "Cek nomor di website resmi dulu, baru telepon."
+        if sedang:
+            return "verifikasi_lalu_hubungi", \
+                   "Kebutuhan sedang. Cek nomor dulu, antrian kedua."
         return "arsipkan", "Kebutuhan rendah, tidak layak biaya verifikasi."
 
     if kualitas_telepon == "call_center":
         if butuh:
             return "cari_nomor_kantor", \
                    "Nomor yang ada hanya call-center. Cari jalur kantor/marketing."
+        if sedang:
+            return "cari_nomor_kantor", \
+                   "Kebutuhan sedang, nomornya call-center. Cari jalur kantor."
         return "arsipkan", "Call-center + kebutuhan rendah."
 
     # tidak ada nomor
     if butuh:
         return "cari_nomor", \
-               "Kebutuhan tinggi tapi nomor belum ada. TARGET UTAMA Places API."
+               "Kebutuhan tinggi tapi nomor belum ada. Cari di halaman kontak situsnya."
+    if sedang:
+        return "cari_nomor", \
+               "Kebutuhan sedang, nomor belum ada. Antrian kedua pencarian nomor."
     return "arsipkan", "Tidak ada nomor dan kebutuhan rendah."
 
 
