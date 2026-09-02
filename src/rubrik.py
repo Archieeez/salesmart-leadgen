@@ -309,12 +309,24 @@ def periksa_dobel_hitung(rincian: dict) -> list:
     INI PENYARING, BUKAN HAKIM. Ia hanya menangkap dobel hitung yang
     kutipannya kebetulan sama persis. Dobel hitung yang diparafrase
     berbeda tetap lolos, dan itu memang tidak bisa ditangkap mesin.
+
+    KOMPONEN BERNILAI 0 DIABAIKAN. Dobel hitung itu masalah karena satu
+    fakta MENAIKKAN dua komponen; komponen yang duduk di pita terendah
+    tidak menaikkan apa pun, jadi kutipan yang sama di sana tidak
+    merugikan siapa-siapa. Ditemukan lewat PT Power Telecom (2 Sep 2026):
+    slogan "INTERNET SERVICE PROVIDER" dipakai untuk industry_fit
+    (platform_jasa, 5) DAN dist_model — tapi dist_model-nya justru
+    tanpa_jaringan_distribusi = 0. Tanpa aturan ini, tiap perusahaan jasa
+    yang jujur dinilai 0 malah kena tuduh dobel hitung.
     """
     peringatan = []
     isi = {}
     for komp, nilai in rincian.items():
-        if isinstance(nilai, dict):
-            isi[komp] = (nilai.get("kutipan") or "").strip().lower()
+        if not isinstance(nilai, dict):
+            continue
+        if komp in MAKS_KOMPONEN and nilai_pita(komp, nilai.get("label", "")) == 0:
+            continue
+        isi[komp] = (nilai.get("kutipan") or "").strip().lower()
 
     # Kutipan pendek diabaikan: terlalu mudah kebetulan sama.
     komp = [k for k, v in isi.items() if len(v) >= 40]
