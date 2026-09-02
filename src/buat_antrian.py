@@ -116,6 +116,22 @@ def kumpulkan():
             "SELECT name, phone FROM leads WHERE phone IS NOT NULL AND phone != ''"):
         osm.setdefault(n.strip(), p)
 
+    # Nomor dari riset manual (companies_prioritas.csv). Dipakai sebagai
+    # cadangan TERAKHIR untuk baris yang sudah pindah ke tabel kebutuhan.
+    #
+    # KENAPA PERLU: begitu sebuah perusahaan dinilai dari bukti situs,
+    # namanya masuk `dinilai` dan cabang riset manual di bawah
+    # melewatinya — termasuk melewati nomor teleponnya. TIKI (1500 125)
+    # dan Alfamart (1500 959) kehilangan nomornya persis begitu, di
+    # detik mereka naik dari tebakan manual jadi penilaian berbukti.
+    # Naik mutu penilaian tidak boleh berarti turun mutu data kontak.
+    manual_tel = {}
+    if CSV_SKOR.exists():
+        for r in csv.DictReader(open(CSV_SKOR, encoding="utf-8")):
+            t = (r.get("phone") or "").strip()
+            if t and t != "NOT_FOUND":
+                manual_tel[r["company_name"].strip()] = t
+
     lead = []
     dinilai = set()
     if tabel_ada(con, "kebutuhan"):
@@ -127,7 +143,7 @@ def kumpulkan():
             dinilai.add(nama)
             rincian = json.loads(r[6])
             k = kontak.get(nama, {})
-            telepon = k.get("telepon") or osm.get(nama)
+            telepon = k.get("telepon") or osm.get(nama) or manual_tel.get(nama)
             aksi, saran = rubrik.tentukan_aksi(
                 r[5], kualitas(k.get("kelas"), telepon),
                 industry_fit=r[4], catatan=r[7] or "")
