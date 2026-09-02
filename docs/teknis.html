@@ -36,6 +36,10 @@ padding:14px 16px;font-size:13px;color:var(--ink2);margin-top:28px}
 border:1px solid var(--line);color:var(--ink3);vertical-align:middle;margin-left:6px}
 .tag.tegak{border-color:#1D9E75;color:#1D9E75}
 .tag.lantai{border-color:#EF9F27;color:#EF9F27;border-style:dashed}
+.tag.tolak{border-color:#B3261E;color:#B3261E;font-weight:600}
+.note.blokir{border-left:3px solid #EF9F27}
+.note.blokir b{color:#A8620A}
+@media(prefers-color-scheme:dark){.note.blokir b{color:#D9A24E}}
 .komp{display:flex;gap:2px;height:20px;flex:1;border-radius:4px;overflow:hidden}
 .komp i{display:block}
 .kosong{color:var(--ink3);font-size:13px;font-style:italic}
@@ -56,6 +60,7 @@ Untuk daftar lead siap telepon, lihat <a href="./" style="color:#185FA5">Antrian
 <div class="c" style="background:#FAECE7"><p class="k" style="color:#993C1D">Dibuang</p><p class="v" style="color:#4A1B0C">425</p></div>
 <div class="c" style="background:#E6F1FB"><p class="k" style="color:#185FA5">Halaman bukti</p><p class="v" style="color:#042C53">494</p></div>
 <div class="c" style="background:#E1F5EE"><p class="k" style="color:#0F6E56">Nilai tegak</p><p class="v" style="color:#04342C">41</p></div>
+<div class="c" style="background:#FBE9E7"><p class="k" style="color:#B3261E">Jangan telepon</p><p class="v" style="color:#5C1410">11</p></div>
 </div>
 
 <h2>Sebaran per kota</h2>
@@ -100,6 +105,20 @@ Untuk daftar lead siap telepon, lihat <a href="./" style="color:#185FA5">Antrian
 <div class="row"><div class="lbl">karier</div><div class="track"><div class="fill" style="width:43.1%;background:#185FA5"></div></div><div class="val">50</div></div>
 <div class="row"><div class="lbl">distribusi</div><div class="track"><div class="fill" style="width:37.1%;background:#185FA5"></div></div><div class="val">43</div></div>
 <div class="row"><div class="lbl">seed</div><div class="track"><div class="fill" style="width:6.9%;background:#185FA5"></div></div><div class="val">8</div></div>
+<h2>Penyaring pola — 108 situs disaring, 36 masuk antrian baca</h2>
+<div class="row"><div class="lbl">Lolos ambang 50</div><div class="track"><div class="fill" style="width:33.3%;background:#0F6E56"></div></div><div class="val">36 <span class="sub">(33%)</span></div></div>
+<div class="row"><div class="lbl">Tersaring keluar</div><div class="track"><div class="fill" style="width:66.7%;background:#B4B2A9"></div></div><div class="val">72</div></div>
+<h3>Nyaris terlewat — pola menilai jauh di bawah bacaan manusia. Ini yang berbahaya.</h3>
+<div class="row"><div class="lbl">Danone Indonesia</div><div class="track"><div class="fill" style="width:65.0%;background:#D85A30"></div></div><div class="val">pola 35 <span class="sub">vs baca 100</span></div></div>
+<div class="row"><div class="lbl">PT. BERCA MANDIRI PERKASA</div><div class="track"><div class="fill" style="width:40.0%;background:#D85A30"></div></div><div class="val">pola 50 <span class="sub">vs baca 90</span></div></div>
+<div class="row"><div class="lbl">PT. Chang Jui Fang Indones</div><div class="track"><div class="fill" style="width:30.0%;background:#D85A30"></div></div><div class="val">pola 55 <span class="sub">vs baca 85</span></div></div>
+<h3>Derau — pola menilai jauh di atas bacaan manusia. Ini boleh, dan memang sudah diduga.</h3>
+<div class="row"><div class="lbl">Balon Tepuk Supporter</div><div class="track"><div class="fill" style="width:95.0%;background:#EF9F27"></div></div><div class="val">pola 95 <span class="sub">vs baca 0</span></div></div>
+<div class="row"><div class="lbl">Balon Tepuk Suporter</div><div class="track"><div class="fill" style="width:70.0%;background:#EF9F27"></div></div><div class="val">pola 70 <span class="sub">vs baca 0</span></div></div>
+<div class="row"><div class="lbl">PT Dirgantara Indonesia (K</div><div class="track"><div class="fill" style="width:65.0%;background:#EF9F27"></div></div><div class="val">pola 65 <span class="sub">vs baca 0</span></div></div>
+<div class="row"><div class="lbl">PT Multi Areal Planing Ind</div><div class="track"><div class="fill" style="width:60.0%;background:#EF9F27"></div></div><div class="val">pola 65 <span class="sub">vs baca 5</span></div></div>
+<div class="row"><div class="lbl">JasaWebMedan</div><div class="track"><div class="fill" style="width:50.0%;background:#EF9F27"></div></div><div class="val">pola 55 <span class="sub">vs baca 5</span></div></div>
+<div class="row"><div class="lbl">Biznet</div><div class="track"><div class="fill" style="width:50.0%;background:#EF9F27"></div></div><div class="val">pola 90 <span class="sub">vs baca 40</span></div></div>
 <h2>Nilai kebutuhan hasil pembacaan bukti — 62 perusahaan</h2>
 <h3>Nilai tegak — minimal 3 dari 4 komponen berbukti</h3>
 <div class="row" title="DINILAI ULANG dari situs Indonesia (danone.co.id) - sebelumnya 15 karena yang terpanen danone.com global. Skor tertinggi di seluruh database. JUJURNYA: skala dan vertikalnya terbukti hitam-putih (24 p"><div class="lbl">Danone Indonesia</div><div class="komp"><i style="flex:35 1 0;background:#12406E"></i><i style="flex:30 1 0;background:#185FA5"></i><i style="flex:20 1 0;background:#6FA3D6"></i><i style="flex:15 1 0;background:#B5D4F4"></i></div><div class="val">100<span class="tag tegak">bukti 2/4</span></div></div>
@@ -165,6 +184,19 @@ Untuk daftar lead siap telepon, lihat <a href="./" style="color:#185FA5">Antrian
 <div class="row" title="Halaman yang terbaca soal telekomunikasi, pusat data, energi, dan kimia - bukan pangan. Persis kehati-hatian yang Anda tulis sendiri di seed CSV: 'holding - cek entitas pangan spesifik'."><div class="lbl">Sinar Mas</div><div class="komp"></div><div class="val">0<span class="tag lantai">bukti 1/4</span></div></div>
 <div class="row" title="BUMN penjaminan kredit. Menunya memuat Informasi Keagenan dan Unit Kerja yang mengisyaratkan jaringan cabang, tapi kedua halaman itu tidak ikut terpanen sehingga skalanya nol karena tidak terbukti, bu"><div class="lbl">Jamkrindo</div><div class="komp"></div><div class="val">0<span class="tag lantai">bukti 1/4</span></div></div>
 <div class="row" title="BCG adalah firma konsultan manajemen (jasa profesional B2B) — tidak ada barang bermerek, jaringan distribusi, atau tim sales kanvas yang perlu dilacak, jadi bukan target Salesmart. Semua halaman terpa"><div class="lbl">Boston Consulting Group</div><div class="komp"></div><div class="val">0<span class="tag lantai">bukti 2/4</span></div></div>
+<h2>11 perusahaan bernilai tinggi yang JANGAN ditelepon</h2>
+<p class="sub">Skornya tidak salah — rubrik memang mengukur "punya operasi lapangan tersebar", dan mereka punya. Yang salah adalah menyimpulkan skor tinggi berarti boleh ditelepon.</p>
+<div class="row" title="ditandai pembaca: bukan lead"><div class="lbl">Smart GPS Bandung</div><div class="track"><div class="fill" style="width:55%;background:#D85A30"></div></div><div class="val">55<span class="tag tolak">tolak</span></div></div>
+<div class="row" title="ditandai pembaca: bukan lead"><div class="lbl">AirNav Indonesia</div><div class="track"><div class="fill" style="width:55%;background:#D85A30"></div></div><div class="val">55<span class="tag tolak">tolak</span></div></div>
+<div class="row" title="ditandai pembaca: penolakan"><div class="lbl">Asuransi Bintang</div><div class="track"><div class="fill" style="width:45%;background:#D85A30"></div></div><div class="val">45<span class="tag tolak">tolak</span></div></div>
+<div class="row" title="ditandai pembaca: penolakan"><div class="lbl">PT. Dharma Satya Nusantara</div><div class="track"><div class="fill" style="width:35%;background:#D85A30"></div></div><div class="val">35<span class="tag tolak">tolak</span></div></div>
+<div class="row" title="ditandai pembaca: bukan lead"><div class="lbl">PT. Control Systems Arena </div><div class="track"><div class="fill" style="width:20%;background:#D85A30"></div></div><div class="val">20<span class="tag tolak">tolak</span></div></div>
+<div class="row" title="ditandai pembaca: bukan lead"><div class="lbl">PT Pacificagung Trijaya</div><div class="track"><div class="fill" style="width:10%;background:#D85A30"></div></div><div class="val">10<span class="tag tolak">tolak</span></div></div>
+<div class="row" title="ditandai pembaca: bukan lead"><div class="lbl">PT Multi Areal Planing Ind</div><div class="track"><div class="fill" style="width:5%;background:#D85A30"></div></div><div class="val">5<span class="tag tolak">tolak</span></div></div>
+<div class="row" title="ditandai pembaca: bukan lead"><div class="lbl">Accurate</div><div class="track"><div class="fill" style="width:5%;background:#D85A30"></div></div><div class="val">5<span class="tag tolak">tolak</span></div></div>
+<div class="row" title="ditandai pembaca: bukan lead"><div class="lbl">JasaWebMedan</div><div class="track"><div class="fill" style="width:5%;background:#D85A30"></div></div><div class="val">5<span class="tag tolak">tolak</span></div></div>
+<div class="row" title="ditandai pembaca: penolakan"><div class="lbl">Balon Tepuk Supporter</div><div class="track"><div class="fill" style="width:0%;background:#D85A30"></div></div><div class="val">0<span class="tag tolak">tolak</span></div></div>
+<div class="row" title="ditandai pembaca: penolakan"><div class="lbl">Boston Consulting Group</div><div class="track"><div class="fill" style="width:0%;background:#D85A30"></div></div><div class="val">0<span class="tag tolak">tolak</span></div></div>
 <h2>Enrichment telepon dari situs resmi — 27 perusahaan uji</h2>
 <div class="row"><div class="lbl">Jalur kantor</div><div class="track"><div class="fill" style="width:33.3%;background:#0F6E56"></div></div><div class="val">9 <span class="sub">/ 27</span></div></div>
 <div class="row"><div class="lbl">Nomor HP</div><div class="track"><div class="fill" style="width:3.7%;background:#EF9F27"></div></div><div class="val">1 <span class="sub">/ 27</span></div></div>
@@ -194,6 +226,16 @@ Untuk daftar lead siap telepon, lihat <a href="./" style="color:#185FA5">Antrian
 <div class="row" title="Marketplace murni digital; akuisisi seller lewat platform bukan lapangan"><div class="lbl">Tokopedia</div><div class="komp"><i style="flex:10 1 0;background:#185FA5"></i><i style="flex:20 1 0;background:#6FA3D6"></i><i style="flex:5 1 0;background:#B5D4F4"></i></div><div class="val">35</div></div>
 <div class="row" title="OTA murni digital; TIDAK ADA operasi sales lapangan sama sekali; telepon 1500-style call center"><div class="lbl">Traveloka</div><div class="komp"><i style="flex:20 1 0;background:#6FA3D6"></i><i style="flex:5 1 0;background:#B5D4F4"></i></div><div class="val">25</div></div>
 
+<div class="note blokir">
+<b>Yang sedang menghambat pipeline: izin BPS</b>
+<ul>
+<li>Direktori Industri Manufaktur BPS (~31.795 perusahaan) adalah sumber data berikutnya, tapi terbitannya melarang reproduksi <b>untuk tujuan komersial</b> tanpa izin tertulis.</li>
+<li>Permohonan izin dikirim lewat e-PPID BPS <b>1 September 2026</b>. Respon pertama (2 Sep): permohonan diterima, <b>"Pemberitahuan Tertulis maksimal 10 hari kerja"</b> &mdash; jatuh tempo sekitar <b>15 September 2026</b>, bisa mulur ke ~24 Sep kalau perpanjangan UU 14/2008 dipakai.</li>
+<li>Sampai izin itu ada, PDF-nya <b>tidak disentuh</b> dan tidak ada pengekstrak yang dibangun. Lihat <code>CATATAN_SUMBER_DATA.md</code>.</li>
+<li>Panen otomatis dari bps.go.id tetap tertutup permanen &mdash; robots.txt mereka menyebut ClaudeBot secara harfiah.</li>
+</ul>
+</div>
+
 <div class="note">
 <b>Cara membaca angka-angka ini</b>
 <ul>
@@ -202,6 +244,8 @@ Untuk daftar lead siap telepon, lihat <a href="./" style="color:#185FA5">Antrian
 <li>145 duplikat lolos dedup berbasis ID karena <b>PT. Bakti Mandiri Perkasa</b> dan <b>PT BAKTI MANDIRI PERKASA</b> punya osm_id berbeda dengan telepon sama.</li>
 <li>Batang pendek di peringkat kebutuhan (Traveloka, Tokopedia) adalah perusahaan besar yang <b>tidak</b> punya tim sales lapangan — tidak cocok untuk Salesmart.</li>
 <li>Panjang batang di peringkat kebutuhan menunjukkan <b>komposisinya</b>, bukan cuma totalnya. Gojek dan Erajaya nilainya mirip tapi susunannya kebalikan.</li>
+<li><b>Skor tinggi bukan izin menelepon.</b> Smart GPS Bandung (55) pesaing langsung, AirNav (55) punya 299 kantor tapi isinya petugas ATC. Keduanya kini ditandai otomatis &mdash; lihat bagian "JANGAN ditelepon" di atas.</li>
+<li><b>Penyaring pola sengaja longgar.</b> Balon Tepuk sempat dapat skor pola 95 (ternyata "Depo" adalah potongan kata "DEPOK" di halaman SEO kota) dan gugur jadi 0 waktu dibaca. Derau seperti itu diterima; yang tidak diterima adalah lead bagus yang tersaring keluar.</li>
 <li>Nilai bertanda <b>bukti &lt;3/4</b> adalah LANTAI — yang terbukti sejauh ini, bukan penilaian final. Jangan dipakai memeringkat.</li>
 <li>Hanya 27 dari 991 entri (3,2%) cocok profil klien ideal. Ini <b>baseline pembanding</b> untuk menilai apakah Places API nanti lebih baik.</li>
 </ul>

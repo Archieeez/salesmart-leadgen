@@ -23,7 +23,11 @@ Jadi file ini tetap jalan di komputer yang belum menjalankan Phase 2.
 
 import csv
 import sqlite3
+import sys
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import rubrik  # noqa: E402
 
 BASE = Path(__file__).resolve().parent.parent
 DB = BASE / "data" / "leads.db"
@@ -77,6 +81,10 @@ padding:14px 16px;font-size:13px;color:var(--ink2);margin-top:28px}
 border:1px solid var(--line);color:var(--ink3);vertical-align:middle;margin-left:6px}
 .tag.tegak{border-color:#1D9E75;color:#1D9E75}
 .tag.lantai{border-color:#EF9F27;color:#EF9F27;border-style:dashed}
+.tag.tolak{border-color:#B3261E;color:#B3261E;font-weight:600}
+.note.blokir{border-left:3px solid #EF9F27}
+.note.blokir b{color:#A8620A}
+@media(prefers-color-scheme:dark){.note.blokir b{color:#D9A24E}}
 .komp{display:flex;gap:2px;height:20px;flex:1;border-radius:4px;overflow:hidden}
 .komp i{display:block}
 .kosong{color:var(--ink3);font-size:13px;font-style:italic}
@@ -219,6 +227,119 @@ def bagian_kebutuhan(con):
     return "\n".join(blok), len(tegak)
 
 
+def bagian_penyaring(con):
+    """Corong penyaring pola: berapa yang ditemukan, berapa yang derau.
+
+    KENAPA BAGIAN INI ADA:
+        Penyaring pola (saring_bukti.py) adalah satu-satunya bagian
+        pipeline yang selama ini tidak punya angka di mana pun. Padahal
+        ia yang memutuskan SIAPA YANG DIBACA — kalau ia bocor, lead
+        bagus hilang tanpa jejak dan tidak ada yang tahu.
+
+        Yang ditampilkan sengaja BUKAN "berapa persen tepat". Penyaring
+        memang tidak dirancang untuk tepat; ia dirancang untuk tidak
+        melewatkan. Jadi yang diukur dua hal berbeda:
+
+        1. Corong: dari sekian situs terpanen, berapa yang lolos ambang.
+        2. Adu ke bacaan manusia: perusahaan yang skor polanya jauh dari
+           bacaan manusia. Selisih BESAR ke bawah = penyaring nyaris
+           melewatkan lead bagus (bahaya). Selisih besar ke atas =
+           derau, yang memang boleh dan sudah diduga.
+    """
+    try:
+        import saring_bukti
+    except ImportError:
+        return "", None
+    if not DB_BUKTI.exists() or not tabel_ada(con, "kebutuhan"):
+        return "", None
+    try:
+        per = saring_bukti.muat_teks(DB_BUKTI)
+    except sqlite3.Error:
+        return "", None
+    if not per:
+        return "", None
+
+    manusia = {n: (need, st) for n, need, st in con.execute(
+        "SELECT nama, need_score, status_nilai FROM kebutuhan")}
+    kategori = saring_bukti.muat_kategori()
+
+    AMBANG = 50
+    lolos = tersaring = 0
+    beda = []
+    for p in per.values():
+        h = saring_bukti.saring(p["teks"], kategori.get(p["nama"], ""),
+                                halaman=p["halaman"])
+        skor = sum(h[k]["nilai"] for k in rubrik.MAKS_KOMPONEN)
+        if skor >= AMBANG:
+            lolos += 1
+        else:
+            tersaring += 1
+        m = manusia.get(p["nama"])
+        if m and m[1] == "nilai_tegak":
+            beda.append((skor - m[0], p["nama"], skor, m[0]))
+
+    total = lolos + tersaring
+    out = [f'<h2>Penyaring pola — {total} situs disaring, {lolos} masuk '
+           f'antrian baca</h2>']
+    out.append(baris("Lolos ambang %d" % AMBANG,
+                     isi(lolos / total * 100, HIJAU),
+                     f'{lolos} <span class="sub">({lolos / total * 100:.0f}%)</span>'))
+    out.append(baris("Tersaring keluar", isi(tersaring / total * 100, ABU),
+                     tersaring))
+
+    # Yang berbahaya: penyaring memberi skor JAUH DI BAWAH bacaan manusia.
+    bahaya = sorted([b for b in beda if b[0] <= -25])[:6]
+    derau = sorted([b for b in beda if b[0] >= 25], reverse=True)[:6]
+    if bahaya:
+        out.append('<h3>Nyaris terlewat — pola menilai jauh di bawah bacaan '
+                   'manusia. Ini yang berbahaya.</h3>')
+        for d, nama, sp, sm in bahaya:
+            out.append(baris(esc(nama)[:26], isi(abs(d), MERAH),
+                             f'pola {sp} <span class="sub">vs baca {sm}</span>'))
+    if derau:
+        out.append('<h3>Derau — pola menilai jauh di atas bacaan manusia. '
+                   'Ini boleh, dan memang sudah diduga.</h3>')
+        for d, nama, sp, sm in derau:
+            out.append(baris(esc(nama)[:26], isi(min(abs(d), 100), OKER),
+                             f'pola {sp} <span class="sub">vs baca {sm}</span>'))
+    return "\n".join(out), lolos
+
+
+def bagian_penolakan(con):
+    """Skor tinggi yang justru TIDAK boleh ditelepon.
+
+    Lihat Aturan 3 di rubrik.py. Ditampilkan terpisah karena inilah
+    satu-satunya bagian dashboard yang kerugiannya jatuh ke orang:
+    antrian diurutkan dari skor tertinggi, dan orang sales menelepon
+    dari atas.
+    """
+    if not tabel_ada(con, "kebutuhan"):
+        return "", None
+    tolak = []
+    for nama, need, fit, catatan in con.execute(
+            "SELECT nama, need_score, industry_fit, COALESCE(catatan,'') "
+            "FROM kebutuhan ORDER BY need_score DESC"):
+        alasan = rubrik.tandai_penolakan(need, fit, catatan)
+        if alasan:
+            tolak.append((need, nama, alasan))
+    if not tolak:
+        return "", None
+    out = [f'<h2>{len(tolak)} perusahaan bernilai tinggi yang JANGAN '
+           f'ditelepon</h2>',
+           '<p class="sub">Skornya tidak salah — rubrik memang mengukur '
+           '"punya operasi lapangan tersebar", dan mereka punya. Yang salah '
+           'adalah menyimpulkan skor tinggi berarti boleh ditelepon.</p>']
+    for need, nama, alasan in tolak:
+        out.append(
+            f'<div class="row" title="{esc(alasan)}">'
+            f'<div class="lbl">{esc(nama)[:26]}</div>'
+            f'<div class="track"><div class="fill" style="width:{need}%;'
+            f'background:{MERAH}"></div></div>'
+            f'<div class="val">{need}'
+            f'<span class="tag tolak">tolak</span></div></div>')
+    return "\n".join(out), len(tolak)
+
+
 def bagian_panen():
     """Cakupan panen halaman bukti, dari bukti.db kalau ada."""
     con = buka_ro(DB_BUKTI)
@@ -279,6 +400,8 @@ def main():
 
     html_kontak, n_langsung = bagian_kontak(c)
     html_kebutuhan, n_tegak = bagian_kebutuhan(c)
+    html_saring, n_lolos = bagian_penyaring(c)
+    html_tolak, n_tolak = bagian_penolakan(c)
     c.close()
 
     html_panen, n_halaman = bagian_panen()
@@ -325,12 +448,15 @@ def main():
         kartu.append(("Halaman bukti", n_halaman, "#E6F1FB", "#185FA5", "#042C53"))
     if n_tegak is not None:
         kartu.append(("Nilai tegak", n_tegak, "#E1F5EE", "#0F6E56", "#04342C"))
+    if n_tolak:
+        kartu.append(("Jangan telepon", n_tolak, "#FBE9E7", "#B3261E", "#5C1410"))
     kartu_html = "\n".join(
         f'<div class="c" style="background:{bg}"><p class="k" style="color:{c1}">{k}</p>'
         f'<p class="v" style="color:{c2}">{v}</p></div>'
         for k, v, bg, c1, c2 in kartu)
 
-    fase2 = "\n".join(x for x in [html_panen, html_kebutuhan, html_kontak] if x)
+    fase2 = "\n".join(x for x in [html_panen, html_saring, html_kebutuhan,
+                                  html_tolak, html_kontak] if x)
 
     html = f"""<!DOCTYPE html>
 <html lang="id"><head><meta charset="utf-8">
@@ -360,6 +486,16 @@ Untuk daftar lead siap telepon, lihat <a href="./" style="color:#185FA5">Antrian
 
 {html_need}
 
+<div class="note blokir">
+<b>Yang sedang menghambat pipeline: izin BPS</b>
+<ul>
+<li>Direktori Industri Manufaktur BPS (~31.795 perusahaan) adalah sumber data berikutnya, tapi terbitannya melarang reproduksi <b>untuk tujuan komersial</b> tanpa izin tertulis.</li>
+<li>Permohonan izin dikirim lewat e-PPID BPS <b>1 September 2026</b>. Respon pertama (2 Sep): permohonan diterima, <b>"Pemberitahuan Tertulis maksimal 10 hari kerja"</b> &mdash; jatuh tempo sekitar <b>15 September 2026</b>, bisa mulur ke ~24 Sep kalau perpanjangan UU 14/2008 dipakai.</li>
+<li>Sampai izin itu ada, PDF-nya <b>tidak disentuh</b> dan tidak ada pengekstrak yang dibangun. Lihat <code>CATATAN_SUMBER_DATA.md</code>.</li>
+<li>Panen otomatis dari bps.go.id tetap tertutup permanen &mdash; robots.txt mereka menyebut ClaudeBot secara harfiah.</li>
+</ul>
+</div>
+
 <div class="note">
 <b>Cara membaca angka-angka ini</b>
 <ul>
@@ -368,6 +504,8 @@ Untuk daftar lead siap telepon, lihat <a href="./" style="color:#185FA5">Antrian
 <li>145 duplikat lolos dedup berbasis ID karena <b>PT. Bakti Mandiri Perkasa</b> dan <b>PT BAKTI MANDIRI PERKASA</b> punya osm_id berbeda dengan telepon sama.</li>
 <li>Batang pendek di peringkat kebutuhan (Traveloka, Tokopedia) adalah perusahaan besar yang <b>tidak</b> punya tim sales lapangan — tidak cocok untuk Salesmart.</li>
 <li>Panjang batang di peringkat kebutuhan menunjukkan <b>komposisinya</b>, bukan cuma totalnya. Gojek dan Erajaya nilainya mirip tapi susunannya kebalikan.</li>
+<li><b>Skor tinggi bukan izin menelepon.</b> Smart GPS Bandung (55) pesaing langsung, AirNav (55) punya 299 kantor tapi isinya petugas ATC. Keduanya kini ditandai otomatis &mdash; lihat bagian "JANGAN ditelepon" di atas.</li>
+<li><b>Penyaring pola sengaja longgar.</b> Balon Tepuk sempat dapat skor pola 95 (ternyata "Depo" adalah potongan kata "DEPOK" di halaman SEO kota) dan gugur jadi 0 waktu dibaca. Derau seperti itu diterima; yang tidak diterima adalah lead bagus yang tersaring keluar.</li>
 <li>Nilai bertanda <b>bukti &lt;3/4</b> adalah LANTAI — yang terbukti sejauh ini, bukan penilaian final. Jangan dipakai memeringkat.</li>
 <li>Hanya 27 dari {tot[0]} entri (3,2%) cocok profil klien ideal. Ini <b>baseline pembanding</b> untuk menilai apakah Places API nanti lebih baik.</li>
 </ul>
@@ -380,7 +518,8 @@ Angka di halaman ini seluruhnya dibaca dari database dan CSV — tidak ada yang 
     OUT.parent.mkdir(exist_ok=True)
     OUT.write_text(html, encoding="utf-8")
     print(f"Dashboard dibuat: {OUT}")
-    ada = [n for n, x in [("panen", html_panen), ("kebutuhan", html_kebutuhan),
+    ada = [n for n, x in [("panen", html_panen), ("penyaring", html_saring),
+                          ("kebutuhan", html_kebutuhan), ("penolakan", html_tolak),
                           ("kontak", html_kontak), ("need", html_need)] if x]
     print(f"Bagian yang tampil: {', '.join(ada)}")
     print("Buka dengan klik dua kali file itu di File Explorer.")

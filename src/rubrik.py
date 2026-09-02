@@ -395,8 +395,71 @@ def vertikal_ditutup(catatan: str = "") -> str:
 # BUKAN "lead sedang". Dia lead bagus yang datanya belum lengkap — dan
 # tindakannya beda: cari nomornya, bukan turunkan prioritasnya.
 
-def tentukan_aksi(need, kualitas_telepon):
-    """Kembalikan (status, aksi_berikutnya)."""
+# --- Aturan 3: SKOR TINGGI YANG SEBENARNYA PENOLAKAN -----------------------
+#
+# Ini lubang paling berbahaya di seluruh pipeline, karena kerugiannya jatuh
+# ke ORANG, bukan ke angka: halaman antrian mengurutkan dari skor tertinggi,
+# dan orang sales menelepon dari atas. Tiga kasus nyata yang sudah ada di
+# database dan semuanya bisa lolos begitu saja:
+#
+#   Smart GPS Bandung  55   PESAING LANGSUNG. Jual GPS tracker armada plus
+#                           aplikasi pelacakan — wilayah produk yang sama
+#                           dengan Salesmart. Jaringan dealernya nyata di 9
+#                           wilayah, jadi skornya JUJUR tinggi. Menelepon
+#                           mereka bukan cuma sia-sia, tapi membocorkan
+#                           daftar target ke pesaing.
+#   AirNav Indonesia   55   299 kantor dan 234 unit layanan, tapi isinya
+#                           petugas ATC. Tidak ada barang yang berpindah.
+#   Asuransi Bintang   60   Vertikal yang sudah sengaja ditutup.
+#
+# Skornya tidak salah — rubrik memang mengukur "punya operasi lapangan
+# tersebar", dan ketiganya punya. Yang salah adalah menyimpulkan bahwa skor
+# tinggi berarti boleh ditelepon. Karena itu penolakan diputuskan TERPISAH
+# dari skor, dan hasilnya menimpa rekomendasi tindakan apa pun.
+
+_POLA_PENOLAKAN = re.compile(
+    r"(bukan\s+lead|pesaing|kompetitor|jangan\s+(?:diprospek|ditelepon|dihubungi)"
+    r"|penolakan|calon\s+mitra)", re.I)
+
+
+def tandai_penolakan(need, industry_fit, catatan=""):
+    """Kembalikan alasan penolakan (str) atau None kalau ini lead sungguhan.
+
+    Dua jalur, sengaja berbeda sumbernya:
+
+    1. PENANDA MANUSIA di catatan. Pesaing tidak bisa dikenali dari rubrik —
+       tidak ada komponen "apakah dia menjual produk yang sama". Yang tahu
+       cuma pembaca, dan ia menuliskannya di catatan. Jadi catatan dibaca.
+
+    2. ATURAN MEKANIS: industry_fit = 0 DAN need >= AMBANG_NEED_SEDANG.
+       industry_fit 0 berarti "tidak ada produk konsumsi yang didorong lewat
+       jaringan lapangan". Kalau komponen itu nol tapi totalnya tetap tinggi,
+       yang tinggi pasti komponen lain — operasi lapangan yang bukan untuk
+       menjual barang. Itu definisi AirNav.
+
+    Skor rendah tidak perlu ditandai: ia sudah jatuh ke arsip sendiri.
+    """
+    if catatan:
+        m = _POLA_PENOLAKAN.search(catatan)
+        if m:
+            return f"ditandai pembaca: {m.group().lower()}"
+    if industry_fit == 0 and need >= AMBANG_NEED_SEDANG:
+        return ("industry_fit 0 tapi skor tinggi — operasi lapangannya nyata "
+                "tapi tidak mendorong barang konsumsi")
+    return None
+
+
+def tentukan_aksi(need, kualitas_telepon, industry_fit=None, catatan=""):
+    """Kembalikan (status, aksi_berikutnya).
+
+    `industry_fit` dan `catatan` opsional supaya pemanggil lama tetap jalan.
+    Kalau diisi, tandai_penolakan() dijalankan dulu dan hasilnya MENIMPA
+    rekomendasi apa pun — lihat Aturan 3 di atas.
+    """
+    if industry_fit is not None:
+        alasan = tandai_penolakan(need, industry_fit, catatan)
+        if alasan:
+            return "jangan_hubungi", f"JANGAN TELEPON — {alasan}."
     butuh = (need >= AMBANG_NEED_TINGGI)
     sedang = (AMBANG_NEED_SEDANG <= need < AMBANG_NEED_TINGGI)
 
