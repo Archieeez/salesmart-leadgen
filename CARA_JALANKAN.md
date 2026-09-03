@@ -231,9 +231,19 @@ python src/baca/selesaikan.py --dir kerja/b1 --tulis    # baru tulis
 ```
 
 `selesaikan.py` menggabungkan `hasil-*.json`, memanggil `terapkan.py`,
-lalu membangkitkan ulang antrian + dasbor + CSV sekaligus. Sebelumnya
-kelima langkah itu diketik satu-satu, dan lupa satu tidak menimbulkan
-error — ia cuma membuat dasbor menampilkan angka kemarin.
+merekam jalannya agen ke tabel `jalan_agen`, lalu membangkitkan ulang
+antrian + dasbor agen + dasbor teknis + CSV sekaligus. Sebelumnya semua
+langkah itu diketik satu-satu, dan lupa satu tidak menimbulkan error —
+ia cuma membuat dasbor menampilkan angka kemarin.
+
+Sebelum menjalankannya, catat lama jalan dan token tiap agen ke
+`kerja/<label>/telemetri.json` (lihat `.claude/skills/nilai-lead/`).
+Angka itu tidak ada di berkas hasil mana pun; kalau tidak dicatat,
+halaman agen menulis "tidak tercatat" — bukan nol.
+
+Menonton agennya bekerja: `python src/buat_agen.py --pantau`
+membangkitkan ulang `docs/agen.html` tiap 3 detik selama agen jalan,
+dan halamannya menyegarkan diri sendiri. Tanpa server.
 
 `terapkan.py` masih bisa dipanggil sendiri kalau cuma mau memverifikasi.
 

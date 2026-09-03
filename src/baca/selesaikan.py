@@ -40,7 +40,8 @@ sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 # Dibangkitkan ulang setiap kali database berubah. Urutannya penting:
 # antrian dan dasbor membaca database, ekspor CSV membaca database yang
 # sama supaya diff-nya terbaca git.
-TAMPILAN = ["buat_antrian.py", "buat_dashboard.py", "ekspor_csv.py"]
+TAMPILAN = ["buat_antrian.py", "buat_dashboard.py", "buat_agen.py",
+            "ekspor_csv.py"]
 
 
 def gabung(folder: Path) -> int:
@@ -103,6 +104,12 @@ def main():
         raise SystemExit(
             "\nterapkan.py menolak. Database TIDAK disentuh dan tampilan "
             "TIDAK dibangkitkan ulang — perbaiki kutipannya dulu.")
+
+    # Rekam jalannya agen SEBELUM tampilan dibangkitkan — dasbor agen
+    # membaca tabel `jalan_agen`, jadi kalau perekaman ditaruh sesudahnya
+    # halaman akan selalu tertinggal satu jalan.
+    jalankan("baca/rekam.py", "--dir", args.dir,
+             *(["--ditulis"] if args.tulis else []))
 
     if not args.tulis:
         print("\n(mode periksa. Tambahkan --tulis untuk menulis dan "

@@ -63,6 +63,23 @@ Pemeriksa yang GAGAL JALAN bukan alasan melanjutkan: setel
 `"pemeriksa_gagal": true` di hasilnya, dan `terapkan.py` akan menahan
 statusnya di `bukti_belum_cukup` berapa pun jumlah kutipannya.
 
+### 3b. Catat lama jalan dan token tiap agen
+
+Setiap agen selesai, catat angkanya ke `kerja/<label>/telemetri.json`:
+
+```json
+{
+  "<slug>": {
+    "pembaca":   {"detik": 105.5, "token": 53479, "alat": 7},
+    "pemeriksa": {"detik": 184.1, "token": 62699, "alat": 11}
+  }
+}
+```
+
+Angka itu hanya kamu yang tahu — tidak ada di berkas hasil mana pun.
+Kalau berkasnya tidak ada, halaman agen menulis "tidak tercatat", BUKAN
+nol; nol adalah klaim yang salah. Jangan mengarang angkanya.
+
 ### 4. Verifikasi, tulis, bangkitkan ulang
 
 ```
@@ -74,8 +91,17 @@ Backup database dulu sebelum `--tulis`:
 `cp data/leads.db data/leads_backup_<label>_<tanggal>.db`
 
 `selesaikan.py` menggabungkan `hasil-*.json`, memanggil `terapkan.py`,
-lalu membangkitkan ulang antrian + dasbor + CSV. Jangan menjalankan
-keempatnya satu-satu lagi.
+**merekam jalannya agen ke tabel `jalan_agen`**, lalu membangkitkan ulang
+antrian + dasbor agen + dasbor teknis + CSV. Jangan menjalankan
+kelimanya satu-satu lagi.
+
+Perekaman itu yang mengisi `docs/agen.html` — halaman yang menjawab
+"kenapa angka ini bisa dipercaya" dengan menunjukkan perselisihan
+pembaca vs pemeriksa apa adanya. Tanpa langkah itu, perselisihannya
+hilang begitu folder `kerja/` dihapus.
+
+Kalau agennya sedang jalan dan ingin ditonton:
+`python src/buat_agen.py --pantau`
 
 ## Larangan
 

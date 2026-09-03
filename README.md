@@ -10,8 +10,9 @@ Semua data bersumber legal, level perusahaan saja (patuh UU PDP).
 
 | Buka | Untuk siapa | Menjawab |
 |---|---|---|
-| `docs/antrian.html` | orang sales | "siapa yang saya telepon sekarang, dan apa pembukanya?" |
-| `docs/index.html` | yang membangun | "pipeline-nya sehat tidak?" |
+| `docs/index.html` | orang sales | "siapa yang saya telepon sekarang, dan apa pembukanya?" |
+| `docs/agen.html` | orang sales & yang membangun | "kenapa angka ini bisa dipercaya?" |
+| `docs/teknis.html` | yang membangun | "pipeline-nya sehat tidak?" |
 
 ## Status
 
@@ -79,7 +80,9 @@ Dua database, sengaja dipisah:
 | `src/baca/siapkan.py` | Rakit bahan baca + bangkitkan prompt kedua agen |
 | `src/baca/prompt.py` | Prompt pembaca & pemeriksa, dibangkitkan dari `rubrik.PITA` |
 | `src/baca/terapkan.py` | Verifikasi kutipan lalu tulis ke tabel `kebutuhan` |
-| `src/baca/selesaikan.py` | Gabung, verifikasi, tulis, bangkitkan ulang tampilan |
+| `src/baca/selesaikan.py` | Gabung, verifikasi, tulis, rekam, bangkitkan ulang tampilan |
+| `src/baca/rekam.py` | Rekam perselisihan pembaca vs pemeriksa ke `jalan_agen` |
+| `src/buat_agen.py` | Hasilkan `docs/agen.html` — agennya bekerja, apa adanya |
 
 Cara menjalankan: lihat `CARA_JALANKAN.md`.
 

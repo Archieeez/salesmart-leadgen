@@ -1,0 +1,148 @@
+<!doctype html><html lang="id"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Agen penilai lead — Salesmart</title>
+<style>
+:root{--bg:#0f1115;--kartu:#171a21;--gr:#232733;--tx:#e6e8ee;--rd:#9aa3b2;
+--ok:#3ddc97;--bad:#ff6b6b;--ung:#7c8cff;--kun:#ffc857}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);
+font:14px/1.55 -apple-system,Segoe UI,Roboto,sans-serif}
+.wrap{max-width:1060px;margin:0 auto;padding:28px 20px 80px}
+h1{font-size:26px;margin:0 0 6px}
+.sub{color:var(--rd);margin:0 0 22px;max-width:70ch}
+h2{font-size:17px;margin:34px 0 10px;padding-top:18px;border-top:1px solid var(--gr)}
+h3{font-size:14px;margin:22px 0 8px;color:var(--rd);
+text-transform:uppercase;letter-spacing:.06em}
+h4{font-size:12px;margin:16px 0 6px;color:var(--rd);
+text-transform:uppercase;letter-spacing:.06em}
+.jml{color:var(--kun)}
+.rk{display:flex;gap:12px;flex-wrap:wrap;margin:0 0 8px}
+.rk>div{background:var(--kartu);border:1px solid var(--gr);border-radius:10px;
+padding:12px 16px;min-width:190px;flex:1}
+.rk .k{color:var(--rd);font-size:12px}
+.rk .v{font-size:26px;font-weight:600;line-height:1.2}
+.rk .n{color:var(--rd);font-size:12px}
+.pipa{background:var(--kartu);border:1px solid var(--gr);border-radius:10px;
+padding:6px 16px 14px}
+.tp{display:flex;align-items:center;gap:14px;padding:10px 0;
+border-bottom:1px solid var(--gr)}
+.tp:last-child{border-bottom:0}
+.tp .ang{font-size:22px;font-weight:600;min-width:74px;text-align:right;
+color:var(--ung)}
+.tp .lbl{font-weight:500}
+.tp .ket{color:var(--rd);font-size:12px}
+.tp .bar{flex:1;height:6px;background:var(--gr);border-radius:3px;overflow:hidden}
+.tp .bar i{display:block;height:100%;background:var(--ung)}
+.p{background:var(--kartu);border:1px solid var(--gr);border-radius:10px;
+padding:14px 16px;margin:0 0 14px}
+.baris{display:flex;justify-content:space-between;align-items:center;gap:16px}
+.nm{font-size:16px;font-weight:600}
+.gerak{display:flex;align-items:center;gap:8px;white-space:nowrap}
+.lama{color:var(--rd);font-size:16px;text-decoration:line-through}
+.pan{color:var(--rd)} .pan.turun{color:var(--bad)} .pan.naik{color:var(--ok)}
+.sk{font-size:22px;font-weight:700}
+.tetap{color:var(--rd);font-size:12px}
+.bk{color:var(--rd);font-size:12px;border:1px solid var(--gr);
+border-radius:20px;padding:2px 9px}
+.kor{background:#1d2130;border-left:3px solid var(--kun);border-radius:0 6px 6px 0;
+padding:9px 12px;margin:0 0 7px;font-size:13px}
+.kor.kosong{border-left-color:var(--gr);color:var(--rd)}
+.peringatan{background:#2a1a1a;border-left:3px solid var(--bad);
+border-radius:0 6px 6px 0;padding:9px 12px;margin:10px 0;font-size:13px}
+table.komp{width:100%;border-collapse:collapse;font-size:13px}
+table.komp th{text-align:left;color:var(--rd);font-weight:500;font-size:11px;
+text-transform:uppercase;letter-spacing:.05em;padding:6px 8px;
+border-bottom:1px solid var(--gr)}
+table.komp td{padding:9px 8px;border-bottom:1px solid var(--gr);
+vertical-align:top}
+table.komp tr.ubah{background:#221d12}
+.lb{font-family:ui-monospace,Consolas,monospace;font-size:12px}
+.lb i{color:var(--rd);font-style:normal}
+.yk{color:var(--kun);font-size:11px;margin-top:3px}
+.kt .q{color:var(--rd);font-size:12px;margin-top:4px}
+.kt .src{color:#5c6474;font-size:11px;margin-top:3px;word-break:break-all}
+.ok{color:var(--ok);font-size:11px} .gagal{color:var(--bad);font-size:11px}
+.netral{color:var(--rd);font-size:11px}
+.tel{margin-top:12px;display:flex;gap:16px;flex-wrap:wrap}
+.tl{color:var(--rd);font-size:12px}
+.tl b{color:var(--tx);font-weight:600}
+.tl.kosong{font-style:italic}
+.cat{color:var(--rd);font-size:13px;max-width:74ch}
+.lapis{display:flex;gap:12px;flex-wrap:wrap;margin:0 0 8px}
+.lapis>div{background:var(--kartu);border:1px solid var(--gr);border-radius:10px;
+padding:12px 16px;flex:1;min-width:230px}
+.lapis .n{color:var(--ung);font-size:12px;font-weight:600}
+.lapis .j{font-weight:600;margin:2px 0 4px}
+.lapis .d{color:var(--rd);font-size:12px}
+.kaki{color:#5c6474;font-size:12px;margin-top:34px;
+border-top:1px solid var(--gr);padding-top:14px}
+.pantau{background:#1d2130;border:1px solid var(--ung);border-radius:8px;
+padding:8px 12px;margin:0 0 16px;font-size:12px;color:var(--ung)}
+</style></head><body><div class='wrap'>
+<h1>Bagaimana angka di antrian itu diputuskan</h1>
+<p class="sub">Setiap skor di antrian dinilai oleh agen yang membaca situs resmi perusahaannya, lalu <b>dibantah oleh agen kedua</b>, lalu kutipannya dicocokkan huruf-per-huruf oleh mesin. Halaman ini menunjukkan ketiganya apa adanya — termasuk waktu bantahannya berhasil dan skornya turun.</p>
+<div class="rk">
+<div><div class="k">Perusahaan dinilai agen</div><div class="v">3</div><div class="n">lewat alur tiga lapis</div></div>
+<div><div class="k">Dibantah pemeriksa</div><div class="v">1</div><div class="n">2 koreksi, 0 label diubah</div></div>
+<div><div class="k">Kutipan diverifikasi mesin</div><div class="v">12/12</div><div class="n">dicocokkan harfiah ke halaman aslinya</div></div>
+</div>
+<h2>Tiga lapis, dan masing-masing ketat pada hal berbeda</h2>
+<div class="lapis">
+<div><div class="n">Lapis 1</div><div class="j">Agen pembaca</div><div class="d">Menilai empat komponen dan WAJIB mengutip kalimat aslinya. Tanpa kutipan, ia harus turun ke pita terendah yang masih bisa dipertahankan.</div></div>
+<div><div class="n">Lapis 2</div><div class="j">Agen pemeriksa</div><div class="d">Diberi satu tugas: MEMBANTAH. Bukan meninjau, bukan menyempurnakan. Ia sudah menjatuhkan Nutrifood 80&rarr;70, Alfamart 85&rarr;70, dan TransTRACK 90&rarr;15.</div></div>
+<div><div class="n">Lapis 3</div><div class="j">Verifikasi mesin</div><div class="d">Tiap kutipan dicocokkan harfiah ke dokumen sumbernya. Kalau satu saja tidak ditemukan, penulisan ke database DITOLAK seluruhnya.</div></div>
+</div>
+<p class="cat">Ketiganya ketat pada hal yang berbeda, dan itu disengaja: sebuah kutipan pernah LOLOS lapis 3 karena pencocokan longgar menyamakan spasi tak-kasatmata dengan spasi biasa, tapi GUGUR di lapis 2 yang mencocokkan huruf demi huruf. Tidak ada lapisan yang boleh dibuang.</p>
+<h2>Yang terjadi pada tiap perusahaan</h2>
+<p class="cat">Kolom "Pembaca" adalah bacaan pertama; "Keputusan akhir" adalah yang bertahan setelah dibantah. Baris bertanda kuning berarti labelnya berubah.</p>
+<h3>jalan &ldquo;uji_agen&rdquo; &middot; 2026-09-03 04:43 UTC &middot; ditulis ke database</h3>
+<article class="p">
+<div class="baris"><div class="nm">Indomaret</div><div class="gerak"><span class="sk">85</span><span class="tetap">bertahan</span><span class="bk">bukti 4/4</span></div></div>
+<h4>Yang dibantah pemeriksa</h4><div class="kor kosong">Pemeriksa menyerang bacaan ini dan tidak menemukan cacat. Tugasnya memang membantah, bukan menyetujui — jadi "nol koreksi" berarti serangannya patah, bukan tidak dicoba.</div>
+<h4>Per komponen: bacaan pertama, lalu keputusan akhir</h4>
+<table class="komp"><thead><tr><th>Komponen</th><th>Pembaca</th><th>Keputusan akhir</th><th>Kutipannya</th></tr></thead><tbody>
+<tr class=""><td>Model distribusi</td><td class="lb">jaringan_sendiri <i>35</i></td><td class="lb">jaringan_sendiri <i>35</i></td><td class="kt"><span class="ok">cocok harfiah</span><div class="q">didukung oleh 37 pusat distribusi &amp; 27 depo</div><div class="src">https://www.indomaret.co.id/tentang-kami/tentang-indomaret</div></td></tr>
+<tr class=""><td>Tim sales lapangan</td><td class="lb">lapangan_operasional <i>20</i></td><td class="lb">lapangan_operasional <i>20</i></td><td class="kt"><span class="ok">cocok harfiah</span><div class="q">Berdiri tahun 1988, Indomaret semakin berpengalaman dalam pengoperasian toko retail dengan skala besar. Mempekerjakan lebih dari 190.000 anak bangsa</div><div class="src">https://www.indomaret.co.id/tentang-kami/tentang-indomaret</div></td></tr>
+<tr class=""><td>Skala operasi</td><td class="lb">nasional <i>20</i></td><td class="lb">nasional <i>20</i></td><td class="kt"><span class="ok">cocok harfiah</span><div class="q">Dengan lebih dari 1.300 outlet yang tersebar di seluruh Indonesia, Point Coffee memastikan kualitas kopi terbaik dapat dinikmati oleh Point People, di mana pun Point People berada.</div><div class="src">https://www.indomaret.co.id/produk/brand-kami</div></td></tr>
+<tr class=""><td>Kecocokan industri</td><td class="lb">ritel_distribusi_logistik <i>10</i></td><td class="lb">ritel_distribusi_logistik <i>10</i></td><td class="kt"><span class="ok">cocok harfiah</span><div class="q">Indomaret dikukuhkan sebagai perusahaan ritel besar di Indonesia</div><div class="src">https://www.indomaret.co.id/tentang-kami/tentang-indomaret</div></td></tr>
+</tbody></table>
+<div class="tel"><span class="tl"><b>pembaca</b> 105.5 dtk &middot; 53,479 token &middot; 7 panggilan alat</span><span class="tl"><b>pemeriksa</b> 184.1 dtk &middot; 62,699 token &middot; 11 panggilan alat</span></div>
+</article>
+<article class="p">
+<div class="baris"><div class="nm">Kopi Kenangan</div><div class="gerak"><span class="sk">85</span><span class="tetap">bertahan</span><span class="bk">bukti 4/4</span></div></div>
+<h4>Yang dibantah pemeriksa</h4><div class="kor kosong">Pemeriksa menyerang bacaan ini dan tidak menemukan cacat. Tugasnya memang membantah, bukan menyetujui — jadi "nol koreksi" berarti serangannya patah, bukan tidak dicoba.</div>
+<h4>Per komponen: bacaan pertama, lalu keputusan akhir</h4>
+<table class="komp"><thead><tr><th>Komponen</th><th>Pembaca</th><th>Keputusan akhir</th><th>Kutipannya</th></tr></thead><tbody>
+<tr class=""><td>Model distribusi</td><td class="lb">jaringan_sendiri <i>35</i></td><td class="lb">jaringan_sendiri <i>35</i></td><td class="kt"><span class="ok">cocok harfiah</span><div class="q">Our team ensures all Kopi Kenangan stores across Indonesia has fresh and quality inventory through seamless distribution network.</div><div class="src">https://kopikenangan.com/career</div></td></tr>
+<tr class=""><td>Tim sales lapangan</td><td class="lb">lapangan_operasional <i>20</i></td><td class="lb">lapangan_operasional <i>20</i></td><td class="kt"><span class="ok">cocok harfiah</span><div class="q">We constantly push boundaries to improve our consumer experience at our retail outlets. We ensure our team follow standard operating procedures to drive a high standard of service quality.</div><div class="src">https://kopikenangan.com/career</div></td></tr>
+<tr class=""><td>Skala operasi</td><td class="lb">nasional <i>20</i></td><td class="lb">nasional <i>20</i></td><td class="kt"><span class="ok">cocok harfiah</span><div class="q">Our Footprints More than 800 stores across 45 cities in Indonesia</div><div class="src">https://kopikenangan.com/about</div></td></tr>
+<tr class=""><td>Kecocokan industri</td><td class="lb">ritel_distribusi_logistik <i>10</i></td><td class="lb">ritel_distribusi_logistik <i>10</i></td><td class="kt"><span class="ok">cocok harfiah</span><div class="q">Kopi Kenangan is one of the fastest growing grab-and-go coffee chain in Indonesia.</div><div class="src">https://kopikenangan.com/about</div></td></tr>
+</tbody></table>
+<div class="tel"><span class="tl"><b>pembaca</b> 126.7 dtk &middot; 52,043 token &middot; 11 panggilan alat</span><span class="tl"><b>pemeriksa</b> 163.3 dtk &middot; 56,390 token &middot; 9 panggilan alat</span></div>
+</article>
+<h3>jalan &ldquo;artaboga2&rdquo; &middot; 2026-09-03 04:43 UTC &middot; ditulis ke database</h3>
+<article class="p">
+<div class="baris"><div class="nm">PT Arta Boga Cemerlang</div><div class="gerak"><span class="sk">95</span><span class="tetap">bertahan</span><span class="bk">bukti 4/4</span></div></div>
+<h4>Yang dibantah pemeriksa <span class="jml">2</span></h4>
+<div class="kor">field_sales keyakinan diturunkan tinggi -&gt; sedang. Pembaca menulis keyakinan tinggi dan menyebut titik lemah lama sudah tertutup, padahal seluruh label 30 poin berdiri di atas SATU kalimat yang konteksnya pembayaran tagihan jatuh tempo: yang terbukti harfiah adalah salesman yang berkunjung untuk menagih, sedangkan aktivitas menjual disimpulkan dari sebutan jabatan dan dari frasa FAQ standar transaksi dengan sales artaboga. Label tetap sales_kanvas karena pita itu memang menyebut salesman sebagai peran yang memenuhi syarat dan pelakunya jelas milik entitas yang dinilai, tapi keyakinan tinggi melebihi buktinya.</div>
+<div class="kor">scale keyakinan diturunkan tinggi -&gt; sedang. Pembaca menandai tinggi untuk nasional padahal, seperti diakuinya sendiri di catatan, tidak ada satu pun angka cabang atau daftar lokasi; satu-satunya area layanan konkret yang disebut di seluruh dokumen justru Pulau Jawa dan Bali. Label nasional tetap berdiri karena pembatasan itu eksplisit dilekatkan pada artaboga.com dan toko di luar Jawa-Bali diarahkan ke CS OT Group, tapi keyakinan tinggi untuk klaim prosa tanpa angka tidak bisa dipertahankan.</div>
+<h4>Per komponen: bacaan pertama, lalu keputusan akhir</h4>
+<table class="komp"><thead><tr><th>Komponen</th><th>Pembaca</th><th>Keputusan akhir</th><th>Kutipannya</th></tr></thead><tbody>
+<tr class=""><td>Model distribusi</td><td class="lb">jaringan_sendiri <i>35</i></td><td class="lb">jaringan_sendiri <i>35</i></td><td class="kt"><span class="ok">cocok harfiah</span><div class="q">Arta Boga Cemerlang terus memperkuat jaringan di pasar tradisional dan pasar modern seperti supermarket, minimarket dan hypermarket.</div><div class="src">https://www.artaboga.com/ID/tentang-kami</div></td></tr>
+<tr class=""><td>Tim sales lapangan</td><td class="lb">sales_kanvas <i>30</i></td><td class="lb">sales_kanvas <i>30</i><div class="yk">keyakinan tinggi &rarr; sedang</div></td><td class="kt"><span class="ok">cocok harfiah</span><div class="q">Pembayaran melalui salesman Arta Boga Cemerlang yang sedang berkunjung ke toko/warung Sobat</div><div class="src">https://www.artaboga.com/ID/cara-pembayaran</div></td></tr>
+<tr class=""><td>Skala operasi</td><td class="lb">nasional <i>20</i></td><td class="lb">nasional <i>20</i><div class="yk">keyakinan tinggi &rarr; sedang</div></td><td class="kt"><span class="ok">cocok harfiah</span><div class="q">Arta Boga Cemerlang memiliki jaringan distribusi dan logistik yang kuat, baik di kota besar maupun kota kecil di seluruh Indonesia</div><div class="src">https://www.artaboga.com/ID/tentang-kami</div></td></tr>
+<tr class=""><td>Kecocokan industri</td><td class="lb">ritel_distribusi_logistik <i>10</i></td><td class="lb">ritel_distribusi_logistik <i>10</i></td><td class="kt"><span class="ok">cocok harfiah</span><div class="q">Sejak tahun 1985, PT. Arta Boga Cemerlang memulai perjalanannya di bidang distribusi.</div><div class="src">https://www.artaboga.com/ID/tentang-kami</div></td></tr>
+</tbody></table>
+<div class="tel"><span class="tl"><b>pembaca</b> 71.3 dtk &middot; 55,805 token &middot; 4 panggilan alat</span><span class="tl"><b>pemeriksa</b> 289.4 dtk &middot; 77,715 token &middot; 21 panggilan alat</span></div>
+</article>
+<h2>Dari mana perusahaannya datang</h2>
+<p class="cat">Tiap tahap membuang sebagian. Yang gugur tidak sampai ke tahap berikutnya — jadi angka terakhirlah yang benar-benar sampai ke tangan orang sales.</p>
+<div class="pipa">
+<div class="tp"><div class="ang">1416</div><div style="flex:1"><div class="lbl">Dipanen dari OpenStreetMap</div><div class="ket">10 kota x 10 kategori, sekali jalan dan sudah tuntas</div></div><div class="bar" style="max-width:220px"><i style="width:100%"></i></div></div>
+<div class="tp"><div class="ang">991</div><div style="flex:1"><div class="lbl">Lolos pembersihan</div><div class="ket">425 dibuang: mall, duplikat entitas, gedung pemerintah</div></div><div class="bar" style="max-width:220px"><i style="width:70%"></i></div></div>
+<div class="tp"><div class="ang">128</div><div style="flex:1"><div class="lbl">Situs resminya dipanen</div><div class="ket">halaman Tentang/Distribusi/Karier diambil sebagai bukti</div></div><div class="bar" style="max-width:220px"><i style="width:9%"></i></div></div>
+<div class="tp"><div class="ang">72</div><div style="flex:1"><div class="lbl">Dinilai dari bukti situs</div><div class="ket">empat komponen, tiap komponen wajib punya kutipan</div></div><div class="bar" style="max-width:220px"><i style="width:5%"></i></div></div>
+<div class="tp"><div class="ang">56</div><div style="flex:1"><div class="lbl">Bukti cukup untuk dipercaya</div><div class="ket">minimal 3 dari 4 kutipan lolos verifikasi mesin</div></div><div class="bar" style="max-width:220px"><i style="width:4%"></i></div></div>
+</div>
+<div class="kaki">Dibuat otomatis dari <code>data/leads.db</code> tabel <code>jalan_agen</code> oleh <code>src/buat_agen.py</code> pada 03 Sep 2026 11:47. Tidak ada angka di halaman ini yang diketik tangan.</div>
+</div></body></html>
