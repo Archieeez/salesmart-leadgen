@@ -201,7 +201,7 @@ def fetch_from_overpass(query, max_retries=5):
     return None
 
 
-def parse_element(element, kota):
+def parse_element(element, kota, tag_key=None, tag_value=None):
     tags = element.get("tags", {})
 
     if element["type"] == "node":
@@ -221,7 +221,21 @@ def parse_element(element, kota):
     return {
         "osm_id": element["id"],
         "name": tags.get("name"),
-        "category": tags.get("office") or tags.get("shop"),
+        # KATEGORI HARUS TERISI, apa pun tagnya.
+        #
+        # Dulu barisnya cuma `tags.get("office") or tags.get("shop")`. Itu
+        # cukup selama sepuluh kategori pertama semuanya office=*. Begitu
+        # tag industri ditambahkan 3 Sep 2026 (man_made=works,
+        # landuse=industrial, building=warehouse), 1.041 lead baru masuk
+        # dengan category NULL -- lolos tanpa error, tidak terlihat di
+        # mana pun, sampai dasbor teknis menampilkan satu blok raksasa
+        # tanpa nama.
+        #
+        # Nilai tag yang MEMANGGIL query ini dipakai sebagai cadangan,
+        # bukan ditebak dari isi tagnya: itu satu-satunya sumber yang
+        # pasti benar.
+        "category": (tags.get("office") or tags.get("shop")
+                     or tag_value),
         "address": alamat,
         "city": kota,
         "phone": tags.get("phone") or tags.get("contact:phone"),
@@ -287,11 +301,25 @@ def tandai_selesai(conn, kota, tag_key, tag_value):
 def save_lead(conn, lead):
     conn.execute(
         """
-        INSERT OR IGNORE INTO leads
+        -- INSERT OR IGNORE dulu, dan itu benar untuk baris yang sudah
+        -- diperiksa manusia: panen ulang tidak boleh menimpanya.
+        --
+        -- Satu pengecualian sempit ditambahkan 3 Sep 2026: kategori yang
+        -- masih NULL boleh diisi. 1.041 lead dari tag industri masuk tanpa
+        -- kategori karena parse_element hanya melihat office/shop; tanpa
+        -- pengecualian ini, panen ulang tidak akan pernah memperbaikinya
+        -- dan satu-satunya jalan adalah menghapus lalu memanen dari nol.
+        --
+        -- Klausa WHERE-nya sengaja ketat: hanya mengisi yang KOSONG, dan
+        -- hanya dengan nilai yang ADA. Tidak ada kolom lain yang tersentuh.
+        INSERT INTO leads
             (osm_id, name, category, address, city, phone, website,
              latitude, longitude, discovered_at)
         VALUES (:osm_id, :name, :category, :address, :city, :phone, :website,
                 :latitude, :longitude, :discovered_at)
+        ON CONFLICT(osm_id) DO UPDATE SET
+            category = excluded.category
+        WHERE leads.category IS NULL AND excluded.category IS NOT NULL
         """,
         {**lead, "discovered_at": datetime.now(timezone.utc).isoformat()},
     )
@@ -333,7 +361,7 @@ def main():
 
             baru = dibuang = 0
             for element in elements:
-                lead = parse_element(element, kota)
+                lead = parse_element(element, kota, tag_key, tag_value)
                 if not lead["name"]:
                     continue
                 if is_noise(lead["name"]):
