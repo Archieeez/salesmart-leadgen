@@ -293,6 +293,46 @@ Catatan pengisian yang berpengaruh, kalau nanti perlu diulang:
 disentuh, pengekstrak tidak dibangun.** Jawaban lisan lewat telepon
 tidak dihitung — kalau positif, minta dikirim lewat surel.
 
+#### PST MENJAWAB — 3 September 2026, 08:57 WIB
+
+Balasan pertama dari PST masuk lewat surel SILASTIK (silastik-noreply@
+bps.go.id) ke transaksi #50964. **Bukan penolakan, bukan pengalihan
+ketiga — ini pertanyaan balik.** Isinya:
+
+> Nama dan alamat perusahaan dipakai untuk menyusun daftar calon
+> pelanggan produk software.
+>
+> Mohon bisa dikirimkan seperti apa susunan daftar calon pelanggan
+> produk software yang ingin dikomersialkan?
+
+Artinya pertanyaan izinnya akhirnya sampai ke meja yang menanganinya,
+dan yang mereka timbang adalah BENTUK penggunaannya.
+
+**Ada salah baca yang harus diluruskan di kalimat pertama balasan.**
+Frasa *"daftar calon pelanggan yang ingin dikomersialkan"* menyiratkan
+DAFTARNYA yang dijual. Itu tidak benar, dan bedanya menentukan: menjual
+daftar nama-alamat dari direktori BPS berarti menjual kembali isi
+publikasi; memakai daftar itu untuk menelepon calon pelanggan produk
+sendiri adalah penggunaan internal. Kalau salah bacanya dibiarkan,
+yang dijawab BPS bukan permohonan yang sebenarnya diajukan.
+
+**Tenggat balasan: Selasa, 8 September 2026** — surelnya menyatakan
+konsultasi ditutup otomatis oleh sistem kalau tidak dibalas dalam 3
+hari kerja. Draf jawaban ada di `surat/jawaban-pst-50964.md`.
+
+**Temuan yang muncul saat menyusun jawabannya, dan ini soal nyata:**
+repo ini PUBLIK dan hasil ekspornya dilacak git
+(`data/kebutuhan_export.csv`, `data/leads_export.csv`), ditambah dasbor
+GitHub Pages. Kalau nama dan alamat dari direktori BPS masuk pipeline
+apa adanya, **ia otomatis ikut terbit ke internet** — dan itu
+penerbitan ulang, persis yang dilarang halaman keterangan terbitan.
+Jadi menulis "tidak menerbitkan ulang" ke BPS tanpa menutup jalur ini
+akan jadi pernyataan yang tidak benar. Draf jawaban menyebutkannya
+terbuka ke BPS disertai kesanggupan menahan baris berasal-BPS dari
+berkas publik. **Kalau izin nanti turun, penyaring ekspornya wajib
+dipasang di kode sebelum baris pertama masuk** — bukan dicatat sebagai
+niat.
+
 **Jalur 2 (cadangan): keberatan ke PPID.** UU 14/2008 Pasal 35 ayat (1)
 huruf e memberi dasar keberatan untuk *"permintaan informasi ditanggapi
 tidak sebagaimana yang diminta"* — dan itu persis yang terjadi. Tenggat
