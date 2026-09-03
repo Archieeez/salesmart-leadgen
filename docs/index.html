@@ -62,7 +62,18 @@ body{background:var(--kertas);color:var(--tinta);
    di atas daftar -- dan supaya tetap terlihat sambil menggulung. */
 .konsol{display:grid;grid-template-columns:326px minmax(0,1fr);
   gap:18px;align-items:start;margin-top:20px}
-.sisi{position:sticky;top:64px;display:flex;flex-direction:column;gap:14px}
+/* Rel lengket WAJIB punya batas tinggi dan gulirnya sendiri.
+   Tanpa itu, isi yang lebih tinggi dari layar jadi TIDAK BISA
+   DICAPAI sama sekali: ia menempel di atas dan sisanya menggantung
+   di luar viewport tanpa satu pun cara menggulungnya. Terjadi
+   3 Sep 2026, satu menit setelah layout dua kolom dipasang. */
+.sisi{position:sticky;top:64px;display:flex;flex-direction:column;gap:14px;
+  max-height:calc(100vh - 80px);overflow-y:auto;overscroll-behavior:contain;
+  padding-right:4px;scrollbar-width:thin;
+  scrollbar-color:var(--garis2) transparent}
+.sisi::-webkit-scrollbar{width:7px}
+.sisi::-webkit-scrollbar-thumb{background:var(--garis2);border-radius:4px}
+.sisi::-webkit-scrollbar-track{background:transparent}
 .utama{min-width:0}
 .blok{background:var(--permukaan);border:1px solid var(--garis);
   border-radius:12px;overflow:hidden}
@@ -71,7 +82,7 @@ body{background:var(--kertas);color:var(--tinta);
   padding:12px 16px 0}
 @media (max-width:900px){
   .konsol{grid-template-columns:1fr}
-  .sisi{position:static}
+  .sisi{position:static;max-height:none;overflow:visible;padding-right:0}
 }
 
 .logo{width:26px;height:26px;border-radius:7px;background:var(--merek);
@@ -225,7 +236,11 @@ h1{font-size:clamp(1.6rem,4vw,2.05rem);font-weight:700;letter-spacing:-.025em;
 .agen-maju .lbl b{color:var(--tinta2);font-family:'IBM Plex Mono',monospace}
 .rel{height:6px;background:var(--permukaan2);border-radius:3px;overflow:hidden}
 .rel i{display:block;height:100%;background:var(--merek);border-radius:3px}
-.denyut{list-style:none;margin:0;padding:8px 18px 14px;max-height:190px;overflow-y:auto}
+/* Batas tinggi dilepas. Dulu daftar ini punya gulir sendiri di dalam
+   panel; setelah rel jadi area gulir, dua area bersarang membuat roda
+   tetikus berhenti di daftar ini dan relnya tidak ikut jalan. Satu
+   area gulir saja. */
+.denyut{list-style:none;margin:0;padding:8px 18px 14px}
 .denyut li{display:flex;gap:10px;align-items:baseline;padding:4px 0;font-size:.83rem;color:var(--tinta2)}
 .denyut .jam{font-family:'IBM Plex Mono',monospace;font-size:.72rem;color:var(--tinta3);flex:none;white-space:nowrap}
 .denyut .tag{font-family:'IBM Plex Mono',monospace;font-size:.66rem;padding:1px 6px;border-radius:4px;flex:none;font-weight:600}
@@ -269,22 +284,22 @@ h1{font-size:clamp(1.6rem,4vw,2.05rem);font-weight:700;letter-spacing:-.025em;
 
   <div class="konsol">
     <aside class="sisi">
-<div class="agen diam" id="agen" data-pada="2026-09-03T06:29:11.581254+00:00" data-dibuat="2026-09-03T06:31:31.872858+00:00" data-ambang="180">
-<div class="agen-kepala"><span class="nadi"></span><div><div class="agen-judul">Agen &middot; <span id="agen-judul">status tidak diketahui</span></div><div class="agen-kini">menyisir Denpasar untuk building=warehouse</div><div class="agen-catatan" id="agen-catatan"></div></div><div class="agen-sejak" id="agen-sejak">&mdash;</div></div>
-<div class="agen-maju"><div class="lbl"><span>Sapuan OpenStreetMap</span><b>210/234 kombinasi wilayah &times; tag</b></div><div class="rel"><i style="width:90%"></i></div></div>
+<div class="agen diam" id="agen" data-pada="2026-09-03T06:38:47.723455+00:00" data-dibuat="2026-09-03T06:38:51.168272+00:00" data-ambang="180">
+<div class="agen-kepala"><span class="nadi"></span><div><div class="agen-judul">Agen &middot; <span id="agen-judul">status tidak diketahui</span></div><div class="agen-kini">menyisir Gresik untuk building=warehouse</div><div class="agen-catatan" id="agen-catatan"></div></div><div class="agen-sejak" id="agen-sejak">&mdash;</div></div>
+<div class="agen-maju"><div class="lbl"><span>Sapuan OpenStreetMap</span><b>222/234 kombinasi wilayah &times; tag</b></div><div class="rel"><i style="width:95%"></i></div></div>
 <ul class="denyut">
-<li><time class="jam" datetime="2026-09-03T06:29:11.581254+00:00">06:29 UTC</time><span class="tag panen">panen</span><span>menyisir Denpasar untuk building=warehouse</span></li>
-<li><time class="jam" datetime="2026-09-03T06:28:49.817905+00:00">06:28 UTC</time><span class="tag panen">panen</span><span>menyisir Denpasar untuk landuse=industrial</span></li>
-<li><time class="jam" datetime="2026-09-03T06:28:28.012955+00:00">06:28 UTC</time><span class="tag panen">panen</span><span>menyisir Denpasar untuk man_made=works</span></li>
-<li><time class="jam" datetime="2026-09-03T06:28:01.233427+00:00">06:28 UTC</time><span class="tag panen">panen</span><span>menyisir Makassar untuk building=warehouse</span></li>
-<li><time class="jam" datetime="2026-09-03T06:27:39.935721+00:00">06:27 UTC</time><span class="tag panen">panen</span><span>menyisir Makassar untuk landuse=industrial</span></li>
-<li><time class="jam" datetime="2026-09-03T06:27:14.640362+00:00">06:27 UTC</time><span class="tag panen">panen</span><span>menyisir Makassar untuk man_made=works</span></li>
-<li><time class="jam" datetime="2026-09-03T06:26:52.993875+00:00">06:26 UTC</time><span class="tag panen">panen</span><span>menyisir Medan untuk building=warehouse</span></li>
-<li><time class="jam" datetime="2026-09-03T06:26:27.520844+00:00">06:26 UTC</time><span class="tag panen">panen</span><span>menyisir Medan untuk landuse=industrial</span></li>
-<li><time class="jam" datetime="2026-09-03T06:25:51.739334+00:00">06:25 UTC</time><span class="tag panen">panen</span><span>menyisir Medan untuk man_made=works</span></li>
-<li><time class="jam" datetime="2026-09-03T06:25:30.349732+00:00">06:25 UTC</time><span class="tag panen">panen</span><span>menyisir Semarang untuk building=warehouse</span></li>
-<li><time class="jam" datetime="2026-09-03T06:25:08.622369+00:00">06:25 UTC</time><span class="tag panen">panen</span><span>menyisir Semarang untuk landuse=industrial</span></li>
-<li><time class="jam" datetime="2026-09-03T06:24:46.774801+00:00">06:24 UTC</time><span class="tag panen">panen</span><span>menyisir Semarang untuk man_made=works</span></li>
+<li><time class="jam" datetime="2026-09-03T06:38:47.723455+00:00">06:38 UTC</time><span class="tag panen">panen</span><span>menyisir Gresik untuk building=warehouse</span></li>
+<li><time class="jam" datetime="2026-09-03T06:38:17.210601+00:00">06:38 UTC</time><span class="tag panen">panen</span><span>menyisir Gresik untuk landuse=industrial</span></li>
+<li><time class="jam" datetime="2026-09-03T06:37:55.773415+00:00">06:37 UTC</time><span class="tag panen">panen</span><span>menyisir Gresik untuk man_made=works</span></li>
+<li><time class="jam" datetime="2026-09-03T06:36:51.256647+00:00">06:36 UTC</time><span class="tag panen">panen</span><span>menyisir Sidoarjo untuk building=warehouse</span></li>
+<li><time class="jam" datetime="2026-09-03T06:36:25.195575+00:00">06:36 UTC</time><span class="tag panen">panen</span><span>menyisir Sidoarjo untuk landuse=industrial</span></li>
+<li><time class="jam" datetime="2026-09-03T06:36:01.230145+00:00">06:36 UTC</time><span class="tag panen">panen</span><span>menyisir Sidoarjo untuk man_made=works</span></li>
+<li><time class="jam" datetime="2026-09-03T06:34:56.936351+00:00">06:34 UTC</time><span class="tag panen">panen</span><span>menyisir Cikarang untuk building=warehouse</span></li>
+<li><time class="jam" datetime="2026-09-03T06:33:53.865943+00:00">06:33 UTC</time><span class="tag panen">panen</span><span>menyisir Cikarang untuk landuse=industrial</span></li>
+<li><time class="jam" datetime="2026-09-03T06:33:16.852302+00:00">06:33 UTC</time><span class="tag panen">panen</span><span>menyisir Cikarang untuk man_made=works</span></li>
+<li><time class="jam" datetime="2026-09-03T06:32:45.745778+00:00">06:32 UTC</time><span class="tag panen">panen</span><span>menyisir Karawang untuk building=warehouse</span></li>
+<li><time class="jam" datetime="2026-09-03T06:32:05.287200+00:00">06:32 UTC</time><span class="tag panen">panen</span><span>menyisir Karawang untuk landuse=industrial</span></li>
+<li><time class="jam" datetime="2026-09-03T06:31:42.729565+00:00">06:31 UTC</time><span class="tag panen">panen</span><span>menyisir Karawang untuk man_made=works</span></li>
 </ul>
 <div class="agen-kaki">Denyut ini jejak pekerjaan yang sungguh terjadi, bukan animasi: tiap barisnya punya stempel waktu di database. Agen ini tidak berjalan sepanjang hari &mdash; ia bekerja waktu sesi dibuka. Status di atas dihitung saat Anda membuka halaman ini, bukan saat halamannya dibuat, jadi halaman lama akan jujur bilang &ldquo;menganggur&rdquo; meski dulu dibangkitkan waktu agennya sibuk.</div>
 </div>
