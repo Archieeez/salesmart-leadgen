@@ -35,48 +35,102 @@ body{background:var(--kertas);color:var(--tinta);
     linear-gradient(90deg,var(--kisi) 1px,transparent 1px);
   background-size:46px 46px;background-position:-1px -1px;
   background-attachment:fixed}
-.app{max-width:1060px;margin:0 auto;padding:0 20px 80px}
+.app{max-width:1280px;margin:0 auto;padding:0 20px 80px}
 
-.kepala{padding:34px 0 22px}
-.merek{display:flex;align-items:center;gap:10px;margin-bottom:20px}
+/* HUD: satu baris melintang berisi angka yang paling sering dilirik.
+   Sengaja lengket di atas -- orang sales menggulung daftar panjang dan
+   tetap perlu tahu berapa yang siap ditelepon tanpa naik lagi. */
+.hud{position:sticky;top:0;z-index:30;display:flex;align-items:center;
+  gap:18px;flex-wrap:wrap;padding:9px 20px;margin:0 -20px 2px;
+  background:rgba(7,11,13,.94);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--garis)}
+.hud-merek{display:flex;align-items:center;gap:9px;flex:none}
+.hud-merek b{font-family:'IBM Plex Mono',monospace;font-size:13px;
+  letter-spacing:.16em;font-weight:600}
+.hud-sub{font-family:'IBM Plex Mono',monospace;font-size:10.5px;
+  color:var(--tinta3);letter-spacing:.1em}
+.hud-tautan{margin-left:auto;display:flex;gap:6px;flex:none}
+.hud-tautan a{font-family:'IBM Plex Mono',monospace;font-size:10.5px;
+  letter-spacing:.12em;color:var(--tinta3);text-decoration:none;
+  border:1px solid var(--garis2);border-radius:5px;padding:4px 9px}
+.hud-tautan a:hover{color:var(--merek);border-color:var(--merek)}
+
+.judul{padding:26px 0 4px}
+
+/* Dua kolom: rel kiri untuk keadaan mesin, kanan untuk pekerjaan.
+   Saringan pindah ke rel supaya tidak lagi memakan satu baris penuh
+   di atas daftar -- dan supaya tetap terlihat sambil menggulung. */
+.konsol{display:grid;grid-template-columns:326px minmax(0,1fr);
+  gap:18px;align-items:start;margin-top:20px}
+.sisi{position:sticky;top:64px;display:flex;flex-direction:column;gap:14px}
+.utama{min-width:0}
+.blok{background:var(--permukaan);border:1px solid var(--garis);
+  border-radius:12px;overflow:hidden}
+.blok-judul{font-family:'IBM Plex Mono',monospace;font-size:10.5px;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--tinta3);
+  padding:12px 16px 0}
+@media (max-width:900px){
+  .konsol{grid-template-columns:1fr}
+  .sisi{position:static}
+}
+
 .logo{width:26px;height:26px;border-radius:7px;background:var(--merek);
   display:grid;place-items:center;color:var(--logo-ink);font-weight:700;font-size:13px;flex:none}
-.merek b{font-size:15px;font-weight:700;letter-spacing:-.01em}
-.merek span{color:var(--tinta3);font-size:13px}
 .merek b,.merek span{font-family:'IBM Plex Mono',monospace;
   letter-spacing:.04em}
 h1{font-size:clamp(1.6rem,4vw,2.05rem);font-weight:700;letter-spacing:-.025em;
   margin:0 0 6px;line-height:1.15;text-wrap:balance}
 .sub{color:var(--tinta2);margin:0;max-width:54ch;font-size:.95rem}
 
-.ringkas{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
-  gap:1px;background:var(--garis);border:1px solid var(--garis);
-  border-radius:12px;overflow:hidden;margin:26px 0 0}
-.rk{background:var(--permukaan);padding:16px 18px;position:relative}
-.rk:after{content:'';position:absolute;left:18px;right:18px;bottom:12px;
-  height:2px;background:linear-gradient(90deg,var(--merek),transparent);
-  opacity:.5}
-.rk .k{font-size:11px;letter-spacing:.12em;text-transform:uppercase;
-  color:var(--tinta3);font-weight:600;margin-bottom:5px;
-  font-family:'IBM Plex Mono',monospace}
-.rk .v{font-family:"IBM Plex Mono",monospace;font-size:1.75rem;font-weight:600;
-  line-height:1;font-variant-numeric:tabular-nums}
-.rk .n{font-size:.78rem;color:var(--tinta3);margin-top:4px}
+.ringkas{display:flex;flex-wrap:wrap;gap:0;border:1px solid var(--garis);
+  border-radius:8px;overflow:hidden;margin:0}
+.rk{background:var(--permukaan);padding:6px 14px;position:relative;
+  border-right:1px solid var(--garis);display:flex;align-items:baseline;
+  gap:8px}
+.rk:last-child{border-right:0}
+.rk:after{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;
+  background:var(--merek);opacity:.55}
+.rk.rk-tolak:after{background:var(--tolak)}
+.rk .k{font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--tinta3);font-weight:600;font-family:'IBM Plex Mono',monospace;
+  order:2}
+.rk .v{font-family:"IBM Plex Mono",monospace;font-size:1.15rem;font-weight:600;
+  line-height:1;font-variant-numeric:tabular-nums;order:1}
+/* Keterangan panjang tiap kartu tidak muat di HUD. Ia tidak dibuang,
+   cuma dipindah ke tooltip -- membuang penjelasan angka berarti
+   membuat angka lebih sulit dipercaya, bukan lebih ringkas. */
+.rk .n{display:none}
 
-.saring{position:sticky;top:0;z-index:5;background:var(--kertas);
-  padding:18px 0 14px;margin-top:26px;border-bottom:1px solid var(--garis);
-  display:flex;flex-wrap:wrap;gap:8px;align-items:center}
-.chip{font:inherit;font-size:.83rem;font-weight:600;padding:7px 14px;border-radius:999px;
-  border:1px solid var(--garis2);background:var(--permukaan);color:var(--tinta2);
-  cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:border-color .12s}
+.saring{display:flex;flex-direction:column;gap:5px;padding:10px 12px 12px}
+.chip{font:inherit;font-size:.83rem;font-weight:600;padding:8px 12px;border-radius:7px;
+  border:1px solid var(--garis);background:var(--permukaan2);color:var(--tinta2);
+  cursor:pointer;display:flex;align-items:center;justify-content:space-between;
+  gap:7px;width:100%;text-align:left;transition:border-color .12s,color .12s}
 .chip:hover{border-color:var(--tinta3)}
 .chip:focus-visible{outline:2px solid var(--merek);outline-offset:2px}
 .chip[aria-pressed="true"]{background:var(--merek);border-color:var(--merek);color:var(--logo-ink)}
 .chip .jml{font-family:"IBM Plex Mono",monospace;font-size:.76rem;opacity:.75}
 
-.daftar{margin-top:18px;display:flex;flex-direction:column;gap:9px}
+.daftar{margin-top:0;display:flex;flex-direction:column;gap:9px;
+  counter-reset:lead}
+.lead{counter-increment:lead}
+/* Nomor urut antrian. Bukan hiasan: orang sales menyebut "nomor 7"
+   waktu bicara dengan rekannya, dan tanpa nomor mereka menyebut
+   nama panjang perusahaan. */
+.nama:before{content:counter(lead,decimal-leading-zero);
+  font-family:'IBM Plex Mono',monospace;font-size:.68rem;font-weight:600;
+  color:var(--tinta3);background:var(--permukaan2);border:1px solid var(--garis);
+  border-radius:4px;padding:2px 6px;flex:none}
 .lead{background:var(--permukaan);border:1px solid var(--garis);border-radius:12px;
-  overflow:hidden;box-shadow:var(--bayang)}
+  overflow:hidden;box-shadow:var(--bayang);position:relative;
+  transition:border-color .12s}
+.lead:hover{border-color:var(--garis2)}
+.lead:before,.lead:after{content:'';position:absolute;width:9px;height:9px;
+  border-color:var(--merek);opacity:0;transition:opacity .12s;pointer-events:none}
+.lead:before{top:5px;right:5px;border-top:1px solid;border-right:1px solid}
+.lead:after{bottom:5px;right:5px;border-bottom:1px solid;border-right:1px solid}
+.lead:hover:before,.lead:hover:after,
+.lead.buka:before,.lead.buka:after{opacity:.7}
 .lead.siap{border-left:3px solid var(--siap)}
 .lead.perlu{border-left:3px solid var(--perlu)}
 .lead.arsip{border-left:3px solid var(--arsip)}
@@ -186,8 +240,6 @@ h1{font-size:clamp(1.6rem,4vw,2.05rem);font-weight:700;letter-spacing:-.025em;
   border:1px solid var(--garis);border-radius:12px;font-size:.84rem;
   color:var(--tinta2);line-height:1.6}
 .kaki b{color:var(--tinta)}
-.tautan{margin-left:auto;font-size:.82rem;font-weight:600;color:var(--merek);text-decoration:none}
-.tautan:hover{text-decoration:underline}
 .kaki code{font-family:"IBM Plex Mono",monospace;font-size:.9em}
 @media (max-width:640px){
   .baris{grid-template-columns:1fr}
@@ -198,38 +250,54 @@ h1{font-size:clamp(1.6rem,4vw,2.05rem);font-weight:700;letter-spacing:-.025em;
 </style>
 </head><body>
 <div class="app">
-  <header class="kepala">
-    <div class="merek">
+  <header class="hud">
+    <div class="hud-merek">
       <span class="logo">S</span>
-      <b>Salesmart</b><span>&middot;</span><span>Pencari Lead</span><a class="tautan" href="agen.html">Kenapa angka ini bisa dipercaya &rarr;</a><a class="tautan" href="teknis.html">Dashboard teknis &rarr;</a>
+      <b>SALESMART</b><span class="hud-sub">// PENCARI LEAD</span>
     </div>
+    <div class="ringkas" id="ringkas"></div>
+    <nav class="hud-tautan">
+      <a href="agen.html">AGEN</a><a href="teknis.html">TEKNIS</a>
+    </nav>
+  </header>
+
+  <div class="judul">
     <h1>Antrian lead hari ini</h1>
     <p class="sub">Perusahaan yang bukti di situsnya sendiri menunjukkan mereka punya
     tim sales lapangan dan jaringan distribusi &mdash; diurutkan dari yang paling butuh.</p>
-    <div class="ringkas" id="ringkas"></div>
-<div class="agen diam" id="agen" data-pada="2026-09-03T06:21:52.435437+00:00" data-dibuat="2026-09-03T06:22:14.693113+00:00" data-ambang="180">
-<div class="agen-kepala"><span class="nadi"></span><div><div class="agen-judul">Agen &middot; <span id="agen-judul">status tidak diketahui</span></div><div class="agen-kini">menyisir Bandung untuk landuse=industrial</div><div class="agen-catatan" id="agen-catatan"></div></div><div class="agen-sejak" id="agen-sejak">&mdash;</div></div>
-<div class="agen-maju"><div class="lbl"><span>Sapuan OpenStreetMap</span><b>194/234 kombinasi wilayah &times; tag</b></div><div class="rel"><i style="width:83%"></i></div></div>
+  </div>
+
+  <div class="konsol">
+    <aside class="sisi">
+<div class="agen diam" id="agen" data-pada="2026-09-03T06:29:11.581254+00:00" data-dibuat="2026-09-03T06:31:31.872858+00:00" data-ambang="180">
+<div class="agen-kepala"><span class="nadi"></span><div><div class="agen-judul">Agen &middot; <span id="agen-judul">status tidak diketahui</span></div><div class="agen-kini">menyisir Denpasar untuk building=warehouse</div><div class="agen-catatan" id="agen-catatan"></div></div><div class="agen-sejak" id="agen-sejak">&mdash;</div></div>
+<div class="agen-maju"><div class="lbl"><span>Sapuan OpenStreetMap</span><b>210/234 kombinasi wilayah &times; tag</b></div><div class="rel"><i style="width:90%"></i></div></div>
 <ul class="denyut">
-<li><time class="jam" datetime="2026-09-03T06:21:52.435437+00:00">06:21 UTC</time><span class="tag panen">panen</span><span>menyisir Bandung untuk landuse=industrial</span></li>
-<li><time class="jam" datetime="2026-09-03T06:21:28.596913+00:00">06:21 UTC</time><span class="tag panen">panen</span><span>menyisir Bandung untuk man_made=works</span></li>
-<li><time class="jam" datetime="2026-09-03T06:21:07.059214+00:00">06:21 UTC</time><span class="tag panen">panen</span><span>menyisir Depok untuk building=warehouse</span></li>
-<li><time class="jam" datetime="2026-09-03T06:20:45.507586+00:00">06:20 UTC</time><span class="tag panen">panen</span><span>menyisir Depok untuk landuse=industrial</span></li>
-<li><time class="jam" datetime="2026-09-03T06:19:39.569679+00:00">06:19 UTC</time><span class="tag panen">panen</span><span>menyisir Depok untuk man_made=works</span></li>
-<li><time class="jam" datetime="2026-09-03T06:19:17.481971+00:00">06:19 UTC</time><span class="tag panen">panen</span><span>menyisir Bekasi untuk building=warehouse</span></li>
-<li><time class="jam" datetime="2026-09-03T06:18:48.380034+00:00">06:18 UTC</time><span class="tag panen">panen</span><span>menyisir Bekasi untuk landuse=industrial</span></li>
-<li><time class="jam" datetime="2026-09-03T06:17:37.746102+00:00">06:17 UTC</time><span class="tag panen">panen</span><span>menyisir Bekasi untuk man_made=works</span></li>
-<li><time class="jam" datetime="2026-09-03T06:17:16.424006+00:00">06:17 UTC</time><span class="tag panen">panen</span><span>menyisir Tangerang untuk building=warehouse</span></li>
-<li><time class="jam" datetime="2026-09-03T06:16:14.331220+00:00">06:16 UTC</time><span class="tag panen">panen</span><span>menyisir Tangerang untuk landuse=industrial</span></li>
-<li><time class="jam" datetime="2026-09-03T06:15:52.470217+00:00">06:15 UTC</time><span class="tag panen">panen</span><span>menyisir Tangerang untuk man_made=works</span></li>
-<li><time class="jam" datetime="2026-09-03T06:14:50.487803+00:00">06:14 UTC</time><span class="tag panen">panen</span><span>menyisir Jakarta untuk building=warehouse</span></li>
+<li><time class="jam" datetime="2026-09-03T06:29:11.581254+00:00">06:29 UTC</time><span class="tag panen">panen</span><span>menyisir Denpasar untuk building=warehouse</span></li>
+<li><time class="jam" datetime="2026-09-03T06:28:49.817905+00:00">06:28 UTC</time><span class="tag panen">panen</span><span>menyisir Denpasar untuk landuse=industrial</span></li>
+<li><time class="jam" datetime="2026-09-03T06:28:28.012955+00:00">06:28 UTC</time><span class="tag panen">panen</span><span>menyisir Denpasar untuk man_made=works</span></li>
+<li><time class="jam" datetime="2026-09-03T06:28:01.233427+00:00">06:28 UTC</time><span class="tag panen">panen</span><span>menyisir Makassar untuk building=warehouse</span></li>
+<li><time class="jam" datetime="2026-09-03T06:27:39.935721+00:00">06:27 UTC</time><span class="tag panen">panen</span><span>menyisir Makassar untuk landuse=industrial</span></li>
+<li><time class="jam" datetime="2026-09-03T06:27:14.640362+00:00">06:27 UTC</time><span class="tag panen">panen</span><span>menyisir Makassar untuk man_made=works</span></li>
+<li><time class="jam" datetime="2026-09-03T06:26:52.993875+00:00">06:26 UTC</time><span class="tag panen">panen</span><span>menyisir Medan untuk building=warehouse</span></li>
+<li><time class="jam" datetime="2026-09-03T06:26:27.520844+00:00">06:26 UTC</time><span class="tag panen">panen</span><span>menyisir Medan untuk landuse=industrial</span></li>
+<li><time class="jam" datetime="2026-09-03T06:25:51.739334+00:00">06:25 UTC</time><span class="tag panen">panen</span><span>menyisir Medan untuk man_made=works</span></li>
+<li><time class="jam" datetime="2026-09-03T06:25:30.349732+00:00">06:25 UTC</time><span class="tag panen">panen</span><span>menyisir Semarang untuk building=warehouse</span></li>
+<li><time class="jam" datetime="2026-09-03T06:25:08.622369+00:00">06:25 UTC</time><span class="tag panen">panen</span><span>menyisir Semarang untuk landuse=industrial</span></li>
+<li><time class="jam" datetime="2026-09-03T06:24:46.774801+00:00">06:24 UTC</time><span class="tag panen">panen</span><span>menyisir Semarang untuk man_made=works</span></li>
 </ul>
 <div class="agen-kaki">Denyut ini jejak pekerjaan yang sungguh terjadi, bukan animasi: tiap barisnya punya stempel waktu di database. Agen ini tidak berjalan sepanjang hari &mdash; ia bekerja waktu sesi dibuka. Status di atas dihitung saat Anda membuka halaman ini, bukan saat halamannya dibuat, jadi halaman lama akan jujur bilang &ldquo;menganggur&rdquo; meski dulu dibangkitkan waktu agennya sibuk.</div>
 </div>
-  </header>
+      <section class="blok">
+        <div class="blok-judul">Saring antrian</div>
+        <div class="saring" id="saring" role="group" aria-label="Saring berdasarkan tindakan"></div>
+      </section>
+    </aside>
 
-  <div class="saring" id="saring" role="group" aria-label="Saring berdasarkan tindakan"></div>
-  <div class="daftar" id="daftar"></div>
+    <main class="utama">
+      <div class="daftar" id="daftar"></div>
+    </main>
+  </div>
 
   <div class="kaki">
     Semua angka, nomor, dan kutipan di halaman ini data nyata dari pipeline
@@ -275,7 +343,11 @@ h1{font-size:clamp(1.6rem,4vw,2.05rem);font-weight:700;letter-spacing:-.025em;
     if (n.tolak) { kartu.splice(3, 0, ["Jangan telepon", n.tolak, "pesaing atau salah sasaran"]); }
     document.getElementById("ringkas").innerHTML = kartu.map(function(k){
       var kls = (k[0] === "Jangan telepon") ? " rk-tolak" : "";
-      return '<div class="rk' + kls + '"><div class="k">' + k[0] + '</div><div class="v">' +
+      // Keterangan tiap angka tidak muat di HUD, tapi TIDAK dibuang: ia
+      // pindah ke tooltip. Angka tanpa penjelasan lebih sulit dipercaya,
+      // bukan lebih ringkas.
+      return '<div class="rk' + kls + '" title="' + k[0] + ' — ' + k[2] + '">' +
+             '<div class="k">' + k[0] + '</div><div class="v">' +
              k[1] + '</div><div class="n">' + k[2] + '</div></div>';
     }).join("");
   }
