@@ -154,6 +154,29 @@ h1{font-size:clamp(1.6rem,4vw,2.05rem);font-weight:700;letter-spacing:-.025em;
 .buka .kait{margin:11px 0 0;padding-top:10px;border-top:1px solid var(--garis2);
   font-size:.86rem;color:var(--tinta)}
 .buka .pastikan{margin:9px 0 0;font-size:.81rem;color:var(--tinta3);line-height:1.5}
+.agen{margin:22px 0 0;background:var(--permukaan);border:1px solid var(--garis);border-radius:12px;overflow:hidden;box-shadow:var(--bayang)}
+.agen-kepala{display:flex;align-items:center;gap:11px;padding:14px 18px;border-bottom:1px solid var(--garis)}
+.nadi{width:9px;height:9px;border-radius:50%;flex:none;background:var(--tinta3)}
+.agen.jalan .nadi{background:var(--siap);animation:denyut 1.6s ease-in-out infinite}
+@keyframes denyut{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.72)}}
+.agen-judul{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:var(--tinta3)}
+.agen-kini{font-size:.92rem;font-weight:600;color:var(--tinta)}
+.agen.diam .agen-kini{color:var(--tinta2);font-weight:500}
+.agen-sejak{margin-left:auto;font-family:'IBM Plex Mono',monospace;font-size:.74rem;color:var(--tinta3);white-space:nowrap}
+.agen-maju{padding:12px 18px;border-bottom:1px solid var(--garis)}
+.agen-maju .lbl{display:flex;justify-content:space-between;font-size:.76rem;color:var(--tinta3);margin-bottom:6px}
+.agen-maju .lbl b{color:var(--tinta2);font-family:'IBM Plex Mono',monospace}
+.rel{height:6px;background:var(--permukaan2);border-radius:3px;overflow:hidden}
+.rel i{display:block;height:100%;background:var(--merek);border-radius:3px}
+.denyut{list-style:none;margin:0;padding:8px 18px 14px;max-height:190px;overflow-y:auto}
+.denyut li{display:flex;gap:10px;align-items:baseline;padding:4px 0;font-size:.83rem;color:var(--tinta2)}
+.denyut .jam{font-family:'IBM Plex Mono',monospace;font-size:.72rem;color:var(--tinta3);flex:none}
+.denyut .tag{font-family:'IBM Plex Mono',monospace;font-size:.66rem;padding:1px 6px;border-radius:4px;flex:none;font-weight:600}
+.tag.panen{background:var(--merek-lembut);color:var(--merek)}
+.tag.kontak{background:var(--perlu-lembut);color:var(--perlu)}
+.tag.nilai{background:var(--siap-lembut);color:var(--siap)}
+.tag.periksa{background:var(--tolak-lembut);color:var(--tolak)}
+.agen-kaki{padding:10px 18px 14px;font-size:.78rem;color:var(--tinta3);line-height:1.5;border-top:1px solid var(--garis)}
 .kosong{text-align:center;padding:56px 20px;color:var(--tinta3)}
 
 .kaki{margin-top:38px;padding:18px 20px;background:var(--permukaan2);
@@ -181,6 +204,25 @@ h1{font-size:clamp(1.6rem,4vw,2.05rem);font-weight:700;letter-spacing:-.025em;
     <p class="sub">Perusahaan yang bukti di situsnya sendiri menunjukkan mereka punya
     tim sales lapangan dan jaringan distribusi &mdash; diurutkan dari yang paling butuh.</p>
     <div class="ringkas" id="ringkas"></div>
+<div class="agen jalan">
+<div class="agen-kepala"><span class="nadi"></span><div><div class="agen-judul">Agen &middot; sedang bekerja</div><div class="agen-kini">menyisir Gresik untuk office=insurance</div></div><div class="agen-sejak">5 detik lalu</div></div>
+<div class="agen-maju"><div class="lbl"><span>Sapuan OpenStreetMap</span><b>175/234 kombinasi wilayah &times; tag</b></div><div class="rel"><i style="width:75%"></i></div></div>
+<ul class="denyut">
+<li><span class="jam">05:28</span><span class="tag panen">panen</span><span>menyisir Gresik untuk office=insurance</span></li>
+<li><span class="jam">05:27</span><span class="tag panen">panen</span><span>menyisir Gresik untuk office=logistics</span></li>
+<li><span class="jam">05:27</span><span class="tag panen">panen</span><span>menyisir Gresik untuk office=engineering</span></li>
+<li><span class="jam">05:26</span><span class="tag panen">panen</span><span>menyisir Gresik untuk office=advertising_agency</span></li>
+<li><span class="jam">05:25</span><span class="tag panen">panen</span><span>menyisir Gresik untuk office=consulting</span></li>
+<li><span class="jam">05:25</span><span class="tag panen">panen</span><span>menyisir Gresik untuk office=it</span></li>
+<li><span class="jam">05:25</span><span class="tag panen">panen</span><span>menyisir Sidoarjo untuk building=warehouse</span></li>
+<li><span class="jam">05:24</span><span class="tag panen">panen</span><span>menyisir Sidoarjo untuk landuse=industrial</span></li>
+<li><span class="jam">05:24</span><span class="tag panen">panen</span><span>menyisir Sidoarjo untuk man_made=works</span></li>
+<li><span class="jam">05:24</span><span class="tag panen">panen</span><span>menyisir Sidoarjo untuk office=company</span></li>
+<li><span class="jam">05:23</span><span class="tag panen">panen</span><span>menyisir Sidoarjo untuk office=research</span></li>
+<li><span class="jam">05:23</span><span class="tag panen">panen</span><span>menyisir Sidoarjo untuk office=financial</span></li>
+</ul>
+<div class="agen-kaki">Denyut ini jejak pekerjaan yang sungguh terjadi, bukan animasi: tiap barisnya punya stempel waktu di database. Agen ini tidak berjalan sepanjang hari &mdash; ia bekerja waktu sesi dibuka, dan panel ini menulis &ldquo;menganggur&rdquo; kalau memang sedang menganggur.</div>
+</div>
   </header>
 
   <div class="saring" id="saring" role="group" aria-label="Saring berdasarkan tindakan"></div>

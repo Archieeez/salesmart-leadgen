@@ -59,6 +59,26 @@ AREAS = {
     "Medan":      ( 3.500,  98.600,  3.690,  98.750),
     "Makassar":   (-5.210, 119.370, -5.080, 119.510),
     "Denpasar":   (-8.730, 115.170, -8.590, 115.290),
+
+    # --- KABUPATEN INDUSTRI, ditambah 3 Sep 2026 -------------------------
+    # Sepuluh kota di atas semuanya PUSAT KANTOR. Pabriknya tidak di sana.
+    # Bukti yang memaksa penambahan ini: 991 baris dari sepuluh kota itu
+    # menghasilkan TIGA lead bernilai >= 75. Sekitar 30 seed manual dari
+    # asosiasi menghasilkan SEMBILAN. Yang salah bukan rubriknya, melainkan
+    # tempat memancingnya.
+    #
+    # Hitungan pra-panen (Overpass `out count`, hanya yang ber-nama):
+    #   Karawang  landuse=industrial 163, man_made=works  8
+    #   Cikarang  landuse=industrial  56, man_made=works 24
+    #   Sidoarjo  landuse=industrial  38, man_made=works 14
+    "Karawang":   (-6.450, 107.200, -6.200, 107.450),
+    "Cikarang":   (-6.400, 107.050, -6.200, 107.250),
+    "Sidoarjo":   (-7.550, 112.600, -7.350, 112.800),
+    "Gresik":     (-7.250, 112.550, -7.100, 112.700),
+    "Purwakarta": (-6.620, 107.400, -6.450, 107.560),
+    "Serang":     (-6.200, 106.030, -6.000, 106.230),
+    "Kudus":      (-6.860, 110.780, -6.740, 110.900),
+    "Mojokerto":  (-7.550, 112.400, -7.400, 112.560),
 }
 
 # ---------------------------------------------------------------------------
@@ -76,6 +96,28 @@ CATEGORIES = [
     ("office", "financial"),
     ("office", "research"),
     ("office", "company"),             # paling generik, paling banyak noise
+
+    # --- TAG INDUSTRI, ditambah 3 Sep 2026 -------------------------------
+    # Sepuluh kategori di atas semuanya KANTOR JASA: IT, konsultan, biro
+    # iklan, asuransi, keuangan, telekomunikasi, riset. Tidak satu pun
+    # manufaktur, pergudangan, atau distribusi -- padahal itulah vertikal
+    # Salesmart. `office=insurance` bahkan vertikal yang sudah ditutup
+    # sendiri lewat VERTIKAL_DITUTUP.
+    #
+    # Sampel pra-panen membuktikan isinya nyata: Unilever, HM Sampoerna,
+    # Unicharm, Hankook Tire, Borwita Citra Prima, Aloha Food Industry.
+    #
+    # Diketahui dan sudah diperhitungkan sebelum dipanen:
+    #   - `landuse=industrial` kadang bernama KAWASAN industrinya, bukan
+    #     perusahaannya. Dibuang POLA_BUANG.
+    #   - `man_made=works` sering bernama "Pabrik" saja. Dibuang juga.
+    #   - satu perusahaan bisa terpetakan 2-3 kali; bersihkan_db.py yang
+    #     menangani dedup entitas.
+    #   - `shop=wholesale` diuji dan hasilnya NOL di keempat wilayah uji,
+    #     jadi sengaja TIDAK dimasukkan.
+    ("man_made", "works"),             # pabrik
+    ("landuse", "industrial"),         # kawasan/lahan industri
+    ("building", "warehouse"),         # gudang
 ]
 
 # ---------------------------------------------------------------------------
@@ -88,7 +130,16 @@ POLA_BUANG = re.compile(
     r"|service,?\s*parts|authorized\s*service|pusat\s*servis"
     r"|kelurahan|kecamatan|kantor\s*pos|puskesmas|polsek|polres"
     r"|\bkpu\b|\bdprd\b|\bbpjs\b|\bsamsat\b"
-    r"|office\s*park|business\s*park|wisma\b|graha\b|menara\b|\bplaza\b)",
+    r"|office\s*park|business\s*park|wisma\b|graha\b|menara\b|\bplaza\b"
+
+    # Ditambah 3 Sep 2026 bersama tag industri. Ketiganya terlihat di
+    # sampel pra-panen, bukan dibayangkan:
+    #   "Pabrik" x9 di Cikarang  -> man_made=works tanpa nama sebenarnya
+    #   "Karawang International Industrial City" -> KAWASAN, bukan perusahaan
+    #   "Tanrise Westgate", "Pergudangan WIRA9" -> properti/kompleks
+    r"|^pabrik$|^gudang$|^pergudangan\b|^kawasan\b"
+    r"|industrial\s*(city|estate|park)|kawasan\s*industri"
+    r"|\bpergudangan\b|\bruko\b|\bsppbe\b)",
     re.IGNORECASE,
 )
 
