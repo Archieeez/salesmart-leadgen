@@ -70,11 +70,75 @@ CREATE TABLE IF NOT EXISTS perusahaan_bps (
     alamat      TEXT,
     halaman     INTEGER,
     kolom       INTEGER,
+    bagian      TEXT,       -- kelompok industri, dari daftar isi
     sumber      TEXT,
     diambil_pada TEXT,
     PRIMARY KEY (nama, alamat)
 );
 """
+
+# KELOMPOK INDUSTRI — ini penyaring paling berharga di seluruh berkas ini.
+#
+# Direktorinya TIDAK alfabetis dari awal sampai akhir. Ia terbagi 24
+# kelompok industri, dan tiap kelompok alfabetis A-Z sendiri. Ketahuan
+# karena halaman 300 mulai "MIKALINDO", 700 "KURNIA", 1100 "GARDA" --
+# urutannya mengulang.
+#
+# Batas antar bagian dideteksi dari titik urutan alfabet MUNDUR lintas
+# halaman; hasilnya 23 batas, persis sejumlah judul di daftar isi
+# (halaman 9-10). Dua sumber yang bebas satu sama lain memberi angka yang
+# sama, jadi pemetaannya bukan tebakan.
+#
+# Nilainya: 35.136 nama tidak mungkin dibaca semua (~1.300 sesi pada
+# langit-langit 25 perusahaan per sesi). Dengan kelompok ini, vertikal
+# inti Salesmart -- makanan, minuman, farmasi -- bisa dipisahkan SEBELUM
+# sepeser perhatian dikeluarkan, dan `industry_fit` praktis sudah
+# diketahui tanpa membaca satu situs pun.
+BAGIAN = [
+    (19,   "Industri Makanan"),
+    (285,  "Industri Minuman"),
+    (319,  "Industri Pengolahan Tembakau"),
+    (353,  "Industri Tekstil"),
+    (423,  "Industri Pakaian Jadi"),
+    (483,  "Industri Kulit, Barang dari Kulit dan Alas Kaki"),
+    (515,  "Industri Kayu, Barang dari Kayu dan Gabus"),
+    (557,  "Industri Kertas dan Barang dari Kertas"),
+    (593,  "Industri Pencetakan dan Reproduksi Media Rekaman"),
+    (637,  "Industri Produk dari Batu Bara dan Pengilangan Minyak Bumi"),
+    (655,  "Industri Bahan Kimia dan Barang dari Bahan Kimia"),
+    (745,  "Industri Farmasi, Produk Obat Kimia dan Obat Tradisional"),
+    (769,  "Industri Karet, Barang dari Karet dan Plastik"),
+    (881,  "Industri Barang Galian Bukan Logam"),
+    (947,  "Industri Logam Dasar"),
+    (987,  "Industri Barang Logam, Bukan Mesin dan Peralatannya"),
+    (1065, "Industri Komputer, Barang Elektronik dan Optik"),
+    (1091, "Industri Peralatan Listrik"),
+    (1129, "Industri Mesin dan Perlengkapan YTDL"),
+    (1177, "Industri Kendaraan Bermotor, Trailer dan Semi Trailer"),
+    (1219, "Industri Alat Angkutan Lainnya"),
+    (1253, "Industri Furnitur"),
+    (1303, "Industri Pengolahan Lainnya"),
+    (1337, "Industri Reparasi dan Pemasangan Mesin dan Peralatan"),
+]
+
+# Vertikal inti Salesmart: barang konsumsi bermerek yang didorong ke pasar
+# lewat jaringan distribusi dan tim sales lapangan.
+BAGIAN_INTI = {
+    "Industri Makanan",
+    "Industri Minuman",
+    "Industri Farmasi, Produk Obat Kimia dan Obat Tradisional",
+}
+
+
+def bagian_halaman(nomor: int) -> str:
+    """Kelompok industri untuk sebuah halaman. Kosong untuk halaman muka."""
+    nama = ""
+    for awal, judul in BAGIAN:
+        if nomor >= awal:
+            nama = judul
+        else:
+            break
+    return nama
 
 # Baris yang MENGAWALI alamat. Dipakai untuk menentukan di mana nama
 # berhenti -- nama bisa membungkus tanpa koma ("CAKE BAKERY PASTRY" lalu
@@ -187,7 +251,8 @@ def ekstrak(halaman=None):
                 for blok in blok_kolom:
                     p = pecah(blok)
                     if p:
-                        hasil.append((p[0], p[1], nomor, k))
+                        hasil.append((p[0], p[1], nomor, k,
+                                      bagian_halaman(nomor)))
     return hasil
 
 
@@ -195,9 +260,9 @@ def mutu(hasil):
     """Berapa yang alamatnya benar-benar lengkap. Angka ini yang menentukan
     layak-tidaknya dipakai, bukan jumlah barisnya."""
     n = len(hasil)
-    prov = sum(1 for _, a, _, _ in hasil if PROVINSI.search(a or ""))
-    pos = sum(1 for _, a, _, _ in hasil if re.search(r"\b\d{5}\b", a or ""))
-    kosong = sum(1 for _, a, _, _ in hasil if not (a or "").strip())
+    prov = sum(1 for _, a, _, _, _ in hasil if PROVINSI.search(a or ""))
+    pos = sum(1 for _, a, _, _, _ in hasil if re.search(r"\b\d{5}\b", a or ""))
+    kosong = sum(1 for _, a, _, _, _ in hasil if not (a or "").strip())
 
     # DUA PERUSAHAAN MENEMPEL JADI SATU RECORD — cacat yang paling mahal,
     # karena hasilnya tetap terlihat masuk akal. Tandanya: satu nama
@@ -214,9 +279,9 @@ def mutu(hasil):
     # pemeriksa ini berteriak 25 kali untuk nama yang benar semua, dan
     # pemeriksa yang sering salah pada akhirnya diabaikan orang.
     bentuk = re.compile(r"\b(PT|CV|UD|TBK|PERSERO|PERUM|KOPERASI)\b")
-    dobel = sum(1 for nm, _, _, _ in hasil if len(bentuk.findall(nm)) >= 3)
+    dobel = sum(1 for nm, _, _, _, _ in hasil if len(bentuk.findall(nm)) >= 3)
 
-    panjang = sum(1 for nm, _, _, _ in hasil if len(nm) > 70)
+    panjang = sum(1 for nm, _, _, _, _ in hasil if len(nm) > 70)
     return {"total": n, "ada_provinsi": prov, "ada_kodepos": pos,
             "alamat_kosong": kosong, "nama_dobel": dobel,
             "nama_kepanjangan": panjang}
@@ -228,9 +293,9 @@ def simpan(hasil):
     pada = datetime.now(timezone.utc).isoformat(timespec="seconds")
     con.executemany(
         "INSERT OR IGNORE INTO perusahaan_bps "
-        "(nama, alamat, halaman, kolom, sumber, diambil_pada) "
-        "VALUES (?,?,?,?,?,?)",
-        [(n, a, h, k, SUMBER, pada) for n, a, h, k in hasil])
+        "(nama, alamat, halaman, kolom, bagian, sumber, diambil_pada) "
+        "VALUES (?,?,?,?,?,?,?)",
+        [(n, a, h, k, b, SUMBER, pada) for n, a, h, k, b in hasil])
     con.commit()
     n = con.execute("SELECT count(*) FROM perusahaan_bps").fetchone()[0]
     con.close()
@@ -265,8 +330,8 @@ def main():
           f"(dua perusahaan menempel; harus 0)")
     print(f"  nama > 70 huruf: {m['nama_kepanjangan']}")
     print()
-    for n, a, h, k in hasil[:args.contoh]:
-        print(f"  [{h}/{k}] {n}")
+    for n, a, h, k, b in hasil[:args.contoh]:
+        print(f"  [{h}/{k}] {n}   <{b}>")
         print(f"        {a[:96]}")
 
     if not args.tulis:

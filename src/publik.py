@@ -74,37 +74,46 @@ def _norm(nama: str) -> str:
     return re.sub(r"\s+", " ", s).strip()
 
 
-def nama_dilindungi() -> set:
-    """Nama perusahaan yang HANYA diketahui dari sumber terlindungi.
-
-    Perusahaan yang juga ditemukan dari sumber lain (OSM, asosiasi, riset
-    manual) TIDAK terlindungi: keberadaannya di daftar kita tidak berasal
-    dari publikasi BPS, jadi menerbitkannya bukan menerbitkan ulang
-    publikasi itu. Yang dilindungi adalah baris yang keberadaannya
-    memang datang dari sana.
-    """
-    if not DB_BPS.exists():
+def _nama_dari(db: Path, sql: str) -> set:
+    if not db.exists():
         return set()
-    con = sqlite3.connect(f"file:{DB_BPS}?mode=ro", uri=True)
+    con = sqlite3.connect(f"file:{db}?mode=ro", uri=True)
     try:
-        bps = {_norm(r[0]) for r in con.execute(
-            "SELECT nama FROM perusahaan_bps")}
+        return {_norm(r[0]) for r in con.execute(sql) if r[0]}
     except sqlite3.Error:
-        bps = set()
+        return set()
     finally:
         con.close()
 
+
+def nama_dilindungi() -> set:
+    """Nama yang keberadaannya di daftar kita HANYA berasal dari BPS.
+
+    Perusahaan yang juga kita kenal dari sumber lain tidak dilindungi:
+    keberadaannya tidak berasal dari publikasi itu, jadi menerbitkannya
+    bukan menerbitkan ulang publikasi itu.
+
+    Dipakai hanya sebagai jaring kedua. Pemeriksaan utama membaca ASAL
+    USUL per baris, bukan mencocokkan nama -- lihat periksa().
+    """
+    bps = _nama_dari(DB_BPS, "SELECT nama FROM perusahaan_bps")
+    if not bps:
+        return set()
     lain = set()
     dbl = BASE / "data" / "leads.db"
-    if dbl.exists():
-        c = sqlite3.connect(f"file:{dbl}?mode=ro", uri=True)
-        try:
-            lain = {_norm(r[0]) for r in c.execute(
-                "SELECT name FROM leads WHERE COALESCE(source,'') NOT LIKE 'bps%'")}
-        except sqlite3.Error:
-            pass
-        finally:
-            c.close()
+    lain |= _nama_dari(dbl, "SELECT name FROM leads")
+    lain |= _nama_dari(dbl, "SELECT nama FROM leads_arsip")
+    lain |= _nama_dari(dbl, "SELECT nama FROM kontak_web")
+    lain |= _nama_dari(dbl, "SELECT nama FROM kebutuhan")
+    for csv_nama in ("companies_scored.csv", "companies_prioritas.csv"):
+        f = BASE / "data" / csv_nama
+        if f.exists():
+            import csv as _csv
+            with open(f, encoding="utf-8") as fh:
+                for r in _csv.DictReader(fh):
+                    n = r.get("company_name") or r.get("nama") or ""
+                    if n:
+                        lain.add(_norm(n))
     return {n for n in bps if n and n not in lain}
 
 
@@ -114,43 +123,103 @@ def _dilacak_git(jalur: str) -> bool:
     return r.returncode == 0
 
 
+def _asal_bps_di_db() -> dict:
+    """Berapa baris ber-ASAL BPS di tiap tabel yang ikut terbit.
+
+    Ini pemeriksaan UTAMA, dan sengaja tidak mencocokkan nama sama
+    sekali. Percobaan pertama (3 Sep 2026) memindai teks berkas publik
+    dan mencari nama yang ada di bps.db. Hasilnya tujuh "kebocoran" yang
+    semuanya SALAH:
+
+      - 'SAHABAT' cocok sebagai potongan di dalam nama lain mana pun
+      - 'NUTRIFOOD' masuk pipeline dari GAPMMI, bukan dari BPS; ia
+        kebetulan juga tercantum di direktori
+
+    Pelajarannya sama dengan yang sudah mahal di proyek ini: yang
+    diperiksa harus PENGAMATAN, bukan kesimpulan. Asal-usul sebuah baris
+    adalah fakta yang dicatat waktu baris itu masuk; kemiripan nama cuma
+    dugaan. Dan gerbang yang sering salah pada akhirnya dimatikan orang.
+    """
+    dbl = BASE / "data" / "leads.db"
+    if not dbl.exists():
+        return {}
+    con = sqlite3.connect(f"file:{dbl}?mode=ro", uri=True)
+    hasil = {}
+    for tabel, kolom in (("leads", "source"),
+                         ("leads_arsip", "source"),
+                         ("kontak_web", "sumber_discovery"),
+                         ("kebutuhan", "model")):
+        try:
+            n = con.execute(
+                f"SELECT count(*) FROM {tabel} "
+                f"WHERE lower(COALESCE({kolom},'')) LIKE 'bps%'").fetchone()[0]
+            if n:
+                hasil[tabel] = n
+        except sqlite3.Error:
+            pass
+    con.close()
+    return hasil
+
+
 def periksa() -> list:
     """Cari kebocoran. Return daftar masalah; kosong berarti aman."""
     masalah = []
-    terlindungi = nama_dilindungi()
 
-    # 1. leads.db tidak boleh dilacak git begitu ia memuat baris BPS.
+    # 1. UTAMA: adakah baris ber-asal BPS di tabel yang ikut terbit?
+    for tabel, n in _asal_bps_di_db().items():
+        masalah.append(
+            f"tabel {tabel} di leads.db memuat {n} baris ber-asal BPS. "
+            "leads.db dilacak git dan diekspor ke CSV publik; pindahkan "
+            "ke data/bps.db atau tandai supaya tidak ikut terbit.")
+
+    # 2. leads.db tidak boleh dilacak git begitu ia memuat baris BPS.
     #    Berkas biner tidak bisa disaring sebagian: ia memuatnya atau
-    #    tidak. Selama belum ada baris BPS, melacaknya tetap benar.
-    if DB_BPS.exists() and _dilacak_git("data/leads.db"):
-        con = sqlite3.connect(f"file:{BASE / 'data' / 'leads.db'}?mode=ro",
-                              uri=True)
-        try:
-            n = con.execute("SELECT count(*) FROM leads "
-                            "WHERE COALESCE(source,'') LIKE 'bps%'").fetchone()[0]
-        except sqlite3.Error:
-            n = 0
-        finally:
-            con.close()
-        if n:
-            masalah.append(
-                f"data/leads.db DILACAK GIT dan memuat {n} baris berasal-BPS. "
-                "Berkas biner tidak bisa disaring sebagian — keluarkan dari "
-                "git (git rm --cached) sebelum commit berikutnya.")
+    #    tidak.
+    if masalah and _dilacak_git("data/leads.db"):
+        masalah.append(
+            "data/leads.db DILACAK GIT sementara ia memuat baris BPS. "
+            "Keluarkan dari git (git rm --cached) sebelum commit "
+            "berikutnya.")
 
-    # 2. Nama terlindungi tidak boleh muncul di keluaran publik.
-    if terlindungi:
-        for jalur in KELUARAN_PUBLIK:
-            f = BASE / jalur
-            if not f.exists():
-                continue
-            isi = _norm(f.read_text(encoding="utf-8", errors="replace"))
-            kena = [n for n in terlindungi if n and len(n) > 6 and n in isi]
-            if kena:
-                masalah.append(
-                    f"{jalur} memuat {len(kena)} nama yang hanya diketahui "
-                    f"dari publikasi BPS, mis. {kena[0][:40]!r}")
     return masalah
+
+
+def dugaan() -> list:
+    """Kecocokan NAMA yang mungkin -- keterangan, BUKAN penghenti.
+
+    Sengaja dipisah dari periksa() dan sengaja tidak pernah menggagalkan
+    ekspor. Pencocokan nama di sini terbukti sering salah, dan sebabnya
+    bukan bisa ditambal dengan ambang yang lebih ketat:
+
+      'SAHABAT'                     cocok sebagai potongan nama lain
+      'NUTRIFOOD'                   masuk dari GAPMMI, bukan dari BPS
+      'ASAHIMAS FLAT GLASS'         ada di leads dari OSM, tapi tercatat
+                                    "Asahimas Flat Glass (Flat Glass)"
+      'GARUDAFOOD PUTRA PUTRI JAYA' ada dari GAPMMI sebagai "Garudafood"
+
+    Dua nama untuk perusahaan yang sama tidak bisa dipastikan sama dari
+    ejaannya, dan memaksakannya berarti menuduh kebocoran yang tidak
+    terjadi. Gerbang yang salah tiga kali tiap jalan akan dimatikan
+    orang, lalu kebocoran yang SUNGGUHAN ikut lewat.
+
+    Yang menjaga garisnya adalah periksa(), yang membaca asal-usul baris
+    -- fakta yang dicatat saat baris itu masuk, bukan dugaan dari nama.
+    """
+    hasil = []
+    terlindungi = {n for n in nama_dilindungi()
+                   if len(n) >= 18 and len(n.split()) >= 3}
+    if not terlindungi:
+        return hasil
+    for jalur in KELUARAN_PUBLIK:
+        f = BASE / jalur
+        if not f.exists():
+            continue
+        isi = _norm(f.read_text(encoding="utf-8", errors="replace"))
+        kena = [n for n in terlindungi if n in isi]
+        if kena:
+            hasil.append(f"{jalur}: {len(kena)} nama mirip, mis. "
+                         f"{kena[0][:46]!r}")
+    return hasil
 
 
 def main():
@@ -160,9 +229,17 @@ def main():
           f"{'ada' if DB_BPS.exists() else 'belum ada'} ({DB_BPS.name})")
     print(f"Nama terlindungi   : {len(terlindungi)}")
     print()
+    d = dugaan()
+    if d:
+        print("Keterangan (BUKAN kebocoran; pencocokan nama memang sering "
+              "salah, lihat dugaan() di src/publik.py):")
+        for x in d:
+            print(f"  ~ {x}")
+        print()
+
     masalah = periksa()
     if not masalah:
-        print("AMAN. Tidak ada baris berasal-BPS di keluaran publik.")
+        print("AMAN. Tidak ada baris ber-asal BPS di keluaran publik.")
         return
     print(f"BOCOR — {len(masalah)} masalah:")
     for m in masalah:
