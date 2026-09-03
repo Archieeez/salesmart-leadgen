@@ -100,6 +100,17 @@ def kualitas(kelas, telepon):
     return "tidak_ada"
 
 
+def rubrik_nama_normal(nama):
+    """Bentuk normal nama, sama dengan yang dipakai kontak_web.
+
+    Diambil dari enrich_kontak supaya cuma ada SATU aturan normalisasi --
+    dua aturan yang sedikit berbeda persis yang membuat sambungan
+    kontak-penilaian putus karena satu koma.
+    """
+    import enrich_kontak
+    return enrich_kontak.normalisasi_nama(nama)
+
+
 def tabel_ada(con, nama):
     return bool(con.execute(
         "SELECT 1 FROM sqlite_master WHERE type='table' AND name=?",
@@ -193,12 +204,29 @@ def kumpulkan():
                 continue
             need = sum(int(r[x]) for x in
                        ["dist_model", "field_sales", "scale", "industry_fit"])
-            telepon = r["phone"] if r["phone"] not in ("NOT_FOUND", "") else None
+            # KONTAK TERVERIFIKASI DIDAHULUKAN, dan cabang ini dulu tidak
+            # pernah melihatnya sama sekali.
+            #
+            # Lead yang dinilai lewat riset manual tetap bisa punya nomor
+            # kantor terverifikasi di `kontak_web` -- dicari agen, dibuka
+            # halamannya, dicatat sumbernya. Tanpa baris ini, antrian
+            # mengabaikannya dan memakai nomor mentah dari CSV, lalu
+            # menyuruh orang sales "cek nomor dulu" untuk nomor yang
+            # SUDAH dicek.
+            #
+            # Paragon (skor 100, pemilik Wardah) persis begitu: nomor
+            # kantor pusatnya ditemukan dari bundel JS situsnya sendiri
+            # dan tersimpan berkelas `langsung`, tapi antrian tetap
+            # menahannya di "verifikasi dulu".
+            k = kontak.get(rubrik_nama_normal(nama), {})
+            telepon = (k.get("telepon")
+                       or (r["phone"] if r["phone"] not in ("NOT_FOUND", "")
+                           else None))
             # legitimacy_score adalah penilaian Anda sendiri soal seberapa
             # terverifikasi datanya. hitung_prioritas.py sudah memakai 60
             # sebagai gerbang, jadi ambang yang sama dipakai di sini:
             # di atasnya dianggap jalur resmi, di bawahnya perlu dicek dulu.
-            q = kualitas(None, telepon)
+            q = kualitas(k.get("kelas"), telepon)
             if q == "langsung_lain" and int(r.get("legitimacy_score", 0)) >= 60:
                 q = "langsung_resmi"
             fit = int(r["industry_fit"])
