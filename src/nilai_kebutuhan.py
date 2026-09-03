@@ -100,6 +100,16 @@ ATURAN BUKTI — ini yang paling penting:
   memang tidak membahas suatu topik, katakan begitu lewat keyakinan
   "rendah" — jangan mengarang.
 
+STATUS JANGAN-TELEPON — isi di field `penolakan`, JANGAN di prosa:
+- Ketiga booleannya berdiri sendiri dan default-nya false. Isi true hanya
+  kalau kamu yakin, dan sertakan `alasan`.
+- Kalau semuanya false, biarkan `alasan` kosong. TIDAK perlu menulis
+  "bukan pesaing" di catatan; field inilah yang dibaca sistem, dan
+  kalimat penyangkalan di prosa dulu justru menyebabkan salah tanda.
+- Penilaian pita tetap JUJUR apa adanya. Pesaing yang jaringannya nyata
+  tetap bernilai tinggi; keputusan jangan-teleponnya diambil sistem dari
+  field ini, bukan dari skornya.
+
 PITA PENILAIAN:
 
 {aturan}
@@ -136,10 +146,45 @@ def bangun_skema():
         "type": "string",
         "description": "satu kalimat: kenapa perusahaan ini butuh / tidak butuh Salesmart",
     }
+    # Status jangan-telepon diisi sebagai BOOLEAN, bukan disisipkan ke
+    # prosa catatan. Sebelum ini status pesaing harus ditebak dari kata
+    # "pesaing" di dalam catatan — dan pembaca yang teliti justru menulis
+    # "Bukan pesaing", yang membuat lead terbaik hari itu (Arta Boga, 85,
+    # bukti 4/4) langsung tertandai JANGAN TELEPON. Lihat rubrik.py.
+    prop["penolakan"] = {
+        "type": "object",
+        "properties": {
+            "pesaing": {
+                "type": "boolean",
+                "description": "true HANYA kalau perusahaan ini menjual "
+                               "produk yang bersaing langsung dengan "
+                               "Salesmart (platform sales lapangan / "
+                               "pelacakan armada / GPS tracker). Kalau "
+                               "ragu, false.",
+            },
+            "calon_mitra": {
+                "type": "boolean",
+                "description": "true kalau ia lebih masuk akal sebagai "
+                               "MITRA integrasi daripada pelanggan "
+                               "(mis. vendor ERP/akuntansi).",
+            },
+            "vertikal_tertutup": {
+                "type": "boolean",
+                "description": "true kalau asuransi atau pembiayaan.",
+            },
+            "alasan": {
+                "type": "string",
+                "description": "kalau ada yang true: satu kalimat kenapa. "
+                               "Kalau semuanya false: kosongkan.",
+            },
+        },
+        "required": ["pesaing", "calon_mitra", "vertikal_tertutup", "alasan"],
+        "additionalProperties": False,
+    }
     return {
         "type": "object",
         "properties": prop,
-        "required": list(rubrik.MAKS_KOMPONEN) + ["catatan"],
+        "required": list(rubrik.MAKS_KOMPONEN) + ["catatan", "penolakan"],
         "additionalProperties": False,
     }
 
@@ -159,6 +204,9 @@ CREATE TABLE IF NOT EXISTS kebutuhan (
     industry_fit   INTEGER,
     need_score     INTEGER,
     rincian        TEXT,      -- JSON: label, kutipan, sumber, keyakinan
+    penanda        TEXT,      -- JSON: boolean pesaing/calon_mitra/
+                              -- vertikal_tertutup + alasan. NULL = baris
+                              -- lama, rubrik jatuh ke jalur prosa.
     catatan        TEXT,
     model          TEXT,
     dinilai_pada   TEXT DEFAULT CURRENT_TIMESTAMP

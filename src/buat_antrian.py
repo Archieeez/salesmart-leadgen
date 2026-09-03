@@ -137,25 +137,29 @@ def kumpulkan():
     if tabel_ada(con, "kebutuhan"):
         for r in con.execute(
                 "SELECT nama, dist_model, field_sales, scale, industry_fit, "
-                "need_score, rincian, catatan, bukti_kuat, status_nilai "
-                "FROM kebutuhan"):
+                "need_score, rincian, catatan, bukti_kuat, status_nilai, "
+                "penanda FROM kebutuhan"):
             nama = r[0]
             dinilai.add(nama)
             rincian = json.loads(r[6])
+            # Kolom `penanda` baru ada sejak 3 Sep 2026. NULL berarti baris
+            # ini dinilai sebelum field booleannya ada, dan rubrik jatuh ke
+            # jalur prosa warisan — lihat rubrik.tandai_penolakan().
+            penanda = json.loads(r[10]) if r[10] else None
+            tolak = rubrik.tandai_penolakan(r[5], r[4], r[7] or "", penanda)
             k = kontak.get(nama, {})
             telepon = k.get("telepon") or osm.get(nama) or manual_tel.get(nama)
             aksi, saran = rubrik.tentukan_aksi(
                 r[5], kualitas(k.get("kelas"), telepon),
-                industry_fit=r[4], catatan=r[7] or "")
+                industry_fit=r[4], catatan=r[7] or "", penanda=penanda)
             lead.append({
                 "nama": nama, "sumber": "bukti situs", "need": r[5],
                 "dist": r[1], "field": r[2], "scale": r[3], "fit": r[4],
                 "telepon": telepon, "kelas": k.get("kelas"),
                 "aksi": aksi, "saran": saran, "catatan": r[7],
-                "tolak": rubrik.tandai_penolakan(r[5], r[4], r[7] or ""),
+                "tolak": tolak,
                 "buka": pembuka.susun(
-                    nama, rincian, r[5], r[8], r[9] == "nilai_tegak",
-                    rubrik.tandai_penolakan(r[5], r[4], r[7] or "")),
+                    nama, rincian, r[5], r[8], r[9] == "nilai_tegak", tolak),
                 "tegak": r[9] == "nilai_tegak", "bukti_kuat": r[8],
                 "bukti": [{"komponen": kk, "label": v["label"],
                            "kutipan": v["kutipan"], "yakin": v["keyakinan"]}

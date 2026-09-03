@@ -65,7 +65,7 @@ EKSPOR = {
         "kebutuhan_export.csv",
         ["nama", "website", "dist_model", "field_sales", "scale",
          "industry_fit", "need_score", "bukti_kuat", "status_nilai",
-         "catatan", "model"],
+         "penanda", "catatan", "model"],
         "status_nilai, need_score DESC, nama",
     ),
 }

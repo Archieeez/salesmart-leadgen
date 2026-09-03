@@ -39,3 +39,8 @@ bukti.db
 # Meng-commit-nya ke repo publik = menerbitkan ulang. Simpan lokal saja.
 data/*.pdf
 *.pdf
+
+# Folder kerja alur baca (src/baca/siapkan.py --keluar kerja/xx). Isinya
+# dokumen bahan + hasil antara agen; hasil akhirnya sudah masuk leads.db
+# lewat terapkan.py, dan dokumennya bisa dirakit ulang kapan saja.
+kerja/

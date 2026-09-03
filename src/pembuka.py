@@ -394,13 +394,14 @@ if __name__ == "__main__":
     db = Path(__file__).resolve().parent.parent / "data" / "leads.db"
     con = sqlite3.connect(db)
     n = 0
-    for (nama, rin, need, bk, st, fit, cat) in con.execute(
+    for (nama, rin, need, bk, st, fit, cat, pen) in con.execute(
             "SELECT nama, rincian, need_score, bukti_kuat, status_nilai, "
-            "industry_fit, COALESCE(catatan,'') FROM kebutuhan "
+            "industry_fit, COALESCE(catatan,''), penanda FROM kebutuhan "
             "ORDER BY need_score DESC"):
         bahan = susun(nama, json.loads(rin), need, bk,
                       st == "nilai_tegak",
-                      rubrik.tandai_penolakan(need, fit, cat))
+                      rubrik.tandai_penolakan(
+                          need, fit, cat, json.loads(pen) if pen else None))
         print(f"\n=== {nama}  (need {need}, bukti {bk}/4)")
         print(ringkas_teks(nama, bahan))
         n += 1

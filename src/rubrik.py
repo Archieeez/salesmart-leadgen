@@ -443,22 +443,53 @@ _POLA_SANGKAL = re.compile(r"(bukan|tidak|non-?|belum)\s*$", re.I)
 # Melebarkan jendelanya justru berbahaya — "pesaing" dan "tidak" bisa
 # berjauhan dalam satu kalimat panjang tanpa saling menyangkal.
 #
-# Obat yang benar bukan regex yang lebih pintar, melainkan membuat
-# pembaca mengisi FIELD TERSENDIRI (mis. boolean "pesaing") di skema
-# keluarannya, sehingga statusnya tidak perlu ditebak dari prosa. Sampai
-# itu dikerjakan, salah-tanda tetap terlihat: dashboard teknis
-# menampilkan SELURUH lead bertanda jangan-telepon beserta alasannya,
-# jadi yang keliru bisa ditemukan dengan membaca daftar itu.
+# OBATNYA SUDAH DIPASANG (3 Sep 2026): pembaca kini mengisi FIELD
+# BOOLEAN tersendiri — `penanda` — sehingga statusnya tidak perlu ditebak
+# dari prosa sama sekali. Regex di atas TIDAK dibuang karena 72 baris
+# lama tidak punya field itu; ia jadi jalur warisan untuk baris ber-
+# `penanda` NULL. Baris yang punya `penanda` tidak pernah menyentuhnya.
+#
+# Jadi kalau menemukan salah-tanda pada baris lama, jawabannya bukan
+# menambal regex: baca ulang perusahaannya lewat src/baca/ supaya ia
+# dapat field yang benar.
+#
+# Salah-tanda tetap terlihat sementara itu: dashboard teknis menampilkan
+# SELURUH lead bertanda jangan-telepon beserta alasannya.
+
+# Kunci boolean di `penanda`, beserta bunyi alasan yang dipakai kalau
+# true. Urutannya menentukan alasan mana yang dilaporkan lebih dulu.
+PENANDA_TOLAK = (
+    ("pesaing", "pesaing langsung — pembaca menandainya"),
+    ("calon_mitra", "calon MITRA, bukan calon pelanggan"),
+    ("vertikal_tertutup", "vertikal yang sudah ditutup"),
+)
 
 
-def tandai_penolakan(need, industry_fit, catatan=""):
+def norm_alasan(teks):
+    """Rapikan alasan bebas dari pembaca supaya muat di satu baris tabel."""
+    teks = re.sub(r"\s+", " ", (teks or "")).strip()
+    return teks[:160]
+
+
+def tandai_penolakan(need, industry_fit, catatan="", penanda=None):
     """Kembalikan alasan penolakan (str) atau None kalau ini lead sungguhan.
 
-    Dua jalur, sengaja berbeda sumbernya:
+    Tiga jalur, sengaja berbeda sumbernya:
 
-    1. PENANDA MANUSIA di catatan. Pesaing tidak bisa dikenali dari rubrik —
-       tidak ada komponen "apakah dia menjual produk yang sama". Yang tahu
-       cuma pembaca, dan ia menuliskannya di catatan. Jadi catatan dibaca.
+    0. FIELD BOOLEAN `penanda` dari pembaca — jalur UTAMA sejak 3 Sep 2026.
+       Bentuknya dict {"pesaing": bool, "calon_mitra": bool,
+       "vertikal_tertutup": bool, "alasan": str}. Kalau dict ini ADA, ia
+       BERDAULAT: prosa tidak dibaca sama sekali, termasuk waktu semua
+       booleannya false. Itu justru intinya — pembaca yang sudah menyatakan
+       "bukan pesaing" lewat field tidak boleh dijatuhkan lagi oleh kata
+       "pesaing" yang muncul di kalimat penyangkalannya sendiri.
+
+    1. PENANDA MANUSIA di catatan — jalur WARISAN, hanya untuk baris yang
+       `penanda`-nya masih NULL (72 baris yang dinilai sebelum field ini
+       ada, plus riset manual di companies_prioritas.csv yang memang cuma
+       punya kolom prosa). Pesaing tidak bisa dikenali dari rubrik — tidak
+       ada komponen "apakah dia menjual produk yang sama" — jadi satu-
+       satunya tempatnya di catatan.
 
     2. ATURAN MEKANIS: industry_fit = 0 DAN need >= AMBANG_NEED_SEDANG.
        industry_fit 0 berarti "tidak ada produk konsumsi yang didorong lewat
@@ -466,9 +497,17 @@ def tandai_penolakan(need, industry_fit, catatan=""):
        yang tinggi pasti komponen lain — operasi lapangan yang bukan untuk
        menjual barang. Itu definisi AirNav.
 
+       Jalur ini tetap jalan APA PUN isi `penanda`: ia tidak menebak niat
+       pembaca, ia membaca angka rubrik.
+
     Skor rendah tidak perlu ditandai: ia sudah jatuh ke arsip sendiri.
     """
-    if catatan:
+    if isinstance(penanda, dict):
+        for kunci, bunyi in PENANDA_TOLAK:
+            if penanda.get(kunci):
+                alasan = norm_alasan(penanda.get("alasan"))
+                return f"{bunyi}{': ' + alasan if alasan else ''}"
+    elif catatan:
         for m in _POLA_PENOLAKAN.finditer(catatan):
             frasa = m.group().lower()
             # "bukan lead" memang sudah berbentuk penyangkalan; jangan
@@ -484,7 +523,8 @@ def tandai_penolakan(need, industry_fit, catatan=""):
     return None
 
 
-def tentukan_aksi(need, kualitas_telepon, industry_fit=None, catatan=""):
+def tentukan_aksi(need, kualitas_telepon, industry_fit=None, catatan="",
+                  penanda=None):
     """Kembalikan (status, aksi_berikutnya).
 
     `industry_fit` dan `catatan` opsional supaya pemanggil lama tetap jalan.
@@ -505,7 +545,7 @@ def tentukan_aksi(need, kualitas_telepon, industry_fit=None, catatan=""):
     dikerjakan, bukan alasan membuang lead.
     """
     if industry_fit is not None:
-        alasan = tandai_penolakan(need, industry_fit, catatan)
+        alasan = tandai_penolakan(need, industry_fit, catatan, penanda)
         if alasan:
             return "jangan_hubungi", f"JANGAN TELEPON — {alasan}."
     butuh = (need >= AMBANG_NEED_TINGGI)

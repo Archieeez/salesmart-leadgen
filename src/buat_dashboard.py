@@ -316,10 +316,11 @@ def bagian_penolakan(con):
     if not tabel_ada(con, "kebutuhan"):
         return "", None
     tolak = []
-    for nama, need, fit, catatan in con.execute(
-            "SELECT nama, need_score, industry_fit, COALESCE(catatan,'') "
-            "FROM kebutuhan ORDER BY need_score DESC"):
-        alasan = rubrik.tandai_penolakan(need, fit, catatan)
+    for nama, need, fit, catatan, penanda in con.execute(
+            "SELECT nama, need_score, industry_fit, COALESCE(catatan,''), "
+            "penanda FROM kebutuhan ORDER BY need_score DESC"):
+        alasan = rubrik.tandai_penolakan(
+            need, fit, catatan, json.loads(penanda) if penanda else None)
         if alasan:
             tolak.append((need, nama, alasan))
     if not tolak:

@@ -12,7 +12,13 @@ Membaca `<dir>/hasil.json` dan `<dir>/daftar.json` yang dibuat
 `siapkan.py`. Bentuk hasil.json:
 
     [{"nama", "nama_normal", "website", "pemeriksa_gagal",
-      "final": {"dist_model": {...}, ..., "catatan", "koreksi"}}]
+      "final": {"dist_model": {...}, ..., "catatan", "koreksi",
+                "penolakan": {"pesaing", "calon_mitra",
+                              "vertikal_tertutup", "alasan"}}}]
+
+`penolakan` boleh dihilangkan; kolom `penanda` lalu ditulis NULL dan
+rubrik jatuh ke jalur prosa warisan. Kalau ADA, ia berdaulat — lihat
+`rubrik.tandai_penolakan()`.
 
 INI LAPIS KETIGA, DAN LAPISNYA BERBEDA DARI DUA YANG LAIN:
     Pembaca dan pemeriksa adalah agen — mereka menilai ARTI. Modul ini
@@ -71,6 +77,20 @@ def muat_dok(path: str) -> str:
     return norm(t[i:] if i >= 0 else t)
 
 
+def pastikan_kolom_penanda(con):
+    """Tambahkan kolom `penanda` kalau database dibuat sebelum 3 Sep 2026.
+
+    Sengaja di sini dan bukan di skrip migrasi tersendiri: kolomnya baru
+    berarti begitu ada hasil pembacaan yang mengisinya, jadi tempat yang
+    tidak mungkin terlewat adalah jalur tulisnya sendiri.
+    """
+    kolom = {r[1] for r in con.execute("PRAGMA table_info(kebutuhan)")}
+    if "penanda" not in kolom:
+        con.execute("ALTER TABLE kebutuhan ADD COLUMN penanda TEXT")
+        con.commit()
+        print("kolom `penanda` ditambahkan ke tabel kebutuhan.")
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--dir", required=True, help="folder dari siapkan.py")
@@ -106,6 +126,16 @@ def main():
         need = sum(skor.values())
         status = "nilai_tegak" if bukti_kuat >= 3 else "bukti_belum_cukup"
 
+        # Field boolean status jangan-telepon. Disimpan mentah supaya
+        # rubrik tidak perlu menebaknya dari prosa; kalau pembaca tidak
+        # mengisinya, kolomnya NULL dan jalur warisan yang dipakai.
+        pen = f.get("penolakan")
+        if isinstance(pen, dict):
+            penanda = {k: bool(pen.get(k)) for k, _ in rubrik.PENANDA_TOLAK}
+            penanda["alasan"] = norm(pen.get("alasan", ""))
+        else:
+            penanda = None
+
         catatan = norm(f.get("catatan", ""))
         koreksi = f.get("koreksi") or []
         if koreksi:
@@ -121,12 +151,13 @@ def main():
             "nama": nama, "nama_normal": h["nama_normal"],
             "website": h["website"], "skor": skor, "need": need,
             "bukti_kuat": bukti_kuat, "status": status, "rincian": rincian,
-            "catatan": catatan,
+            "penanda": penanda, "catatan": catatan,
             "dobel": rubrik.periksa_dobel_hitung(rincian),
         })
 
     baris.sort(key=lambda b: -b["need"])
     con = sqlite3.connect(DB)
+    pastikan_kolom_penanda(con)
     lama = {n: need for n, need in con.execute(
         "SELECT nama, need_score FROM kebutuhan")}
 
@@ -136,7 +167,13 @@ def main():
         sl = str(lama.get(b["nama"], "-"))
         print(f"{b['nama'][:40]:<42}{sl:>6}{b['need']:>6}"
               f"{b['bukti_kuat']:>5}/4  {b['status']}"
-              + ("  DOBEL: " + "; ".join(b["dobel"]) if b["dobel"] else ""))
+              + ("  DOBEL: " + "; ".join(b["dobel"]) if b["dobel"] else "")
+              + ("  TOLAK: " + rubrik.tandai_penolakan(
+                    b["need"], b["skor"]["industry_fit"], b["catatan"],
+                    b["penanda"])
+                 if rubrik.tandai_penolakan(
+                    b["need"], b["skor"]["industry_fit"], b["catatan"],
+                    b["penanda"]) else ""))
 
     if gagal:
         print(f"\nKUTIPAN GAGAL VERIFIKASI MESIN ({len(gagal)}):")
@@ -163,15 +200,16 @@ def main():
         con.execute(
             """INSERT INTO kebutuhan
                (nama_normal, nama, website, dist_model, field_sales, scale,
-                industry_fit, need_score, rincian, catatan, model,
+                industry_fit, need_score, rincian, penanda, catatan, model,
                 bukti_kuat, status_nilai, dinilai_pada)
-               VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,CURRENT_TIMESTAMP)
+               VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,CURRENT_TIMESTAMP)
                ON CONFLICT(nama_normal) DO UPDATE SET
                  nama=excluded.nama, website=excluded.website,
                  dist_model=excluded.dist_model,
                  field_sales=excluded.field_sales, scale=excluded.scale,
                  industry_fit=excluded.industry_fit,
                  need_score=excluded.need_score, rincian=excluded.rincian,
+                 penanda=excluded.penanda,
                  catatan=excluded.catatan, model=excluded.model,
                  bukti_kuat=excluded.bukti_kuat,
                  status_nilai=excluded.status_nilai,
@@ -180,6 +218,8 @@ def main():
              b["skor"]["dist_model"], b["skor"]["field_sales"],
              b["skor"]["scale"], b["skor"]["industry_fit"], b["need"],
              json.dumps(b["rincian"], ensure_ascii=False),
+             json.dumps(b["penanda"], ensure_ascii=False)
+             if b["penanda"] else None,
              cat, args.model, b["bukti_kuat"], b["status"]))
     con.commit()
     n = con.execute("SELECT count(*) FROM kebutuhan").fetchone()[0]

@@ -70,12 +70,11 @@ DATA = BASE / "data"
 KONTEKS = {
     "Smart GPS Bandung":
         "PESAING/tetangga produk Salesmart (penjual GPS tracker). Nilai "
-        "tetap jujur per rubrik, TAPI sebut status pesaing itu "
-        "terang-terangan di catatan — catatan itulah yang dipakai sistem "
-        "untuk menandai jangan-telepon.",
+        "tetap jujur per rubrik, TAPI setel penolakan.pesaing = true — "
+        "field itulah yang dipakai sistem untuk menandai jangan-telepon.",
     "TransTRACK.ID":
-        "PESAING LANGSUNG (platform telematika armada/GPS). Sama: sebut "
-        "status pesaingnya di catatan.",
+        "PESAING LANGSUNG (platform telematika armada/GPS). Sama: setel "
+        "penolakan.pesaing = true.",
     "Kantor Maxim Indonesia":
         "Aplikasi ride-hailing. Daftar ratusan kota di situsnya adalah "
         "kota LAYANAN APLIKASI, bukan titik distribusi barang.",
@@ -91,10 +90,13 @@ KONTEKS = {
         "ADA saja.",
     "PT Arta Boga Cemerlang":
         "Lengan distribusi FMCG Orang Tua Group. Sempat salah dicap "
-        "'diblokir robots.txt'; ternyata tidak pernah tertutup. Halaman "
-        "yang terpanen masih sedikit, jadi ketiadaan bukti untuk sebuah "
-        "komponen kemungkinan besar berarti halamannya belum dipanen, "
-        "bukan faktanya tidak ada.",
+        "'diblokir robots.txt'; ternyata tidak pernah tertutup. "
+        "artaboga.com adalah kanal KULAKAN DARING untuk toko, bukan situs "
+        "korporat: ia TIDAK punya halaman karier sama sekali (sudah "
+        "diperiksa 3 Sep 2026, seluruh footer ditelusuri), jadi berhenti "
+        "menunggu bukti dari lowongan. Bukti tim lapangannya justru ada "
+        "di halaman operasional (cara pembayaran, FAQ, cara berbelanja) "
+        "yang dipanen 3 Sep.",
 }
 
 # Aturan tambahan proyek yang TIDAK bisa dibangkitkan dari rubrik.PITA,
@@ -121,6 +123,12 @@ ATURAN TAMBAHAN PROYEK (sudah final, jangan diperdebatkan):
    untuk alamat rumah pelamar) BUKAN bukti apa-apa.
 5. Skor tinggi dengan industry_fit "tidak_relevan" berarti PENOLAKAN —
    tetap nilai jujur; keputusannya diambil sistem.
+6. STATUS JANGAN-TELEPON DIISI DI FIELD `penolakan`, BUKAN DI PROSA.
+   Tiga boolean (pesaing, calon_mitra, vertikal_tertutup) plus `alasan`.
+   Jangan menulis "bukan pesaing" atau "boleh ditelepon" di catatan:
+   sebelum field ini ada, kalimat penyangkalan seperti itu justru
+   membuat lead terbaik hari itu (Arta Boga, 85, bukti 4/4) tertandai
+   JANGAN TELEPON. Catatan sekarang untuk hal lain saja.
 
 JEBAKAN YANG SUDAH PERNAH MELOLOSKAN PENILAIAN SALAH — periksa keempatnya:
 
