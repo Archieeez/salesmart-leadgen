@@ -20,6 +20,22 @@ KENAPA ADA PEMERIKSA DI TENGAH:
     yang mematuhinya -- dan satu agen yang lalai sudah cukup untuk
     memasukkan data yang salah tanpa ada yang tahu.
 
+JEBAKAN YANG SUDAH TERBUKTI, semuanya lolos kalau yang dicek cuma
+status code. Dicatat di sini karena tiap satu bentuk kegagalan yang
+BERBEDA, dan daftar ini yang dipakai menyusun prompt agen berikutnya:
+
+    indokom.co.id        terindeks lengkap  -> "Domain Expired"
+    yummychoice.co.id    HTTP 200           -> halaman webmail
+    indoworld.co.id      HTTP 200           -> login Outlook Web Access
+    gawimakmur.com       HTTP 200 + judul   -> placeholder hosting Rumahweb
+                                               "Selamat, website X telah aktif"
+    cocolabakery.com     200 + judul COCOK  -> toko roti di San Jose, AS
+    megajaya.co.id       200 + isi rapi     -> penjual wire rope, industri lain
+    heinzabc.co.id       dikutip Wikipedia  -> 301 ke situs konsumen AS
+
+Judul yang cocok pun bukan bukti. Yang membuktikan: alamat, provinsi,
+mata uang, dan nama badan hukum di dalam isinya.
+
 KENAPA URL TIDAK DIVERIFIKASI ULANG DI SINI:
     Agen sudah membuka tiap situs dan mencatat buktinya. Membukanya lagi
     berarti memukul situs orang dua kali untuk hal yang sama. Yang
@@ -113,6 +129,7 @@ def main():
     con.close()
 
     lolos, ditolak, tak_ketemu, asing = [], [], 0, []
+    gagal = []
     for r in baris:
         k = kunci(r.get("nama", ""))
         if k not in dikenal:
@@ -123,6 +140,12 @@ def main():
             ditolak.append((r.get("nama", ""), r.get("website", ""), salah))
         elif not (r.get("website") or "").strip():
             tak_ketemu += 1
+            # DITANDAI, bukan dilewatkan diam-diam. Baris yang sudah
+            # dicari dan tidak ketemu terlihat sama persis dengan baris
+            # yang belum pernah dicari -- keduanya website NULL. Tanpa
+            # penanda ini, gelombang berikutnya mencarinya lagi, dan
+            # pekerjaan yang sudah gagal diulang tanpa ada yang sadar.
+            gagal.append((k, (r.get("catatan") or "").strip()))
         else:
             lolos.append((k, r))
 
@@ -145,6 +168,10 @@ def main():
         return
 
     con = sqlite3.connect(DB_BPS)
+    for k, c in gagal:
+        con.execute(
+            "UPDATE prioritas_bps SET catatan=? WHERE kunci=? AND catatan=''",
+            (f"dicari, TIDAK KETEMU. {c[:160]}".strip(), k))
     for k, r in lolos:
         con.execute(
             "UPDATE prioritas_bps SET website=?, catatan=? WHERE kunci=?",
