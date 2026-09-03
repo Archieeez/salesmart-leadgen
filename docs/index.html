@@ -6,48 +6,35 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
 <style>
+/* Palet TERMINAL GELAP. Satu palet saja, bukan pasangan terang-gelap:
+   halaman ini alat pantau, dan alat pantau tidak berganti wajah
+   menurut setelan sistem. Warna latar dicat eksplisit supaya tidak
+   meminjam warna peramban. */
 :root{
-  --kertas:#FAFAF7; --permukaan:#FFFFFF; --permukaan2:#F2F2EC; --garis:#E6E5DD;
-  --garis2:#CFCEC3; --tinta:#16201B; --tinta2:#4E5A53; --tinta3:#8B958D;
-  --merek:#14584E; --merek-lembut:#E2EFEA;
-  --siap:#1B7F4F; --siap-lembut:#E4F2E9;
-  --perlu:#A8620A; --perlu-lembut:#F7EEE1;
-  --arsip:#8B958D; --arsip-lembut:#EFEFEA;
-  --tolak:#B3261E; --tolak-lembut:#FBE9E7;
-  --k1:#0F4A42; --k2:#1C7A6B; --k3:#5BA99A; --k4:#A9CFC6;
-  --logo-ink:#FAFAF7;
-  --bayang:0 1px 2px rgba(22,32,27,.05), 0 10px 28px -16px rgba(22,32,27,.22);
-}
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){
-    --kertas:#0E1311; --permukaan:#161C19; --permukaan2:#1E2521; --garis:#293029;
-    --garis2:#3D463E; --tinta:#E7ECE8; --tinta2:#AFB9B2; --tinta3:#7F8A83;
-    --merek:#5CC0A8; --merek-lembut:#122B26;
-    --siap:#4FBF8B; --siap-lembut:#12271C;
-    --perlu:#D9A24E; --perlu-lembut:#2A2114;
-    --arsip:#7F8A83; --arsip-lembut:#1D231F;
-  --tolak:#F2837A; --tolak-lembut:#2E1715;
-    --k1:#CFEAE2; --k2:#8FCBBC; --k3:#4E9C8B; --k4:#2C5F55;
-    --logo-ink:#0E1311;
-    --bayang:0 1px 2px rgba(0,0,0,.4), 0 10px 28px -16px rgba(0,0,0,.7);
-  }
-}
-:root[data-theme="dark"]{
-  --kertas:#0E1311; --permukaan:#161C19; --permukaan2:#1E2521; --garis:#293029;
-  --garis2:#3D463E; --tinta:#E7ECE8; --tinta2:#AFB9B2; --tinta3:#7F8A83;
-  --merek:#5CC0A8; --merek-lembut:#122B26;
-  --siap:#4FBF8B; --siap-lembut:#12271C;
-  --perlu:#D9A24E; --perlu-lembut:#2A2114;
-  --arsip:#7F8A83; --arsip-lembut:#1D231F;
-  --tolak:#F2837A; --tolak-lembut:#2E1715;
-  --k1:#CFEAE2; --k2:#8FCBBC; --k3:#4E9C8B; --k4:#2C5F55;
-  --logo-ink:#0E1311;
-  --bayang:0 1px 2px rgba(0,0,0,.4), 0 10px 28px -16px rgba(0,0,0,.7);
+  --kertas:#070B0D; --permukaan:#0C1215; --permukaan2:#111A1E;
+  --garis:#1A262B; --garis2:#2B3B42;
+  /* Kontras teks sengaja tinggi: orang sales membaca kutipan panjang
+     sambil menelepon. Abu-abu redup yang terlihat elegan di tangkapan
+     layar justru melambatkan orang yang sedang bekerja. */
+  --tinta:#DCE8E5; --tinta2:#9DB2AD; --tinta3:#6B837E;
+  --merek:#2DD4BF; --merek-lembut:#0B2B28;
+  --siap:#34D399; --siap-lembut:#0A2620;
+  --perlu:#F0B429; --perlu-lembut:#2A2110;
+  --arsip:#6B837E; --arsip-lembut:#131C1F;
+  --tolak:#FB7185; --tolak-lembut:#2B1419;
+  --k1:#0E7C6E; --k2:#17A697; --k3:#2DD4BF; --k4:#7FE9DC;
+  --logo-ink:#04090A;
+  --kisi:rgba(45,212,191,.045);
+  --bayang:0 1px 0 rgba(255,255,255,.02), 0 18px 44px -28px rgba(0,0,0,.9);
 }
 *{box-sizing:border-box}
 body{background:var(--kertas);color:var(--tinta);
   font-family:"Plus Jakarta Sans",ui-sans-serif,system-ui,-apple-system,sans-serif;
-  font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;
+  background-image:linear-gradient(var(--kisi) 1px,transparent 1px),
+    linear-gradient(90deg,var(--kisi) 1px,transparent 1px);
+  background-size:46px 46px;background-position:-1px -1px;
+  background-attachment:fixed}
 .app{max-width:1060px;margin:0 auto;padding:0 20px 80px}
 
 .kepala{padding:34px 0 22px}
@@ -56,6 +43,8 @@ body{background:var(--kertas);color:var(--tinta);
   display:grid;place-items:center;color:var(--logo-ink);font-weight:700;font-size:13px;flex:none}
 .merek b{font-size:15px;font-weight:700;letter-spacing:-.01em}
 .merek span{color:var(--tinta3);font-size:13px}
+.merek b,.merek span{font-family:'IBM Plex Mono',monospace;
+  letter-spacing:.04em}
 h1{font-size:clamp(1.6rem,4vw,2.05rem);font-weight:700;letter-spacing:-.025em;
   margin:0 0 6px;line-height:1.15;text-wrap:balance}
 .sub{color:var(--tinta2);margin:0;max-width:54ch;font-size:.95rem}
@@ -63,9 +52,13 @@ h1{font-size:clamp(1.6rem,4vw,2.05rem);font-weight:700;letter-spacing:-.025em;
 .ringkas{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
   gap:1px;background:var(--garis);border:1px solid var(--garis);
   border-radius:12px;overflow:hidden;margin:26px 0 0}
-.rk{background:var(--permukaan);padding:16px 18px}
-.rk .k{font-size:11px;letter-spacing:.08em;text-transform:uppercase;
-  color:var(--tinta3);font-weight:600;margin-bottom:5px}
+.rk{background:var(--permukaan);padding:16px 18px;position:relative}
+.rk:after{content:'';position:absolute;left:18px;right:18px;bottom:12px;
+  height:2px;background:linear-gradient(90deg,var(--merek),transparent);
+  opacity:.5}
+.rk .k{font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--tinta3);font-weight:600;margin-bottom:5px;
+  font-family:'IBM Plex Mono',monospace}
 .rk .v{font-family:"IBM Plex Mono",monospace;font-size:1.75rem;font-weight:600;
   line-height:1;font-variant-numeric:tabular-nums}
 .rk .n{font-size:.78rem;color:var(--tinta3);margin-top:4px}
@@ -106,7 +99,7 @@ h1{font-size:clamp(1.6rem,4vw,2.05rem);font-weight:700;letter-spacing:-.025em;
 .pil.arsip{background:var(--arsip-lembut);color:var(--arsip)}
 .pil.lantai{background:var(--perlu-lembut);color:var(--perlu);border:1px dashed var(--perlu)}
 .aksi-teks{font-size:.86rem;color:var(--tinta2);margin-bottom:6px}
-.kutip{font-size:.83rem;color:var(--tinta3);line-height:1.5;font-style:italic;
+.kutip{font-size:.83rem;color:var(--tinta2);line-height:1.5;font-style:italic;
   overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
 .kanan{display:flex;align-items:center;gap:16px;flex:none}
 .skor{text-align:right}
@@ -137,7 +130,7 @@ h1{font-size:clamp(1.6rem,4vw,2.05rem);font-weight:700;letter-spacing:-.025em;
 .bukti-komp{font-family:"IBM Plex Mono",monospace;font-size:.73rem;
   color:var(--tinta3);margin-bottom:3px}
 .bukti-komp b{color:var(--tinta2);font-weight:600}
-.bukti-teks{font-size:.86rem;color:var(--tinta2);line-height:1.55}
+.bukti-teks{font-size:.88rem;color:var(--tinta);line-height:1.6}
 .nanti{background:var(--permukaan2);border:1px dashed var(--garis2);border-radius:9px;
   padding:13px 15px;font-size:.85rem;color:var(--tinta3);line-height:1.5}
 .nanti b{color:var(--tinta2)}
@@ -154,12 +147,20 @@ h1{font-size:clamp(1.6rem,4vw,2.05rem);font-weight:700;letter-spacing:-.025em;
 .buka .kait{margin:11px 0 0;padding-top:10px;border-top:1px solid var(--garis2);
   font-size:.86rem;color:var(--tinta)}
 .buka .pastikan{margin:9px 0 0;font-size:.81rem;color:var(--tinta3);line-height:1.5}
-.agen{margin:22px 0 0;background:var(--permukaan);border:1px solid var(--garis);border-radius:12px;overflow:hidden;box-shadow:var(--bayang)}
+.agen{margin:22px 0 0;background:var(--permukaan);border:1px solid var(--garis);border-radius:12px;overflow:hidden;box-shadow:var(--bayang);position:relative}
+/* Garis pemindai murni hiasan, jadi ia HANYA menyapu waktu agennya
+   benar-benar bekerja. Hiasan yang bergerak terus akan terbaca
+   sebagai tanda kegiatan, dan itu kebohongan yang sama dengan
+   titik hijau yang menyala terus. */
+.agen.jalan:before{content:'';position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(180deg,transparent,rgba(45,212,191,.10),transparent);
+  height:38%;animation:sapu 4.5s linear infinite}
+@keyframes sapu{0%{transform:translateY(-40%)}100%{transform:translateY(280%)}}
 .agen-kepala{display:flex;align-items:center;gap:11px;padding:14px 18px;border-bottom:1px solid var(--garis)}
 .nadi{width:9px;height:9px;border-radius:50%;flex:none;background:var(--tinta3)}
 .agen.jalan .nadi{background:var(--siap);animation:denyut 1.6s ease-in-out infinite}
 @keyframes denyut{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.72)}}
-.agen-judul{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:var(--tinta3)}
+.agen-judul{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--tinta3);font-family:'IBM Plex Mono',monospace}
 .agen-kini{font-size:.92rem;font-weight:600;color:var(--tinta)}
 .agen.diam .agen-kini{color:var(--tinta2);font-weight:500}
 .agen-catatan{font-size:.74rem;color:var(--tinta3);margin-top:2px}
@@ -193,7 +194,7 @@ h1{font-size:clamp(1.6rem,4vw,2.05rem);font-weight:700;letter-spacing:-.025em;
   .kanan{justify-content:space-between;width:100%}
   .komp{width:120px}
 }
-@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head><body>
 <div class="app">
@@ -206,22 +207,22 @@ h1{font-size:clamp(1.6rem,4vw,2.05rem);font-weight:700;letter-spacing:-.025em;
     <p class="sub">Perusahaan yang bukti di situsnya sendiri menunjukkan mereka punya
     tim sales lapangan dan jaringan distribusi &mdash; diurutkan dari yang paling butuh.</p>
     <div class="ringkas" id="ringkas"></div>
-<div class="agen diam" id="agen" data-pada="2026-09-03T06:15:52.470217+00:00" data-dibuat="2026-09-03T06:16:10.378903+00:00" data-ambang="180">
-<div class="agen-kepala"><span class="nadi"></span><div><div class="agen-judul">Agen &middot; <span id="agen-judul">status tidak diketahui</span></div><div class="agen-kini">menyisir Tangerang untuk man_made=works</div><div class="agen-catatan" id="agen-catatan"></div></div><div class="agen-sejak" id="agen-sejak">&mdash;</div></div>
-<div class="agen-maju"><div class="lbl"><span>Sapuan OpenStreetMap</span><b>184/234 kombinasi wilayah &times; tag</b></div><div class="rel"><i style="width:79%"></i></div></div>
+<div class="agen diam" id="agen" data-pada="2026-09-03T06:21:52.435437+00:00" data-dibuat="2026-09-03T06:22:14.693113+00:00" data-ambang="180">
+<div class="agen-kepala"><span class="nadi"></span><div><div class="agen-judul">Agen &middot; <span id="agen-judul">status tidak diketahui</span></div><div class="agen-kini">menyisir Bandung untuk landuse=industrial</div><div class="agen-catatan" id="agen-catatan"></div></div><div class="agen-sejak" id="agen-sejak">&mdash;</div></div>
+<div class="agen-maju"><div class="lbl"><span>Sapuan OpenStreetMap</span><b>194/234 kombinasi wilayah &times; tag</b></div><div class="rel"><i style="width:83%"></i></div></div>
 <ul class="denyut">
+<li><time class="jam" datetime="2026-09-03T06:21:52.435437+00:00">06:21 UTC</time><span class="tag panen">panen</span><span>menyisir Bandung untuk landuse=industrial</span></li>
+<li><time class="jam" datetime="2026-09-03T06:21:28.596913+00:00">06:21 UTC</time><span class="tag panen">panen</span><span>menyisir Bandung untuk man_made=works</span></li>
+<li><time class="jam" datetime="2026-09-03T06:21:07.059214+00:00">06:21 UTC</time><span class="tag panen">panen</span><span>menyisir Depok untuk building=warehouse</span></li>
+<li><time class="jam" datetime="2026-09-03T06:20:45.507586+00:00">06:20 UTC</time><span class="tag panen">panen</span><span>menyisir Depok untuk landuse=industrial</span></li>
+<li><time class="jam" datetime="2026-09-03T06:19:39.569679+00:00">06:19 UTC</time><span class="tag panen">panen</span><span>menyisir Depok untuk man_made=works</span></li>
+<li><time class="jam" datetime="2026-09-03T06:19:17.481971+00:00">06:19 UTC</time><span class="tag panen">panen</span><span>menyisir Bekasi untuk building=warehouse</span></li>
+<li><time class="jam" datetime="2026-09-03T06:18:48.380034+00:00">06:18 UTC</time><span class="tag panen">panen</span><span>menyisir Bekasi untuk landuse=industrial</span></li>
+<li><time class="jam" datetime="2026-09-03T06:17:37.746102+00:00">06:17 UTC</time><span class="tag panen">panen</span><span>menyisir Bekasi untuk man_made=works</span></li>
+<li><time class="jam" datetime="2026-09-03T06:17:16.424006+00:00">06:17 UTC</time><span class="tag panen">panen</span><span>menyisir Tangerang untuk building=warehouse</span></li>
+<li><time class="jam" datetime="2026-09-03T06:16:14.331220+00:00">06:16 UTC</time><span class="tag panen">panen</span><span>menyisir Tangerang untuk landuse=industrial</span></li>
 <li><time class="jam" datetime="2026-09-03T06:15:52.470217+00:00">06:15 UTC</time><span class="tag panen">panen</span><span>menyisir Tangerang untuk man_made=works</span></li>
 <li><time class="jam" datetime="2026-09-03T06:14:50.487803+00:00">06:14 UTC</time><span class="tag panen">panen</span><span>menyisir Jakarta untuk building=warehouse</span></li>
-<li><time class="jam" datetime="2026-09-03T06:14:22.919789+00:00">06:14 UTC</time><span class="tag panen">panen</span><span>menyisir Jakarta untuk landuse=industrial</span></li>
-<li><time class="jam" datetime="2026-09-03T06:13:08.847130+00:00">06:13 UTC</time><span class="tag panen">panen</span><span>menyisir Jakarta untuk man_made=works</span></li>
-<li><time class="jam" datetime="2026-09-03T05:56:26.833815+00:00">05:56 UTC</time><span class="tag panen">panen</span><span>menyisir Mojokerto untuk office=company</span></li>
-<li><time class="jam" datetime="2026-09-03T05:56:03.109524+00:00">05:56 UTC</time><span class="tag panen">panen</span><span>menyisir Mojokerto untuk office=research</span></li>
-<li><time class="jam" datetime="2026-09-03T05:55:41.831237+00:00">05:55 UTC</time><span class="tag panen">panen</span><span>menyisir Mojokerto untuk office=financial</span></li>
-<li><time class="jam" datetime="2026-09-03T05:55:13.605949+00:00">05:55 UTC</time><span class="tag panen">panen</span><span>menyisir Mojokerto untuk office=telecommunication</span></li>
-<li><time class="jam" datetime="2026-09-03T05:54:05.596583+00:00">05:54 UTC</time><span class="tag panen">panen</span><span>menyisir Mojokerto untuk office=insurance</span></li>
-<li><time class="jam" datetime="2026-09-03T05:53:42.468759+00:00">05:53 UTC</time><span class="tag panen">panen</span><span>menyisir Mojokerto untuk office=logistics</span></li>
-<li><time class="jam" datetime="2026-09-03T05:53:21.461804+00:00">05:53 UTC</time><span class="tag panen">panen</span><span>menyisir Mojokerto untuk office=engineering</span></li>
-<li><time class="jam" datetime="2026-09-03T05:53:00.409429+00:00">05:53 UTC</time><span class="tag panen">panen</span><span>menyisir Mojokerto untuk office=advertising_agency</span></li>
 </ul>
 <div class="agen-kaki">Denyut ini jejak pekerjaan yang sungguh terjadi, bukan animasi: tiap barisnya punya stempel waktu di database. Agen ini tidak berjalan sepanjang hari &mdash; ia bekerja waktu sesi dibuka. Status di atas dihitung saat Anda membuka halaman ini, bukan saat halamannya dibuat, jadi halaman lama akan jujur bilang &ldquo;menganggur&rdquo; meski dulu dibangkitkan waktu agennya sibuk.</div>
 </div>
@@ -460,10 +461,42 @@ h1{font-size:clamp(1.6rem,4vw,2.05rem);font-weight:700;letter-spacing:-.025em;
       n[i].title = d.toLocaleString();
     }
   }
+  // --- angka menghitung naik saat halaman dibuka ---------------------
+  // Hanya angka bulat polos yang dianimasikan. Yang berbentuk '68/72'
+  // atau berisi teks dibiarkan apa adanya: separuh angka yang bergerak
+  // dan separuh diam terbaca seperti halaman rusak, bukan gaya.
+  //
+  // Nilai akhirnya sudah ada di DOM sebelum animasi jalan, jadi kalau
+  // skripnya gagal di tengah, yang tertinggal angka yang BENAR.
+  function hidupkanAngka(){
+    if (window.matchMedia &&
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+      return;
+    }
+    var n = document.querySelectorAll('.rk .v, .skor .angka');
+    for (var i = 0; i < n.length; i++){
+      (function(el){
+        var teks = el.textContent.trim();
+        if (!/^\d+$/.test(teks)) { return; }
+        var akhir = parseInt(teks, 10);
+        if (akhir < 2) { return; }
+        var mulai = performance.now();
+        var lama = 620;
+        function langkah(t){
+          var k = Math.min(1, (t - mulai) / lama);
+          var e = 1 - Math.pow(1 - k, 3);
+          el.textContent = String(Math.round(akhir * e));
+          if (k < 1) { requestAnimationFrame(langkah); }
+          else { el.textContent = teks; }
+        }
+        requestAnimationFrame(langkah);
+      })(n[i]);
+    }
+  }
   jamSetempat();
   statusAgen(); setInterval(statusAgen, 20000);
 
-  ringkas(); chips(); render();
+  ringkas(); chips(); render(); hidupkanAngka();
 })();
 
 </script>

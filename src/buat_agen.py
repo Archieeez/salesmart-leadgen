@@ -228,25 +228,35 @@ def blok_perusahaan(b):
 
 
 GAYA = """
-:root{--bg:#0f1115;--kartu:#171a21;--gr:#232733;--tx:#e6e8ee;--rd:#9aa3b2;
---ok:#3ddc97;--bad:#ff6b6b;--ung:#7c8cff;--kun:#ffc857}
+/* Palet disamakan dengan docs/index.html. Dua halaman yang dibuka
+   bergantian oleh orang yang sama tidak boleh terasa seperti dua produk. */
+:root{--bg:#070B0D;--kartu:#0C1215;--gr:#1A262B;--tx:#DCE8E5;--rd:#9DB2AD;
+--ok:#34D399;--bad:#FB7185;--ung:#2DD4BF;--kun:#F0B429;
+--kisi:rgba(45,212,191,.045)}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--tx);
-font:14px/1.55 -apple-system,Segoe UI,Roboto,sans-serif}
+font:14px/1.55 -apple-system,Segoe UI,Roboto,sans-serif;
+background-image:linear-gradient(var(--kisi) 1px,transparent 1px),
+  linear-gradient(90deg,var(--kisi) 1px,transparent 1px);
+background-size:46px 46px;background-position:-1px -1px;
+background-attachment:fixed}
 .wrap{max-width:1060px;margin:0 auto;padding:28px 20px 80px}
 h1{font-size:26px;margin:0 0 6px}
 .sub{color:var(--rd);margin:0 0 22px;max-width:70ch}
 h2{font-size:17px;margin:34px 0 10px;padding-top:18px;border-top:1px solid var(--gr)}
-h3{font-size:14px;margin:22px 0 8px;color:var(--rd);
-text-transform:uppercase;letter-spacing:.06em}
+h3{font-size:13px;margin:22px 0 8px;color:var(--rd);
+text-transform:uppercase;letter-spacing:.14em;
+font-family:ui-monospace,Consolas,monospace}
 h4{font-size:12px;margin:16px 0 6px;color:var(--rd);
 text-transform:uppercase;letter-spacing:.06em}
 .jml{color:var(--kun)}
 .rk{display:flex;gap:12px;flex-wrap:wrap;margin:0 0 8px}
 .rk>div{background:var(--kartu);border:1px solid var(--gr);border-radius:10px;
 padding:12px 16px;min-width:190px;flex:1}
-.rk .k{color:var(--rd);font-size:12px}
-.rk .v{font-size:26px;font-weight:600;line-height:1.2}
+.rk .k{color:var(--rd);font-size:11px;letter-spacing:.12em;
+text-transform:uppercase;font-family:ui-monospace,Consolas,monospace}
+.rk .v{font-size:28px;font-weight:600;line-height:1.2;
+font-family:ui-monospace,Consolas,monospace;font-variant-numeric:tabular-nums}
 .rk .n{color:var(--rd);font-size:12px}
 .pipa{background:var(--kartu);border:1px solid var(--gr);border-radius:10px;
 padding:6px 16px 14px}
@@ -266,14 +276,15 @@ padding:14px 16px;margin:0 0 14px}
 .gerak{display:flex;align-items:center;gap:8px;white-space:nowrap}
 .lama{color:var(--rd);font-size:16px;text-decoration:line-through}
 .pan{color:var(--rd)} .pan.turun{color:var(--bad)} .pan.naik{color:var(--ok)}
-.sk{font-size:22px;font-weight:700}
+.sk{font-size:24px;font-weight:700;font-family:ui-monospace,Consolas,monospace;
+font-variant-numeric:tabular-nums}
 .tetap{color:var(--rd);font-size:12px}
 .bk{color:var(--rd);font-size:12px;border:1px solid var(--gr);
 border-radius:20px;padding:2px 9px}
-.kor{background:#1d2130;border-left:3px solid var(--kun);border-radius:0 6px 6px 0;
+.kor{background:#161311;border-left:3px solid var(--kun);border-radius:0 6px 6px 0;
 padding:9px 12px;margin:0 0 7px;font-size:13px}
 .kor.kosong{border-left-color:var(--gr);color:var(--rd)}
-.peringatan{background:#2a1a1a;border-left:3px solid var(--bad);
+.peringatan{background:#2B1419;border-left:3px solid var(--bad);
 border-radius:0 6px 6px 0;padding:9px 12px;margin:10px 0;font-size:13px}
 table.komp{width:100%;border-collapse:collapse;font-size:13px}
 table.komp th{text-align:left;color:var(--rd);font-weight:500;font-size:11px;
@@ -281,7 +292,7 @@ text-transform:uppercase;letter-spacing:.05em;padding:6px 8px;
 border-bottom:1px solid var(--gr)}
 table.komp td{padding:9px 8px;border-bottom:1px solid var(--gr);
 vertical-align:top}
-table.komp tr.ubah{background:#221d12}
+table.komp tr.ubah{background:#1C1810}
 .lb{font-family:ui-monospace,Consolas,monospace;font-size:12px}
 .lb i{color:var(--rd);font-style:normal}
 .yk{color:var(--kun);font-size:11px;margin-top:3px}
@@ -302,8 +313,10 @@ padding:12px 16px;flex:1;min-width:230px}
 .lapis .d{color:var(--rd);font-size:12px}
 .kaki{color:#5c6474;font-size:12px;margin-top:34px;
 border-top:1px solid var(--gr);padding-top:14px}
-.pantau{background:#1d2130;border:1px solid var(--ung);border-radius:8px;
+.pantau{background:#0B2B28;border:1px solid var(--ung);border-radius:8px;
 padding:8px 12px;margin:0 0 16px;font-size:12px;color:var(--ung)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;
+transition:none!important}}
 """
 
 
