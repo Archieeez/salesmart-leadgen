@@ -22,6 +22,7 @@ Jadi file ini tetap jalan di komputer yang belum menjalankan Phase 2.
 """
 
 import csv
+import json
 import sqlite3
 import sys
 from pathlib import Path
