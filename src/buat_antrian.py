@@ -398,11 +398,24 @@ def main():
                     help="bangkitkan ulang terus-menerus selama agen bekerja, "
                          "dan halamannya menyegarkan diri sendiri")
     ap.add_argument("--jeda", type=float, default=4.0)
+    # SEKALI JALAN, TAPI TETAP MENYISIPKAN PENYEGARAN.
+    #
+    # Dipakai src/pantau.py, yang menjalankan loopnya sendiri untuk semua
+    # halaman sekaligus. Tanpa flag ini pantau.py harus memanggil
+    # --pantau, dan --pantau tidak pernah kembali -- pemantau gabungan
+    # akan menggantung di halaman pertama selamanya.
+    ap.add_argument("--segar", action="store_true",
+                    help="bangkitkan sekali dengan penyegaran otomatis; "
+                         "untuk dipakai pemantau di luar")
     args = ap.parse_args()
 
     if not DB.exists():
         print("Database tidak ada: " + str(DB))
         raise SystemExit(1)
+
+    if args.segar:
+        bangun(True)
+        return
 
     if not args.pantau:
         bangun(False)

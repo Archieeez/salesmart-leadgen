@@ -437,15 +437,24 @@ def main():
     ap.add_argument("--pantau", action="store_true",
                     help="bangkitkan ulang terus-menerus selama agen jalan")
     ap.add_argument("--jeda", type=float, default=3.0)
+    # Sekali jalan tapi tetap menyisipkan penyegaran — untuk pemantau di
+    # luar (src/pantau.py) yang punya loopnya sendiri. Tanpa ini, ia harus
+    # memanggil --pantau, dan --pantau tidak pernah kembali.
+    ap.add_argument("--segar", action="store_true",
+                    help="bangkitkan sekali dengan penyegaran otomatis")
     args = ap.parse_args()
 
     KELUAR.parent.mkdir(parents=True, exist_ok=True)
 
-    def sekali():
+    def sekali(segar=None):
         con = sqlite3.connect(f"file:{DB}?mode=ro", uri=True)
-        html = bangun(con, args.pantau)
+        html = bangun(con, args.pantau if segar is None else segar)
         con.close()
         KELUAR.write_text(html, encoding="utf-8")
+
+    if args.segar:
+        sekali(True)
+        return
 
     if not args.pantau:
         sekali()
