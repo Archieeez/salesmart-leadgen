@@ -106,11 +106,22 @@ def kumpulkan():
     """Gabungkan penilaian bukti, hasil enrichment kontak, dan riset manual."""
     con = sqlite3.connect(DB)
 
+    # DIKUNCI PADA nama_normal, BUKAN nama.
+    #
+    # Dulu kuncinya nama tampilan, dan itu putus begitu ejaannya beda
+    # sedikit saja. PT. Kimia Farma tersimpan sebagai "PT. Kimia Farma
+    # Tbk." di kontak_web tapi "PT. Kimia Farma, Tbk." di kebutuhan --
+    # beda satu koma. Nomornya ADA di database, tapi antrian menampilkan
+    # "cari nomor" dan orang sales tidak pernah melihatnya.
+    #
+    # Kedua tabel sama-sama ber-PRIMARY KEY nama_normal; tidak ada alasan
+    # menyambung lewat kolom yang bebas ditulis manusia.
     kontak = {}
     if tabel_ada(con, "kontak_web"):
         kontak = {r[0]: {"telepon": r[1], "kelas": r[2]}
                   for r in con.execute(
-                      "SELECT nama, telepon, kelas_kontak FROM kontak_web")}
+                      "SELECT nama_normal, telepon, kelas_kontak "
+                      "FROM kontak_web")}
 
     # Telepon lead OSM ikut dipakai - sebagian sudah punya nomor dari OSM
     # sendiri, jadi sayang kalau tidak dimanfaatkan.
@@ -141,7 +152,7 @@ def kumpulkan():
         for r in con.execute(
                 "SELECT nama, dist_model, field_sales, scale, industry_fit, "
                 "need_score, rincian, catatan, bukti_kuat, status_nilai, "
-                "penanda FROM kebutuhan"):
+                "penanda, nama_normal FROM kebutuhan"):
             nama = r[0]
             dinilai.add(nama)
             rincian = json.loads(r[6])
@@ -150,7 +161,7 @@ def kumpulkan():
             # jalur prosa warisan — lihat rubrik.tandai_penolakan().
             penanda = json.loads(r[10]) if r[10] else None
             tolak = rubrik.tandai_penolakan(r[5], r[4], r[7] or "", penanda)
-            k = kontak.get(nama, {})
+            k = kontak.get(r[11], {})
             telepon = k.get("telepon") or osm.get(nama) or manual_tel.get(nama)
             aksi, saran = rubrik.tentukan_aksi(
                 r[5], kualitas(k.get("kelas"), telepon),
