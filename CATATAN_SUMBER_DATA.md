@@ -333,6 +333,25 @@ berkas publik. **Kalau izin nanti turun, penyaring ekspornya wajib
 dipasang di kode sebelum baris pertama masuk** — bukan dicatat sebagai
 niat.
 
+#### JAWABAN DIKIRIM — 3 September 2026
+
+Balasan ditempel ke kolom percakapan transaksi #50964 di pst.bps.go.id
+(bukan lewat surel; pengirimnya silastik-noreply). Teks persisnya
+tersimpan di `surat/jawaban-pst-50964-tempel.txt`.
+
+Isi pokoknya: meluruskan bahwa DAFTARNYA tidak dijual, menunjukkan
+11 kolom apa adanya, dan memisahkan tegas bahwa dari direktori BPS
+hanya nama dan alamat yang akan diambil sebagai kandidat awal yang
+tetap diverifikasi ke situs resmi masing-masing perusahaan.
+
+**Satu komitmen ikut terkirim dan sekarang mengikat:** baris yang
+berasal dari publikasi BPS tidak akan disertakan dalam berkas publik
+repo ini. Kalau izin turun, penyaring ekspornya dipasang di kode
+SEBELUM baris pertama masuk — bukan dicatat sebagai niat.
+
+Status: menunggu balasan berikutnya. Tidak ada yang berubah sementara
+itu: PDF tidak disentuh, pengekstrak tidak dibangun.
+
 **Jalur 2 (cadangan): keberatan ke PPID.** UU 14/2008 Pasal 35 ayat (1)
 huruf e memberi dasar keberatan untuk *"permintaan informasi ditanggapi
 tidak sebagaimana yang diminta"* — dan itu persis yang terjadi. Tenggat

@@ -69,6 +69,12 @@ POLA_TELEPON = [
     (r"\b1500[\s\-\.]?\d{3}\b", "layanan"),
     # Layanan pelanggan 0804: 0804-1-500500
     (r"\b0804[\s\-\.]?\d[\s\-\.]?\d{6}\b", "layanan"),
+    # SELULER TIGA KELOMPOK, harus di ATAS pola umum supaya dicoba dulu:
+    # "0813-888888-73". Pola umum berhenti di batas kata setelah kelompok
+    # KEDUA dan menghasilkan 0813888888 -- 10 digit, lolos gerbang panjang,
+    # dan menyambung ke orang lain kalau ditelepon. Ini yang terjadi pada
+    # careline Danone 3 Sep 2026.
+    (r"\b08\d{1,2}[\s\-\.]?\d{3,6}[\s\-\.]?\d{2,5}\b", "umum"),
     # Format internasional: +62 21 1234 5678
     (r"\+62[\s\-\.]?\(?\d{2,3}\)?[\s\-\.]?\d{3,4}[\s\-\.]?\d{3,5}", "umum"),
     # Kode area dalam kurung: (021) 1234 5678
@@ -85,6 +91,38 @@ KATA_BUKAN_TELEPON = re.compile(
     r"izin|sertifikat|isbn|issn|nomor induk|siup|tdp)",
     re.IGNORECASE,
 )
+
+# Penanda bahwa nomor itu milik ORANG, bukan perusahaan. Dicari ke DEPAN,
+# dalam jendela sempit, dan sengaja terpisah dari KATA_BUKAN_TELEPON yang
+# menengok ke belakang.
+#
+# KENAPA HARUS MENENGOK KE DEPAN: pada halaman cek undian Alfamart
+# tertulis "No. HP: +62 8xx-xxxx-xxx Nama: <nama seorang pembeli>". Labelnya
+# sendiri ("No. HP") justru label telepon yang SAH -- yang membuatnya
+# terlarang adalah nama orang yang menempel SESUDAHNYA. Tanpa lihat ke
+# depan, nomor seluler milik seorang pembeli tersimpan sebagai kontak
+# perusahaan. Aturan proyek: data kontak level perusahaan saja (UU PDP).
+#
+# Jendelanya dijaga sempit (40 karakter) karena melebarkannya persis
+# kesalahan yang dulu membuat penengokan ke depan dibuang: label field
+# BERIKUTNYA ikut terbaca dan nomor yang sah malah dibuang.
+KATA_DATA_PRIBADI = re.compile(
+    r"(\bnama\b|atas\s*nama|\ba\.?n\.?\s|pemenang|peserta|pelanggan\s*yth)",
+    re.IGNORECASE,
+)
+
+# Nomor yang bentuknya jelas contoh/isian formulir, bukan nomor sungguhan.
+#   0821-2345-6789  -> deret naik 6 digit atau lebih
+#   0812-3333-3333  -> satu digit diulang 7 kali atau lebih
+# Keduanya praktis mustahil pada nomor Indonesia yang benar-benar dipakai.
+_DERET_NAIK = re.compile(
+    r"(?=(0123456|1234567|2345678|3456789|4567890))")
+_DIGIT_DIULANG = re.compile(r"(\d)\1{6,}")
+
+
+def nomor_contoh(digit: str) -> bool:
+    """True kalau deretan angkanya berbentuk contoh, bukan nomor nyata."""
+    return bool(_DERET_NAIK.search(digit) or _DIGIT_DIULANG.search(digit))
 
 
 def normalisasi_telepon(mentah: str) -> str | None:
@@ -105,12 +143,19 @@ def normalisasi_telepon(mentah: str) -> str | None:
     # "(021) 4287 3888/89" -> 62214287388889. Itu bukan satu nomor.
     if not (10 <= len(digit) <= 13):
         return None
+    if nomor_contoh(digit):
+        return None
     return digit
 
 
-def ekstrak_telepon(teks: str) -> list[tuple[str, str]]:
+def ekstrak_telepon(teks: str) -> list[tuple[str, str, int]]:
     """
-    Return list of (nomor_ternormalisasi, tipe_pola).
+    Return list of (nomor_ternormalisasi, tipe_pola, posisi_di_teks).
+
+    Posisinya ikut dikembalikan supaya pemanggil bisa melihat KATA DI
+    SEKITAR nomor -- itulah satu-satunya cara membedakan nomor kantor
+    pusat dari salah satu dari 71 nomor cabang.
+
     Sudah dedup, urutan dipertahankan.
     """
     hasil = []
@@ -125,11 +170,29 @@ def ekstrak_telepon(teks: str) -> list[tuple[str, str]]:
             awal = max(0, m.start() - 40)
             if KATA_BUKAN_TELEPON.search(teks[awal:m.start()]):
                 continue
+            if KATA_DATA_PRIBADI.search(teks[m.end():m.end() + 40]):
+                continue
 
             nomor = normalisasi_telepon(m.group())
+
+            # Masih ada angka yang menempel SESUDAH kecocokan, dan yang
+            # cocok ini nomor seluler? Berarti pola berhenti di tengah
+            # nomor. Buang, jangan simpan potongannya -- lebih baik tidak
+            # punya nomor daripada punya nomor yang salah sambung.
+            # Nomor kantor sengaja TIDAK ikut aturan ini: "021-4203047-48"
+            # itu notasi RENTANG, dan bagian pertamanya sudah bisa
+            # ditelepon apa adanya.
+            #
+            # SPASI TIDAK DIHITUNG sebagai penyambung. Kalau ikut dihitung,
+            # nomor yang UTUH pun terbuang begitu ada nomor lain
+            # sesudahnya -- "0813-888888-73 0-800-13-60360" persis
+            # bentuk itu, dan gerbangnya justru membuang jawaban benarnya.
+            if (nomor and nomor.startswith("628")
+                    and re.match(r"[\-\.]\d", teks[m.end():m.end() + 2])):
+                continue
             if nomor and nomor not in terlihat:
                 terlihat.add(nomor)
-                hasil.append((nomor, tipe))
+                hasil.append((nomor, tipe, m.start()))
     return hasil
 
 
@@ -142,6 +205,10 @@ def klasifikasi_telepon(nomor: str, tipe_pola: str) -> str:
     """
     'layanan'  -> call center / customer service, bukan jalur kantor
     'langsung' -> kemungkinan jalur kantor
+
+    Kelas 'cabang' TIDAK diputuskan di sini: ia tidak bisa dikenali dari
+    bentuk nomornya, hanya dari halaman tempat nomor itu berdiri. Lihat
+    cari_kontak().
     """
     if tipe_pola == "layanan":
         return "layanan"
@@ -154,8 +221,42 @@ def klasifikasi_telepon(nomor: str, tipe_pola: str) -> str:
     return "langsung"
 
 
-PERINGKAT_KELAS = {"langsung": 0, "seluler": 1, "layanan": 2}
+PERINGKAT_KELAS = {"langsung": 0, "cabang": 1, "seluler": 2, "layanan": 3}
 MAKS_LINK_KONTAK = 4
+
+# Penanda bahwa nomor di dekatnya adalah KANTOR PUSAT.
+#
+# KENAPA PERLU: halaman kontak TIKI memuat 71 nomor -- satu per cabang,
+# dari Ambon sampai Sorong. Semuanya sah, semuanya berkelas "langsung",
+# dan pemilih lama mengambil yang KEBETULAN muncul pertama: 0911 347857,
+# cabang Ambon. Orang sales yang menelepon dari antrian akan menelepon
+# cabang Ambon untuk menawarkan sistem ke perusahaan berkantor pusat di
+# Jakarta.
+#
+# Nomor cabang tidak salah sebagai data; ia salah sebagai NOMOR YANG
+# DITELEPON DULUAN. Jadi yang diubah bukan apa yang dipanen, melainkan
+# mana yang dipilih jadi nomor utama.
+PENANDA_PUSAT = re.compile(
+    r"(kantor\s*pusat|head\s*office|kantor\s*utama|pusat\s*informasi)",
+    re.IGNORECASE,
+)
+
+# Sejauh mana ke belakang penanda itu dicari dari posisi nomornya.
+# Cukup untuk menampung "Kantor Pusat PT X, Jl ... Telp." dalam satu
+# blok alamat, tapi tidak sampai menyeberang ke blok cabang berikutnya.
+JENDELA_PUSAT = 300
+
+# Halaman yang isinya DAFTAR CABANG, bukan kontak perusahaan.
+PENANDA_DAFTAR_CABANG = re.compile(
+    r"(kontak\s*cabang|daftar\s*cabang|cabang\s*kami|lokasi\s*cabang|"
+    r"branch\s*(list|office|network)|daftar\s*(kantor|gerai|outlet))",
+    re.IGNORECASE,
+)
+
+# Kalau satu halaman memuat sebanyak ini nomor kantor tanpa satu pun
+# penanda kantor pusat, ia daftar cabang walau judulnya tidak berkata
+# begitu. Halaman kontak biasa memuat satu sampai tiga nomor.
+AMBANG_DAFTAR_CABANG = 5
 
 
 def cari_kontak(website: str) -> dict:
@@ -180,7 +281,9 @@ def cari_kontak(website: str) -> dict:
     }
 
     diperiksa: set[str] = set()
-    ditemukan: list[tuple[str, str, str]] = []   # (nomor, kelas, url)
+    # (nomor, kelas, url, pusat) -- `pusat` True kalau di teks halaman
+    # nomor itu berdiri di dekat penanda "Kantor Pusat"/"Head Office".
+    ditemukan: list[tuple[str, str, str, bool]] = []
 
     def periksa(url: str) -> bool:
         """Return True kalau sudah dapat jalur kantor (boleh berhenti)."""
@@ -206,9 +309,34 @@ def cari_kontak(website: str) -> dict:
             log(f"halaman terbaca ({len(teks)} char) tapi 0 nomor cocok")
             return False
 
-        for n, tipe in nomor:
-            ditemukan.append((n, klasifikasi_telepon(n, tipe), url))
-        return any(k == "langsung" for _, k, _ in ditemukan)
+        kelas_awal = [(n, klasifikasi_telepon(n, tipe), posisi)
+                      for n, tipe, posisi in nomor]
+        pusat = {posisi: bool(PENANDA_PUSAT.search(
+            teks[max(0, posisi - JENDELA_PUSAT):posisi]))
+            for _, _, posisi in kelas_awal}
+
+        # Daftar cabang? Nomornya sah semua, tapi tidak satu pun kantor
+        # pusat -- dan yang muncul pertama cuma kebetulan. Halaman kontak
+        # TIKI memuat 71 nomor berurut dari Ambon; tanpa aturan ini, orang
+        # sales menelepon cabang Ambon untuk menawarkan sistem nasional.
+        jml_kantor = sum(1 for _, k, _ in kelas_awal if k == "langsung")
+        daftar_cabang = (
+            bool(PENANDA_DAFTAR_CABANG.search(teks))
+            or jml_kantor >= AMBANG_DAFTAR_CABANG
+        ) and not any(pusat.values())
+        if daftar_cabang:
+            log(f"halaman ini daftar cabang ({jml_kantor} nomor kantor, "
+                f"tanpa penanda kantor pusat) -- dicatat sebagai cabang")
+
+        for n, kelas, posisi in kelas_awal:
+            if kelas == "langsung" and daftar_cabang:
+                kelas = "cabang"
+            ditemukan.append((n, kelas, url, pusat[posisi]))
+
+        # Berhenti hanya kalau yang didapat jalur kantor DAN kelihatan
+        # kantor pusat. Kalau yang ketemu baru nomor cabang, teruskan --
+        # halaman lain mungkin memuat kantor pusatnya.
+        return any(k == "langsung" and p for _, k, _, p in ditemukan)
 
     # --- urutan penelusuran ---------------------------------------------
     # 1. Homepage duluan: sumber link kontak yang sebenarnya.
@@ -243,12 +371,16 @@ def cari_kontak(website: str) -> dict:
         return catatan
     catatan.pop("_ditolak_robots", None)
 
-    ditemukan.sort(key=lambda x: PERINGKAT_KELAS.get(x[1], 9))
-    nomor, kelas, url = ditemukan[0]
+    # Kelas dulu (kantor > seluler > call center), baru penanda kantor
+    # pusat. Urutan kemunculan cuma jadi pemutus terakhir -- dulu ia
+    # satu-satunya pemutus, dan itulah yang menyerahkan TIKI ke cabang
+    # Ambon.
+    ditemukan.sort(key=lambda x: (PERINGKAT_KELAS.get(x[1], 9), not x[3]))
+    nomor, kelas, url, _ = ditemukan[0]
 
     # dedup, urutan dipertahankan
     semua, terlihat = [], set()
-    for n, _, _ in ditemukan:
+    for n, _, _, _ in ditemukan:
         if n not in terlihat:
             terlihat.add(n)
             semua.append(n)
