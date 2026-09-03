@@ -1,0 +1,28 @@
+Terima kasih banyak atas penjelasannya, dan atas tanggapan yang cepat.
+
+Izinkan saya menegaskan kembali pemahaman saya, agar tidak ada
+kekeliruan di kemudian hari:
+
+1. Ketentuan "Dilarang mereproduksi dan/atau menggandakan sebagian atau
+   seluruh isi buku ini untuk tujuan komersial tanpa izin tertulis dari
+   Badan Pusat Statistik" ditujukan pada reproduksi atau penerbitan
+   kembali publikasinya.
+
+2. Pemanfaatan informasi nama dan alamat perusahaan dari publikasi
+   tersebut untuk keperluan saya tidak memerlukan izin tertulis dari
+   BPS.
+
+3. Karena itu, yang akan saya lakukan hanya mengambil nama dan alamat
+   perusahaan sebagai daftar awal, lalu memverifikasinya ke situs resmi
+   masing-masing perusahaan. Saya tidak akan menerbitkan ulang
+   publikasinya, tidak menjual datanya, dan tidak menyusun terbitan
+   turunan darinya.
+
+Sesuai yang saya sampaikan sebelumnya, saya juga akan menjaga agar
+baris yang berasal dari publikasi tersebut tidak disertakan dalam
+berkas yang dapat diakses umum di repositori kode saya.
+
+Apabila ada bagian dari pemahaman di atas yang keliru, mohon
+dikoreksi. Bila sudah sesuai, tidak perlu ditanggapi lagi.
+
+Sekali lagi terima kasih atas bantuannya.

@@ -349,8 +349,50 @@ berasal dari publikasi BPS tidak akan disertakan dalam berkas publik
 repo ini. Kalau izin turun, penyaring ekspornya dipasang di kode
 SEBELUM baris pertama masuk — bukan dicatat sebagai niat.
 
-Status: menunggu balasan berikutnya. Tidak ada yang berubah sementara
-itu: PDF tidak disentuh, pengekstrak tidak dibangun.
+#### BPS MENJAWAB — 3 September 2026. PENGHALANGNYA TERANGKAT.
+
+Balasan PST lewat SILASTIK, transaksi #50964:
+
+> Informasi nama dan alamat perusahaan yang tercantum dalam publikasi
+> *Direktori Industri Manufaktur Indonesia 2025* **dapat dimanfaatkan
+> sesuai dengan kebutuhan pengguna**. Ketentuan "Dilarang mereproduksi
+> ... untuk tujuan komersial tanpa izin tertulis dari Badan Pusat
+> Statistik" pada publikasi dimaksudkan untuk penggunaan yang bersifat
+> **reproduksi/penerbitan kembali publikasi** untuk tujuan komersial.
+>
+> Dengan demikian, sepanjang penggunaannya hanya berupa pemanfaatan
+> informasi nama dan alamat perusahaan, **tidak diperlukan pengajuan
+> izin tertulis** kepada BPS.
+
+Artinya larangan itu memang ada, tapi sasarannya BUKAN pemakaian isinya.
+Sasarannya menerbitkan ulang publikasinya. Pertanyaan yang sejak 1
+September membuat rencana ini berhenti akhirnya terjawab, dan jawabannya
+membolehkan.
+
+**YANG SEKARANG BOLEH:** mengambil nama dan alamat perusahaan dari PDF
+yang sudah diunduh sah, memakainya untuk menyusun daftar calon pelanggan,
+dan menghubungi perusahaan-perusahaan itu. Tanpa izin tertulis, karena
+BPS menyatakan izin tertulis tidak diperlukan untuk pemakaian ini.
+
+**YANG TETAP TIDAK BOLEH, dan sekarang justru lebih tajam batasnya:**
+mereproduksi atau menerbitkan kembali publikasinya. Kalimat BPS
+menyebutnya terang-terangan. Menaruh nama-alamat berasal-BPS ke
+`data/*.csv` yang dilacak git di repo PUBLIK, atau ke dasbor GitHub
+Pages, adalah persis bentuk penerbitan ulang itu.
+
+Jadi kesanggupan yang sudah terkirim ke BPS — baris berasal-BPS tidak
+disertakan dalam berkas publik — **bukan lagi sekadar janji sopan. Ia
+garis antara yang diizinkan dan yang dilarang.** Penyaring ekspornya
+dipasang di kode SEBELUM baris pertama masuk, bukan sesudahnya.
+
+**Bentuk buktinya.** Yang dipegang adalah penafsiran resmi BPS lewat
+kanal resminya, tertulis, ber-ID transaksi #50964, dan terkirim juga ke
+surel. Simpan utuh benang percakapannya. Yang TIDAK dipegang adalah
+"surat izin" — dan itu memang tidak ada, karena BPS menyatakan izin
+seperti itu tidak diperlukan untuk pemakaian ini.
+
+**Jalur keberatan ke PPID ditutup** — tidak lagi relevan, pertanyaannya
+sudah dijawab. Tenggat 15 Oktober tidak perlu dikejar.
 
 **Jalur 2 (cadangan): keberatan ke PPID.** UU 14/2008 Pasal 35 ayat (1)
 huruf e memberi dasar keberatan untuk *"permintaan informasi ditanggapi
