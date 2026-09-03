@@ -97,3 +97,62 @@ Hasilnya masuk `data/bps.db` (sudah di `.gitignore`), **bukan**
 `ekspor_csv.py` menolak jalan kalau ada baris berasal-BPS bocor ke berkas
 publik. Lihat `CATATAN_SUMBER_DATA.md`: yang BPS izinkan adalah memakai
 nama dan alamat; yang tetap dilarang adalah menerbitkannya kembali.
+
+---
+
+# Setelah ekstraksi: mencari situs, dan kenapa itu penghalang berikutnya
+
+Direktori BPS **tidak memuat alamat situs web**, sedangkan agen pembaca
+butuh situs untuk dibaca. Jadi tiap kandidat harus dicarikan situsnya
+lebih dulu, satu per satu.
+
+## Cara bertanya menentukan hasilnya
+
+Diuji 3 Sep 2026 ke enam perusahaan yang sama sekali belum disentuh:
+
+| bentuk kueri | berhasil |
+|---|---|
+| `"<nama PT> situs resmi perusahaan"` | **1 dari 4** |
+| `"<merek/grup> website perusahaan"` | **2 dari 2** |
+
+Sebabnya: yang punya situs biasanya **merek atau grupnya**, bukan badan
+hukumnya. Badan hukum hanya muncul di portal lowongan kerja, direktori
+alamat, dan situs data saham — bukan di situs perusahaannya sendiri.
+
+Contoh yang membuktikannya:
+
+- **PT Sariguna Primatirta** — kueri "situs resmi" gagal total. Lewat
+  mereknya (Cleo) ketemu `tanobel.com`, identitas korporat grupnya.
+- **PT Kelola Mina Laut** — gagal lewat nama PT, ketemu lewat "KML Food"
+  di `kmlfood.com`.
+- **PT Ciomas Adisatwa** — tidak punya situs sendiri sama sekali; yang
+  ada situs INDUKNYA, `japfacomfeed.co.id`.
+
+## Yang harus diputuskan, bukan diasumsikan
+
+Kasus Ciomas memunculkan pertanyaan yang belum dijawab: **kalau anak
+usaha tidak punya situs, boleh tidak menilainya dari situs induknya?**
+
+Argumen menolak: aturan LINGKUP ENTITAS di alur baca menyatakan bukti
+harus tentang entitas yang dinilai. Situs Japfa bercerita tentang Japfa.
+
+Argumen menerima: yang dinilai adalah apakah ada tim sales lapangan dan
+jaringan distribusi — dan untuk anak usaha yang memang memakai jaringan
+induknya, situs induk itu justru bukti yang tepat.
+
+Belum diputuskan. Jangan diam-diam dipilih salah satunya saat menilai.
+
+## Angka yang menentukan skala pekerjaannya
+
+209 kandidat prioritas belum punya situs. Pada 2 dari 3 keberhasilan
+kueri merek, itu sekitar 140 situs yang bisa ditemukan — dengan satu
+pencarian ber-penilaian manusia per perusahaan.
+
+Yang TIDAK bisa dinilai tanpa situs: `dist_model` (35 poin) dan
+`field_sales` (30). Keduanya butuh kalimat dari situs perusahaan.
+
+Yang SUDAH diketahui tanpa situs sama sekali, dari direktori:
+`industry_fit` (kelompok industri BPS) dan `scale` (jumlah provinsi
+tempat pabriknya). Itu 2 dari 4 komponen, tapi cuma 20-30 dari 100 poin
+— di bawah ambang arsip. Jadi direktori saja tidak menghasilkan lead
+yang bisa ditelepon; ia menghasilkan daftar pendek yang layak dikejar.
