@@ -204,24 +204,24 @@ h1{font-size:clamp(1.6rem,4vw,2.05rem);font-weight:700;letter-spacing:-.025em;
     <p class="sub">Perusahaan yang bukti di situsnya sendiri menunjukkan mereka punya
     tim sales lapangan dan jaringan distribusi &mdash; diurutkan dari yang paling butuh.</p>
     <div class="ringkas" id="ringkas"></div>
-<div class="agen jalan">
-<div class="agen-kepala"><span class="nadi"></span><div><div class="agen-judul">Agen &middot; sedang bekerja</div><div class="agen-kini">menyisir Gresik untuk office=insurance</div></div><div class="agen-sejak">5 detik lalu</div></div>
-<div class="agen-maju"><div class="lbl"><span>Sapuan OpenStreetMap</span><b>175/234 kombinasi wilayah &times; tag</b></div><div class="rel"><i style="width:75%"></i></div></div>
+<div class="agen diam" id="agen" data-pada="2026-09-03T05:57:29.827215+00:00" data-ambang="180">
+<div class="agen-kepala"><span class="nadi"></span><div><div class="agen-judul">Agen &middot; <span id="agen-judul">menganggur</span></div><div class="agen-kini">menyisir Mojokerto untuk building=warehouse</div></div><div class="agen-sejak" id="agen-sejak">&mdash;</div></div>
+<div class="agen-maju"><div class="lbl"><span>Sapuan OpenStreetMap</span><b>234/234 kombinasi wilayah &times; tag</b></div><div class="rel"><i style="width:100%"></i></div></div>
 <ul class="denyut">
-<li><span class="jam">05:28</span><span class="tag panen">panen</span><span>menyisir Gresik untuk office=insurance</span></li>
-<li><span class="jam">05:27</span><span class="tag panen">panen</span><span>menyisir Gresik untuk office=logistics</span></li>
-<li><span class="jam">05:27</span><span class="tag panen">panen</span><span>menyisir Gresik untuk office=engineering</span></li>
-<li><span class="jam">05:26</span><span class="tag panen">panen</span><span>menyisir Gresik untuk office=advertising_agency</span></li>
-<li><span class="jam">05:25</span><span class="tag panen">panen</span><span>menyisir Gresik untuk office=consulting</span></li>
-<li><span class="jam">05:25</span><span class="tag panen">panen</span><span>menyisir Gresik untuk office=it</span></li>
-<li><span class="jam">05:25</span><span class="tag panen">panen</span><span>menyisir Sidoarjo untuk building=warehouse</span></li>
-<li><span class="jam">05:24</span><span class="tag panen">panen</span><span>menyisir Sidoarjo untuk landuse=industrial</span></li>
-<li><span class="jam">05:24</span><span class="tag panen">panen</span><span>menyisir Sidoarjo untuk man_made=works</span></li>
-<li><span class="jam">05:24</span><span class="tag panen">panen</span><span>menyisir Sidoarjo untuk office=company</span></li>
-<li><span class="jam">05:23</span><span class="tag panen">panen</span><span>menyisir Sidoarjo untuk office=research</span></li>
-<li><span class="jam">05:23</span><span class="tag panen">panen</span><span>menyisir Sidoarjo untuk office=financial</span></li>
+<li><span class="jam">05:57</span><span class="tag panen">panen</span><span>menyisir Mojokerto untuk building=warehouse</span></li>
+<li><span class="jam">05:57</span><span class="tag panen">panen</span><span>menyisir Mojokerto untuk landuse=industrial</span></li>
+<li><span class="jam">05:56</span><span class="tag panen">panen</span><span>menyisir Mojokerto untuk man_made=works</span></li>
+<li><span class="jam">05:56</span><span class="tag panen">panen</span><span>menyisir Mojokerto untuk office=company</span></li>
+<li><span class="jam">05:56</span><span class="tag panen">panen</span><span>menyisir Mojokerto untuk office=research</span></li>
+<li><span class="jam">05:55</span><span class="tag panen">panen</span><span>menyisir Mojokerto untuk office=financial</span></li>
+<li><span class="jam">05:55</span><span class="tag panen">panen</span><span>menyisir Mojokerto untuk office=telecommunication</span></li>
+<li><span class="jam">05:54</span><span class="tag panen">panen</span><span>menyisir Mojokerto untuk office=insurance</span></li>
+<li><span class="jam">05:53</span><span class="tag panen">panen</span><span>menyisir Mojokerto untuk office=logistics</span></li>
+<li><span class="jam">05:53</span><span class="tag panen">panen</span><span>menyisir Mojokerto untuk office=engineering</span></li>
+<li><span class="jam">05:53</span><span class="tag panen">panen</span><span>menyisir Mojokerto untuk office=advertising_agency</span></li>
+<li><span class="jam">05:52</span><span class="tag panen">panen</span><span>menyisir Mojokerto untuk office=consulting</span></li>
 </ul>
-<div class="agen-kaki">Denyut ini jejak pekerjaan yang sungguh terjadi, bukan animasi: tiap barisnya punya stempel waktu di database. Agen ini tidak berjalan sepanjang hari &mdash; ia bekerja waktu sesi dibuka, dan panel ini menulis &ldquo;menganggur&rdquo; kalau memang sedang menganggur.</div>
+<div class="agen-kaki">Denyut ini jejak pekerjaan yang sungguh terjadi, bukan animasi: tiap barisnya punya stempel waktu di database. Agen ini tidak berjalan sepanjang hari &mdash; ia bekerja waktu sesi dibuka. Status di atas dihitung saat Anda membuka halaman ini, bukan saat halamannya dibuat, jadi halaman lama akan jujur bilang &ldquo;menganggur&rdquo; meski dulu dibangkitkan waktu agennya sibuk.</div>
 </div>
   </header>
 
@@ -404,6 +404,34 @@ h1{font-size:clamp(1.6rem,4vw,2.05rem);font-weight:700;letter-spacing:-.025em;
       b.setAttribute("aria-expanded", buka ? "true" : "false");
     }
   });
+
+  // --- status agen: dihitung di PERAMBAN, bukan saat halaman dibuat ---
+  // Halaman ini statis dan bisa dibuka berjam-jam kemudian, atau dibuka
+  // dari GitHub Pages yang dibangun dari commit lama. Umur peristiwa
+  // terakhir karena itu dihitung terhadap jam pembaca.
+  function usia(d){
+    // Jam pembaca bisa lebih lambat dari jam server; tanpa ini
+    // panelnya menulis "-8 detik lalu".
+    if (d < 0) { d = 0; }
+    if (d < 60) { return Math.round(d) + ' detik lalu'; }
+    if (d < 3600) { return Math.round(d/60) + ' menit lalu'; }
+    if (d < 86400) { return Math.round(d/3600) + ' jam lalu'; }
+    return Math.round(d/86400) + ' hari lalu';
+  }
+  function statusAgen(){
+    var el = document.getElementById('agen');
+    if (!el || !el.dataset.pada) { return; }
+    var t = Date.parse(el.dataset.pada);
+    if (isNaN(t)) { return; }
+    var d = (Date.now() - t) / 1000;
+    var jalan = d >= 0 && d <= Number(el.dataset.ambang || 180);
+    el.classList.toggle('jalan', jalan);
+    el.classList.toggle('diam', !jalan);
+    document.getElementById('agen-judul').textContent =
+      jalan ? 'sedang bekerja' : 'menganggur';
+    document.getElementById('agen-sejak').textContent = usia(d);
+  }
+  statusAgen(); setInterval(statusAgen, 20000);
 
   ringkas(); chips(); render();
 })();

@@ -46,6 +46,7 @@ osm_id,name,category,city,address,phone,website,latitude,longitude
 669873133,AKR,,Surabaya,,,,-7.209292,112.72926
 1430916357,AKR,,Semarang,,,,-6.9433044,110.4255687
 4267802198,AKR Corporindo. PT Tbk,company,Surabaya,"Jalan Sumatera, 51 - 53, Surabaya",,,-7.2701738,112.7490424
+8932325212,APP Sinarmas,,Mojokerto,,,,-7.4349731,112.4621046
 372807792,ASABRI,insurance,Denpasar,"Hang Tuah, 4, Denpasar",,,-8.6739275,115.2452864
 695489617,ASMO,,Cikarang,,,,-6.3072841,107.1054442
 13658337101,Abang Express - Pengiriman Internasional,company,,"Jalan Raya Bogor, No. 114",+628111361888,https://abangexpress.co.id/,-6.28132,106.8720599
@@ -63,6 +64,7 @@ osm_id,name,category,city,address,phone,website,latitude,longitude
 512842606,AirNav Indonesia,company,Tangerang,"Jalan Juanda, 1, Tangerang",+62 21 5591 5000,https://airnavindonesia.co.id/,-6.1534513,106.6436905
 282189669,Akasha International,company,,"Jalan Tahi Bonar Simatupang, 89",,,-6.3048969,106.8482044
 932247050,Akashi Wahana Indonesia,,Karawang,,,,-6.4210111,107.3401458
+705289648,Akses Kebomas,,Gresik,,,,-7.1773684,112.6196024
 11648765950,Alcott Semarang,it,Semarang,"Jalan Sultan Agung, 90 A, Semarang",,https://alcott-smg.com,-7.0104698,110.4160179
 6236284585,Alfindo Group,company,,,,,-6.1489309,106.8076894
 12740671401,Alguntal,company,,"Jalan Taman Asri Utama, B7 No.7",,https://alguntal.xyz,-6.2440821,106.7315645
@@ -283,6 +285,7 @@ osm_id,name,category,city,address,phone,website,latitude,longitude
 6951189590,Cigna,company,,,,,-6.2283507,106.8326829
 549604302,Cikarang Dry Port,,Cikarang,,,,-6.2678539,107.166351
 1065850289,Cikarang Dry Port Office,company,Cikarang,,,https://cikarangdryport.com/,-6.2684722,107.1642869
+476228455,Cintia Box,,Kudus,,,,-6.7803166,110.8352876
 873115066,Ciputra Biz Park,,Jakarta,,,,-6.1854425,106.9270679
 320789967,Circle K Distribution Centre,,Denpasar,"MT Haryono, 2B, Denpasar",,,-8.6631197,115.216391
 367608350,Citicon Concrete,,Denpasar,"Jalan Hayam Wuruk, 160A, Denpasar",,,-8.6692956,115.2429782
@@ -339,6 +342,7 @@ osm_id,name,category,city,address,phone,website,latitude,longitude
 8301476918,Depo MRT Jakarta,company,,,,,-6.2904732,106.7740645
 1385692300,Depo Peti Kemas Kima,,Makassar,,,,-5.087068,119.4921244
 1431092011,Depot Air Ni Zannah,,Bekasi,,,,-6.2970939,107.000523
+705296589,Depot BBM Gresik,,Gresik,,,,-7.1705464,112.6601842
 1360133929,Depot Bus Litha & CO,,Makassar,,,,-5.1468722,119.4670869
 30040717,Depot LPG Tanjung Priok,,Jakarta,,,,-6.1055926,106.9023799
 155962808,Depot Pertamina Halim,,Jakarta,,,,-6.2616888,106.8883738
@@ -364,6 +368,12 @@ osm_id,name,category,city,address,phone,website,latitude,longitude
 5726656323,Dipo Kereta Jakarta Kota,company,,,,,-6.1350912,106.8221854
 990640391,Dirgantara Indonesia,,Bandung,,,,-6.8972428,107.5788631
 13736829901,Djabesmen,company,,,,,-6.1698165,106.8163965
+476642374,Djarum,,Kudus,,,,-6.8176909,110.8675244
+723179627,Djarum,,Kudus,,,,-6.8325038,110.8347907
+723179629,Djarum,,Kudus,,,,-6.7933297,110.7929362
+723179631,Djarum,,Kudus,,,,-6.7754395,110.7837296
+723179632,Djarum,,Kudus,,,,-6.7896436,110.8310733
+723179637,Djarum Oasis,,Kudus,,,,-6.7772134,110.8601269
 491746304,Dok & Perkapalan Kodja Bahari,,Jakarta,,,,-6.1042061,106.911287
 669873127,Dok dan Perkapalan Surabaya,,Surabaya,,,,-7.2018135,112.7318555
 1077871637,DosNiRoha,,Tangerang,"Komplek Pergudangan Sinar Hati, Jl. Sinar Hati Raya No.88, RT.001/RW.002, Sukajadi, Kec. Karawaci, Kota Tangerang, Banten 15115, Tangerang",,,-6.1845516,106.6221329
@@ -394,6 +404,7 @@ osm_id,name,category,city,address,phone,website,latitude,longitude
 6894785485,Epson,company,,,,,-6.2059776,106.8216708
 3279934867,Equity,financial,Denpasar,"Jalan Diponegoro, A14, Denpasar",,,-8.6651451,115.2148542
 372807806,Equity Life Indonesia,insurance,Denpasar,"Raya Puputan, Denpasar",,,-8.6730544,115.2428181
+705296586,Eternit Gresik,,Gresik,,,,-7.1749028,112.6602553
 3281407699,Etrading Securities,company,Denpasar,"Raya Puputan, Denpasar",,,-8.6734423,115.2341217
 340808714,Ex-RPH,,Semarang,,,,-6.9738136,110.4304294
 5726685532,Ex. Balai Yasa SJS,company,Semarang,,,,-6.9632755,110.4321976
@@ -440,6 +451,7 @@ osm_id,name,category,city,address,phone,website,latitude,longitude
 7709217805,Finmas - Fintech P2P Lending,financial,Jakarta,Jalan Doktor Ide Anak Agung Gde Agung,,,-6.2263197,106.8255682
 426896940,First Media,telecommunication,Surabaya,,+62211500595,https://www.firstmedia.com/,-7.2702607,112.7511588
 28994187,Fishery Research center,,Depok,,,,-6.4025867,106.8149037
+708321384,Furukawa Indomobil Battery Manufacturing,,Purwakarta,"Kota Bukit Indah, Blok O1 No. 1, Purwakarta",,,-6.4545503,107.4577666
 695665201,G-Tekt Indonesia Manufacturing,,Karawang,,,,-6.4099417,107.409113
 624170363,GEDUNG SEKOLAH MINGGU HKBP MENTENG,,Medan,"Jalan Menteng VII, Gang Kurnia, MEDAN",,,3.5652877,98.7250878
 926254403,GISTET Tambun II,,Bekasi,,,,-6.293576,106.9996702
@@ -501,24 +513,31 @@ osm_id,name,category,city,address,phone,website,latitude,longitude
 1430916363,Gudang Ampenan,,Semarang,,,,-6.9555965,110.4255668
 1429496124,Gudang BULOG Purwasari II,,Karawang,,,,-6.3868965,107.4045219
 607814421,Gudang Bawang Lembo,,Makassar,Jalan Lembo,,,-5.119608,119.422894
+487947867,Gudang Beras,,Kudus,,,,-6.8485125,110.8105848
 514123221,Gudang Billboard,advertising_agency,,,+62 877 8889 9283,https://billboard.mikkaintermedia.co.id/,-6.3308951,106.8607177
+723179634,Gudang Burikan,,Kudus,,,,-6.7984434,110.8511737
 157358459,Gudang Dealer Kawasaki,,Jakarta,,,,-6.2072739,106.8336183
 718980840,Gudang Depdiknas,,Jakarta,,,,-6.3325325,106.7491855
 718980841,Gudang Depdiknas,,Jakarta,,,,-6.3325434,106.7492412
 1201028114,Gudang Depdiknas,,Jakarta,,,,-6.3324578,106.7494405
 504968948,Gudang Farmasi Suku Dinas Kesehatan Kota Administrasi Jakarta Selatan,,Jakarta,,,,-6.316066,106.8255335
 701947629,Gudang Garam,,Sidoarjo,,,,-7.3559708,112.7245612
+723179628,Gudang Gulang,,Kudus,,,,-6.846115,110.854218
 541298327,Gudang Helm,,Tangerang,,,,-6.1657808,106.570129
 541298328,Gudang Helm,,Tangerang,,,,-6.1653911,106.5698473
 541298329,Gudang Helm,,Tangerang,,,,-6.1655436,106.5698144
 541298331,Gudang Helm,,Tangerang,,,,-6.1656924,106.569777
 320898608,Gudang Induk Pemda Bali,,Denpasar,"Kapten Tantular, Denpasar",,,-8.6706482,115.2286049
 1509691323,Gudang KL,,Bandung,,,,-6.9361584,107.6631451
+723179636,Gudang Kaliputu,,Kudus,,,,-6.7942592,110.8536628
+723179635,Gudang Karang Bener,,Kudus,,,,-6.7832248,110.8865681
 340592805,Gudang Keramik,,Semarang,"Jalan Pekojan Tengah, 3",,,-6.9731891,110.4285763
 1333503978,Gudang Keramik,,Semarang,"Jalan Pekojan Tengah, 3",,,-6.9731026,110.4285857
 292809844,Gudang Keramik KIA,,Medan,,,,3.6412213,98.6641381
+476225191,Gudang Kertas,,Kudus,,,,-6.7771953,110.8326277
 453887111,Gudang Ketintang UPT Surabaya,,Surabaya,"Ketintang Baru, 9, Surabaya",,,-7.3192672,112.7270152
 541298326,Gudang Konstruksi,,Tangerang,,,,-6.1654639,106.570351
+723179633,Gudang Krapyak,,Kudus,,,,-6.7879364,110.835165
 517825809,Gudang Logistik BPBD,,Karawang,,,,-6.2066576,107.2926457
 1333439213,Gudang Mainan Petemesan,,Semarang,"Petemesan, 160A, Semarang",,,-6.9720465,110.4286937
 340573932,Gudang Maspion,,Semarang,"Jl. Jurnatan, Blok D.31-32",,,-6.9703216,110.4282137
@@ -529,6 +548,8 @@ osm_id,name,category,city,address,phone,website,latitude,longitude
 723088913,Gudang Pabrik Kardus,,Jakarta,,,,-6.3511701,106.9356957
 1144614908,Gudang Perlengkapan Jalan,,Bandung,,,,-6.9685883,107.6979681
 1381387408,Gudang Persediaan Cikudapateuh,,Bandung,,,,-6.9189698,107.634897
+487947864,Gudang Pura,,Kudus,,,,-6.8477888,110.8102979
+487947865,Gudang Pura,,Kudus,,,,-6.8478127,110.8098513
 292809845,Gudang Rokok,,Medan,,,,3.6383184,98.664323
 1430916348,Gudang SAR KPLP,,Semarang,"Jalan Asahan, 4",,,-6.9545692,110.4212164
 1318294077,Gudang SR Karawang,,Karawang,,,,-6.3661368,107.359364
@@ -601,6 +622,7 @@ osm_id,name,category,city,address,phone,website,latitude,longitude
 13647733725,Indolife,insurance,Bandung,,,,-6.9046416,107.6104893
 857198475,Indomaret,convenience,Bandung,,,https://www.klikindomaret.com,-6.901154,107.6914695
 1444836022,Indonesia Kendaraan Terminal,,Jakarta,,,,-6.102429,106.9145277
+705296591,Indonesia Marina Shipyard,,Gresik,,,,-7.1722355,112.666914
 1428458218,Indonesia Nanya Indah Plastics,,Semarang,,,,-6.9829232,110.3744948
 904931152,Indonesia Nippon Steel Pipe,,Karawang,,,,-6.4206922,107.4181965
 6953875887,Indonesia Power,company,,,,,-6.2302042,106.8209121
@@ -660,6 +682,7 @@ osm_id,name,category,city,address,phone,website,latitude,longitude
 339579452,Jasa Raharja,insurance,Semarang,"Imam Bonjol, 131, Semarang",,,-6.9772703,110.4118764
 5541514921,JasaWebMedan,company,Medan,"Jalan Eka Warni 1A, 1",+6285296929820,https://www.jasawebmedan.com,3.5211687,98.6715443
 1237314304,Jasamarga Surabaya Mojokerto,company,Surabaya,,,,-7.3464566,112.7139166
+1105002743,Jatiluhur Industrial Smart City,,Purwakarta,,,,-6.4988577,107.4254636
 701941374,Jatim Taman Steel Manufacturing,,Sidoarjo,,,,-7.3531192,112.7023083
 486499571,Java Books/ Periplus,,Jakarta,,,,-6.2031856,106.9149431
 450526464,Jawa Pos Temprina,,Denpasar,"Jalan Katalia II, 26, Denpasar",,,-8.6304433,115.2004911
@@ -702,6 +725,8 @@ osm_id,name,category,city,address,phone,website,latitude,longitude
 10568142909,Kantor Martha Tilaar (Holding),company,,"Jalan Pulokambing II, 1",,,-6.1942564,106.9075957
 1320914938,Kantor Maxim Indonesia,company,Bekasi,"Jalan K. H. Noer Ali, 192, Kota Bekasi",,https://id.taximaxim.com,-6.248,106.9872051
 12223605479,Kantor Maxim Indonesia - Depok,company,Depok,"Jalan Proklamasi, 10D, Kota Depok",,https://id.taximaxim.com,-6.3931512,106.8433496
+12223623205,Kantor Maxim Indonesia - Kudus,company,Kudus,Kabupaten Kudus,,https://id.taximaxim.com,-6.8037772,110.882827
+12233255266,Kantor Maxim Indonesia - Mojokerto,company,Mojokerto,"Jalan Surodinawan, 61-89, Kota Mojokerto",,https://id.taximaxim.com,-7.4850912,112.4230929
 12229142884,Kantor Maxim Indonesia - Semarang,company,Semarang,"Jalan Kenconowungu Tengah I, 30, Kota Semarang",,https://id.taximaxim.com,-6.9773896,110.3928513
 157361261,Kantor PALYJA/PAM Jaya Cab. Kebayoran Baru,company,,,,,-6.2396094,106.7891381
 1208662769,Kantor PDAM Majalaya,,Karawang,,,,-6.3310437,107.3498593
@@ -763,6 +788,7 @@ osm_id,name,category,city,address,phone,website,latitude,longitude
 7406367473,Kontraktor Interior Duta Laras Cipta CV,company,,"Jalan Raya Gandul, Apartemen Cinere Resort, Cinere, Depok",,,-6.3362442,106.7938018
 299080062,Kopegtel Kantor Perusahaan - Unit Foto Copy & Percetakan,company,Bandung,"Japati, 1, Bandung, Jawa Barat",,,-6.8953148,107.6179374
 844320182,Koperasi Gowa Abadi,company,Makassar,,,,-5.2084936,119.4522914
+306821955,Koperasi Wahid,financial,Kudus,"Jalan Sunan Kudus, kudus",,,-6.8073987,110.8393607
 416084289,Korin Muliajaya,company,Denpasar,"Jalan Bypass Ngurah Rai, 5, Kuta",,,-8.722048,115.1856532
 339610405,Kospin Jasa Syariah,company,Semarang,,,,-7.0011021,110.4329918
 904935095,Koyama Casting Indonesia PT,,Karawang,,,,-6.4105993,107.4072987
@@ -845,6 +871,7 @@ osm_id,name,category,city,address,phone,website,latitude,longitude
 9933410150,Maxsi Reklame Padangsambian Kelod,advertising_agency,Denpasar,,,,-8.6818679,115.1774908
 445056569,Maybank Finance,financial,Denpasar,"Jalan Bypass Gatot Subroto, 193, Denpasar",,,-8.6358563,115.2301793
 6535153418,McKinsey & Company,consulting,,,+622157986600,https://www.mckinsey.com/id,-6.2173253,106.8130071
+705296596,Media Karya Sentosa,,Gresik,,,,-7.1667918,112.6652818
 4196577992,Mega Auto Finance,financial,Denpasar,"Jalan Bypass Gatot Subroto, Denpasar",,,-8.6355293,115.2219106
 4673956934,Meiko Abadi 1,,Sidoarjo,Gedangan,,,-7.3882997,112.7488762
 1198173727,Meitech,company,Bandung,"Bulevar Magna, 21, Bandung",,,-6.9577326,107.6895631
@@ -906,6 +933,7 @@ osm_id,name,category,city,address,phone,website,latitude,longitude
 3659598581,Ngobas,company,,"Jl. Pamulang Permai Tim. 3D No.34, B nomer 5, Pamulang",+62 21 74714801,https://ngobas.com/,-6.3329511,106.7369118
 933071051,Nichirin Indonesia,,Karawang,,,,-6.3740145,107.3206488
 10741151467,Ninja,logistics,Jakarta,,,,-6.2542046,106.8012671
+904344790,Nippon Indosari Corpindo,,Purwakarta,"Kota Bukit Indah, Blok NV No. 1, Purwakarta",,,-6.4546122,107.4624274
 425684379,Nippon Paint,company,Denpasar,"Jalan Pulau Kawe, 30, Denpasar",,https://www.nipponpaint-indonesia.com/,-8.6792084,115.2067182
 705296575,Nippon Paint,,Surabaya,,,,-7.1927472,112.6443994
 155956691,Nissan Halim,company,,,,,-6.2483323,106.8809678
@@ -936,6 +964,7 @@ osm_id,name,category,city,address,phone,website,latitude,longitude
 386983808,PAL Indonesia,,Surabaya,,,,-7.2018839,112.7400186
 154839315,PAM Jaya,company,,,,,-6.1529969,106.8793816
 120326900,PAM Jaya Pasar Rebo,,Jakarta,,,,-6.2998104,106.8708565
+476214104,PASAR BITINGAN,company,Kudus,,,,-6.8167772,110.8369513
 197196788,PD Parkir Makassar Raya,company,Makassar,,,,-5.1624212,119.410303
 381441270,PDAM Badung,company,Denpasar,"Jalan Bedahulu, 3, Denpasar",,,-8.6356824,115.2159063
 499661114,PDAM Kebalen,company,Bekasi,,,,-6.1832286,107.0380624
@@ -958,6 +987,7 @@ osm_id,name,category,city,address,phone,website,latitude,longitude
 414611117,PLN Bali,,Denpasar,,,,-8.6632609,115.2098138
 6222915487,PLN Distribusi Jakarta Raya,company,,,,https://www.pln.co.id/,-6.1805194,106.8328284
 317396960,PLN Gunung Latimojong,company,Makassar,,,,-5.1324907,119.4188726
+13946896102,PLN Nusantara Power UP Gresik,company,Gresik,,,,-7.1689881,112.6612319
 476460657,PLN Semarang Selatan,company,Semarang,,,,-7.0502632,110.4193862
 398161501,PLN Serpong,company,Tangerang,,,,-6.2906966,106.6643643
 1111244299,PLN UIKL Sulawesi (Unit Induk Pembangkitan & Penyaluran Sulawesi),,Makassar,,,,-5.1474472,119.4713745
@@ -970,6 +1000,7 @@ osm_id,name,category,city,address,phone,website,latitude,longitude
 239759321,PLTDG Pesanggaran,,Denpasar,,,,-8.7177819,115.2112913
 930833477,PLTG Glugur,,Medan,,,,3.6159362,98.6686635
 549604296,PLTGU Bekasi Power,,Cikarang,,,,-6.2701676,107.1591988
+705296597,PLTGU Gresik,,Gresik,"Jalan Kopral KKO. Harun Thohir, Gresik",,,-7.1645136,112.6641738
 694792625,PLTGU Jababeka,,Cikarang,,,,-6.2908692,107.1214088
 929881495,PLTGU Jawa-2 Power Project,,Jakarta,,,,-6.1081907,106.8701718
 29367652,PLTGU Muara Karang,,Jakarta,,,,-6.1100844,106.784575
@@ -977,13 +1008,16 @@ osm_id,name,category,city,address,phone,website,latitude,longitude
 570139147,PLTGU Tambak Lorok,,Semarang,Semarang,,,-6.9500707,110.4269324
 894351150,PLTGU Tambak Lorok,,Semarang,Semarang,,,-6.9503683,110.4323048
 960747876,PLTU DSS,,Karawang,,,,-6.3251623,107.3146033
+530303610,PLTU Jawa 7,,Serang,Serang,,,-5.9918823,106.1055836
 109924603,PLTU Tello,,Makassar,,,,-5.1473815,119.4719989
+1098612561,PLTU Tjiwi Kimia,,Mojokerto,,,,-7.4366288,112.4695943
 1317820672,PO Agra Mas,,Karawang,,,,-6.3414443,107.3386143
 1318303869,PO HIBA UTAMA POOL KLARI,,Karawang,,,,-6.3613498,107.3581602
 1317820673,PO Pandawa 87 Karawang,,Karawang,,,,-6.3410822,107.3386846
 1384000586,PO dan Bengkel Bus PIPOSS,,Makassar,,,,-5.1098303,119.5048634
 306984691,POLARI,,Tangerang,,,,-6.1627346,106.6851028
 718995681,PPD,company,,,,,-6.3316015,106.7470385
+476602200,PR Noyorono,,Kudus,,,,-6.8160556,110.8374143
 4419973198,"PRUDENTIAL, PRUventure DP 10",insurance,Denpasar,"Jl. Patih Jelantik, Kabupaten Badung, Bali, Indonesia",,,-8.7114194,115.1797841
 5621334621,PSN,company,,"Jalan Cimandiri, 6",,,-6.1943064,106.8407963
 10248119752,PT ANK INDONESIA ONE,company,Tangerang,"KP. BUARAN WETAN RT 03 RW 015, Tanah Tinggi, Tangerang, Kota Tangerang, KOTA TANGERANG",,,-6.1760945,106.654196
@@ -1025,6 +1059,7 @@ osm_id,name,category,city,address,phone,website,latitude,longitude
 179746316,PT CMI,,Bandung,,,,-6.943042,107.6478412
 179746317,PT CMI,,Bandung,,,,-6.9427833,107.6478927
 179746318,PT CMI,,Bandung,,,,-6.9422401,107.6479597
+530201765,PT Cakra,,Serang,,,,-6.0039406,106.0868248
 316937093,PT Canning Indonesia Products office,company,Denpasar,"Jalan Diponegoro, 101, Denpasar",,,-8.6643656,115.2156114
 316937090,PT Canning Indonesian Products,,Denpasar,"Jalan Diponegoro, 101, Denpasar",,https://www.pronas.co.id/,-8.6639697,115.216111
 9763334043,PT Carsworld Digital Indonesia,company,Tangerang,"Sunburst CBD LOT II, 3, Tangerang Selatan",+622122356880,https://carsworld.co.id/,-6.2976929,106.6665557
@@ -1048,6 +1083,7 @@ osm_id,name,category,city,address,phone,website,latitude,longitude
 524545352,PT Dima,,Denpasar,,,,-8.670181,115.1919293
 26729382,PT Dirgantara Indonesia (Kantor Pusat),company,Bandung,,,https://www.indonesian-aerospace.com/,-6.8982177,107.5822506
 374650210,PT Djarum,company,Denpasar,"Jalan Raya Sesetan, 259A, Denpasar",,,-8.7035251,115.2201031
+641070731,PT Dunia Daging Food Industries,,Purwakarta,,,,-6.4975168,107.4881736
 13441870017,PT Duta Wibawa Perkasa,,Surabaya,,,,-7.2535689,112.767385
 374821671,PT Dwiniaga Pratama Sarana,company,Denpasar,"Jalan Pulau Moyo, 2, Denpasar",,,-8.7081779,115.2170982
 208600876,PT Earthline,company,,"Lebak Bulus IV, 9D",,,-6.3001993,106.7914708
@@ -1058,6 +1094,7 @@ osm_id,name,category,city,address,phone,website,latitude,longitude
 119422778,PT Frisian Flag,,Jakarta,,,,-6.3354773,106.8695088
 510643733,PT Frisian Flag Indonesia,,Jakarta,"Jalan Raya Bogor, Km 5, Jakarta Timur",,,-6.3046362,106.8645039
 419639233,PT GIEB Indonesia,company,Denpasar,"Jalan Bypass Gatot Subroto, 66X, Denpasar",,,-8.6351171,115.224944
+530201761,PT GTA,company,Serang,,,,-6.0146402,106.0856128
 419639219,PT Gajah Gotra Bali,company,Denpasar,"Jalan Bypass Gatot Subroto, 227, Denpasar",,,-8.6358354,115.2259935
 11765178101,PT Gelindo Garmentama,,Bandung,"Jalan Cangkuang Kulon, 38, Kabupaten Bandung",+62 22-85241345,,-6.976217,107.5960421
 904935100,PT Gemala Kempa Daya,,Karawang,,,,-6.4126739,107.4090147
@@ -1094,6 +1131,7 @@ osm_id,name,category,city,address,phone,website,latitude,longitude
 5058655067,PT Jutarasa Abadi,company,Semarang,"Jalan Letjen. Suprapto, Semarang",,,-6.968597,110.4267803
 155961372,PT KABEL METAL,,Jakarta,,,,-6.1862011,106.9405569
 489269030,PT KAI Balai Yasa fraksi Manggarai,company,,DKI Jakarta,,,-6.2144405,106.8520658
+641068798,PT KINENTA INDONESIA,,Purwakarta,,,,-6.4954915,107.4908269
 523527383,PT Kacang Rahayu,company,Denpasar,"Jalan Bypass Gatot Subroto, 472, Denpasar",,,-8.6362611,115.1886329
 1390912697,PT Kalbe Farma,,Jakarta,"Jalan Ahmad Yani, Jakarta Timur",,,-6.173485,106.8783241
 1209255876,PT Kalbe Morinaga Indonesia,,Karawang,"Indotaisei Indah Development, Sektor 1A, Blok Q1, karawang",,,-6.4172749,107.4113622
@@ -1108,7 +1146,9 @@ osm_id,name,category,city,address,phone,website,latitude,longitude
 357092411,PT Koyama Indonesia,,Karawang,,,,-6.3757788,107.2746933
 540895308,PT Kreasi/Mr Jo (Produksi Kontruksi Bangunan),company,Tangerang,,,,-6.2290816,106.5491121
 1370426930,PT LEN Industri,,Bandung,,,,-6.9502019,107.6195843
+1432017918,PT Lembu Jantan Perkasa,,Serang,,,,-6.1911299,106.1383995
 502251513,PT MAKA (Makna Karya Angan Andanu),company,,"Jalan MPR Raya, 14, Jakarta Selatan",,maka.id,-6.2802583,106.8030653
+13118847301,PT METRO PEARL INDONESIA,company,Purwakarta,Jalan Pramuka,,,-6.5532581,107.4309259
 416070749,PT Macnels Express Pratama,company,Denpasar,"Jalan Bypass Ngurah Rai, 607, Denpasar",,,-8.7197598,115.1991074
 12417826926,PT Magna Perkasa,company,,"Jl Kaji, 18, Jakarta Pusat",+62 21 6325935,https://www.magnaperkasa.com,-6.1669149,106.81511
 317196849,PT Mahameru,company,Makassar,,,,-5.1321627,119.4289444
@@ -1206,6 +1246,8 @@ osm_id,name,category,city,address,phone,website,latitude,longitude
 1496455961,PT Sejati Jaya Manunggal Prima,,Surabaya,"Jalan Jagalan IV, 2",+6231 5322515,https://www.sejatijaya.co.id/,-7.2494362,112.743308
 1496540309,PT Sejati Mandiri Multi Rajut,,Sidoarjo,,,https://www.sjmp.co.id/,-7.3637715,112.666605
 405590695,PT Sekar Nusa Baruna,,Denpasar,"Jalan Bypass Ngurah Rai, Denpasar",,,-8.7177015,115.2044007
+13088623759,PT Semen Indonesia Distributor,company,Gresik,"Jalan Dokter Wahidin Sudirohusodo, 728A",,https://sidistributor.com/,-7.1674128,112.5987308
+13088478828,PT Semen Indonesia Logistik,company,Gresik,"Jalan Veteran, 129, Gresik",,https://www.silog.co.id/,-7.1781901,112.6511481
 488166587,PT Siantar Top Tbk (Plant Bekasi),,Bekasi,,,,-6.2977417,106.9872048
 29449877,PT Siemens Indonesia,,Jakarta,"Jalan Ahmad Yani, 67-68, Jakarta Timur",,,-6.17262,106.8785753
 642402490,PT Sinar Surabaya Sakti,,Sidoarjo,,,,-7.3546041,112.6922719
@@ -1227,6 +1269,7 @@ osm_id,name,category,city,address,phone,website,latitude,longitude
 436687362,PT Surya Permai,,Tangerang,Jalan Diklat Pemda,,,-6.2684542,106.5928674
 524436543,PT Surya Timber Raya,,Denpasar,"Jalan Bypass Gatot Subroto, 588, Denpasar",,,-8.6364276,115.1792301
 157211719,PT Suzuki Indomobil,,Jakarta,,,,-6.194005,106.9372719
+13118819101,PT THREE MAKMUR RAJA,company,Purwakarta,Jalan Pramuka,,,-6.5553997,107.4287273
 402035786,PT TOYOTA MOTOR MANUFACTURING INDONESIA,,Jakarta,,,,-6.1347651,106.888961
 540895305,PT TRIAS (produksi Kontruksi Bangunan),company,Tangerang,,,,-6.2304319,106.5507167
 7709217808,PT Tani Hub Indonesia (TaniHub HQ),company,,Jalan Doktor Ide Anak Agung Gde Agung,,,-6.2263762,106.8255337
@@ -1236,12 +1279,14 @@ osm_id,name,category,city,address,phone,website,latitude,longitude
 6222912899,PT Timah,company,,,,,-6.1788928,106.8325929
 1090644901,PT Tirta Investama,,Denpasar,"Jalan Mahendradatta, 16A, Denpasar",,,-8.6758759,115.1896346
 4351102216,PT Tjipta Rimba Djaja,company,Medan,,,,3.6466589,98.6630084
+493955341,PT Tjiwi Kimia,,Mojokerto,,,https://www.tjiwi.co.id/,-7.4359638,112.4718783
 12237909862,PT Toyo Sensing Indonesia,company,Bandung,"Mekar Raya, 11, Kab Bandung",,https://toyosensing.com,-6.9738606,107.5511024
 119724077,PT Tranka Kabel,,Jakarta,,,,-6.3606536,106.8604812
 156925882,PT Trans Nusantara Sejati,company,,,,,-6.156301,106.7568888
 9808158547,PT Tresnamuda Sejati,company,Surabaya,,,,-7.2197651,112.7329546
 1318920195,PT Tri Jaya Teknik Karawang,,Karawang,,,,-6.3339348,107.3372682
 6001907233,PT Trimanunggal Perkasindo,company,,"Jalan Rawa Terate, 66, DKI Jakarta",+62 21 29368722,https://tpturbo.com,-6.1859453,106.9284659
+530201762,PT Tromik,company,Serang,,,,-6.0115787,106.0864725
 722943097,PT Tunas Jaya Sanur,architect,Denpasar,"Jalan Bypass Ngurah Rai, 52XX, Sanur",+62361288691,https://tunasjayasanur.com,-8.703651,115.2532035
 155953455,PT Tunggal Idaman Abdi,,Jakarta,"Jalan Jenderal Ahmad Yani, 7, Jakarta Timur",,https://tia-pharma.com/,-6.2048973,106.8752793
 1390912698,PT Tunggal Sila Farma,,Jakarta,,,,-6.174421,106.8780682
@@ -1427,10 +1472,13 @@ osm_id,name,category,city,address,phone,website,latitude,longitude
 154836251,PT. Ritra Kornas,,Jakarta,,,,-6.1242258,106.9304013
 292809854,PT. SUMATERA TEXTILE,,Medan,,,,3.6418152,98.6618649
 1384000570,PT. Samator Gas Industri Makassar,,Makassar,,,,-5.1048138,119.5065772
+641069024,PT. Samwha Indonesia,,Purwakarta,,,,-6.4964861,107.4887516
 155957608,PT. Sandoz,,Jakarta,,,,-6.3017607,106.8578031
 1209255877,PT. Sanghiang Perkasa - Kalbe Nutritionals,,Karawang,"Indotaisei Indah Development, karawang",+62 800-1402-000,https://kalbenutritionals.com/id,-6.4157625,107.4123951
 529402791,PT. Sarana Multigriya Finansial (Persero),financial,Jakarta,Jalan Panglima Polim I,,,-6.2474374,106.7981798
 292809855,PT. Sasa,,Medan,,,,3.6408596,98.662446
+522318601,PT. Sentra Karya Mandiri,company,Serang,,,,-6.047804,106.0585977
+530201763,PT. Sidomulyo Selaras Tbk,company,Serang,"Jl. Raya Bojonegara, Cilegon",+62 254 5750040,https://www.sidomulyo.com/,-6.0091619,106.0867581
 1357786138,PT. Sinergy Power Source,,Sidoarjo,,,,-7.5156169,112.6007317
 1385692301,PT. Sinotrans ZTE Makassar,,Makassar,,,,-5.0860995,119.4926275
 1232099717,PT. Starch Solution Internasional,,Karawang,,,,-6.4221875,107.4117711
@@ -1475,11 +1523,17 @@ osm_id,name,category,city,address,phone,website,latitude,longitude
 904935101,PT.Daido Indonesia Manufakturing,,Karawang,,,,-6.4151851,107.4080818
 9150477583,PT.Nisson Indonesia,company,Tangerang,,,,-6.1518491,106.6383245
 340410646,PT.Tanaya Adhi,,Semarang,,,,-6.9712465,110.4298582
+487947861,PURA,,Kudus,,,,-6.8407603,110.815205
+487947862,PURA,,Kudus,,,,-6.8411963,110.8159862
+836335234,PURA METALIZING,,Kudus,,,,-6.8362164,110.8307662
+834297454,PURA OFFSET,,Kudus,,,,-6.8352648,110.8279472
+834295493,PURA ROTOGRAVURE & PURA KERTAS,,Kudus,,,,-6.8283342,110.8296529
 9442280672,PWK J1 no 7,company,Surabaya,"Jalan Citra Lakasantri 4, 7, Surabaya",,,-7.2899879,112.6527638
 6954192987,PZ Cussons,company,,,,,-6.2244775,106.8253861
 1370415602,Paberik Badjoe,,Bandung,,,,-6.9453953,107.6379253
 155956692,Pabrik Ban Intirub,,Jakarta,,,,-6.2641933,106.8773435
 517825830,Pabrik Cibeo,,Karawang,,,,-6.2138643,107.2913317
+13744267741,Pabrik Gula Rendeng,,Kudus,,,,-6.8032831,110.8621852
 723088901,Pabrik Kardus,,Jakarta,,,,-6.3512459,106.9359978
 734809624,Pabrik Kerupuk H Engkus,,Jakarta,,,,-6.3510295,106.9384927
 540899975,Pabrik Konblok,,Tangerang,,,,-6.2942312,106.5936851
@@ -1491,7 +1545,9 @@ osm_id,name,category,city,address,phone,website,latitude,longitude
 517825808,Pabrik Penggilingan Padi Joksi,,Karawang,,,,-6.2060077,107.2936941
 517825811,Pabrik Penggilingan Padi Ridho Ilahi,,Karawang,,,,-6.2039841,107.2933761
 211034358,Pabrik Plastik,,Jakarta,,,,-6.1281246,106.8034157
+487947866,Pabrik Pura,,Kudus,,,,-6.8484585,110.8092847
 734811730,Pabrik Rambu Jalan,,Jakarta,,,,-6.3523074,106.9383165
+487947868,Pabrik Rokok,,Kudus,,,,-6.8489419,110.8113969
 1145009196,Pabrik Roti Tiara Mukti,,Bandung,Jalan Cigadung Wetan,,,-6.8783931,107.6289901
 155949211,Pabrik Tahu,,Jakarta,,,,-6.1955772,106.8676769
 281226919,Pabrik beton - Herstellung von Transportbeton - production of ready-mixed concrete,,Makassar,,,,-5.1677374,119.4000793
@@ -1526,10 +1582,12 @@ osm_id,name,category,city,address,phone,website,latitude,longitude
 6250017491,Pegadaian Kantor Wilayah VIII,company,,,,,-6.1763697,106.8397524
 6250017490,Pegadaian Kanwil IX Jakarta 2,company,,,,,-6.1764593,106.8395313
 11651185808,Pegadaian UPC Sukawati,company,Denpasar,"Jalan Raya Celuk, 53, Sukawati",+62 21 80635162,https://www.pegadaian.co.id,-8.600585,115.2660303
+705296588,Pelabuhan Barang Gresik,,Gresik,,,,-7.1559169,112.6618711
 489926413,Pelabuhan Ikan Nizam Zachman,,Jakarta,,,,-6.1029994,106.8024248
 317545071,Pelabuhan Makassar,,Makassar,,,,-5.1198733,119.4087773
 669873128,Pelabuhan Penyeberangan Ujung-Kamal,,Surabaya,,,,-7.1984511,112.7345361
 907371755,Pelabuhan Rakyat Paotere,,Makassar,,,,-5.1098177,119.4225
+705296593,Pelabuhan Semen Indonesia,,Gresik,,,,-7.1688416,112.6671804
 1433576940,Pelabuhan Sunda Kelapa,,Jakarta,,,,-6.1210356,106.8106183
 1430916359,Pelabuhan Tanjung Emas,,Semarang,,,,-6.9463468,110.4278023
 30088883,Pelabuhan Tanjung Priok,,Jakarta,,,,-6.1043888,106.8828024
@@ -1553,6 +1611,8 @@ osm_id,name,category,city,address,phone,website,latitude,longitude
 316162722,Pertamina,company,Denpasar,"Sugianyar, 10, Denpasar",,,-8.6583955,115.2170672
 374819659,Pertamina,,Denpasar,,,,-8.7167268,115.2175602
 669873134,Pertamina,,Surabaya,,,,-7.2091029,112.7306096
+705296595,Pertamina,,Gresik,,,,-7.1604074,112.6613329
+705296590,Pertamina Hulu Energi,,Gresik,,,,-7.1711345,112.6646534
 30035983,Pertamina Lubricants,,Jakarta,,,,-6.1101457,106.9032598
 486686545,Pertamina TBBM Makassar,,Makassar,,,,-5.1139874,119.4113244
 6239456596,Pertamina Training and Consulting,company,,"Jalan Mohammad Husni Thamrin, Menteng, Central Jakarta",,,-6.1913407,106.8233163
@@ -1562,6 +1622,10 @@ osm_id,name,category,city,address,phone,website,latitude,longitude
 9819722670,Perum Perhutani Jawa Barat & Banten,company,Bandung,,,,-6.9370339,107.7010576
 186431830,Perum Perumnas Makassar,company,Makassar,,,,-5.1623195,119.4387621
 570981017,Peruri,,Karawang,,,,-6.3706455,107.3033032
+1210906536,Perusahaan,company,Purwakarta,,,,-6.5100228,107.4006594
+1211749306,Perusahaan,company,Purwakarta,,,,-6.5134026,107.4046499
+1214257346,Perusahaan,company,Purwakarta,,,,-6.5557609,107.4039296
+1214257347,Perusahaan,company,Purwakarta,,,,-6.555019,107.4043513
 292809858,Perusahaan Air Minum Prima-A,,Medan,,,,3.6396001,98.6644089
 3573891046,Perusahaan Bus Bintang Timur,company,Makassar,,,,-5.1414269,119.4786641
 155957119,Perusahaan Daerah Air Minum,,Jakarta,,,,-6.2044153,106.898505
@@ -1569,6 +1633,7 @@ osm_id,name,category,city,address,phone,website,latitude,longitude
 6400801193,Perusahaan Umum Perikanan Indonesia,company,,,,,-6.1009795,106.8002796
 12828473025,Perwakilan Bus Batutumonga,,Makassar,,,,-5.1208469,119.508416
 430144342,Perwakilan Bus Bintang Prima,,Makassar,,,,-5.1245818,119.5047575
+640066048,Petrokimia Gresik,,Gresik,,,,-7.1462948,112.6475966
 6222915388,Petrokimia Gresik,company,,,,,-6.1767065,106.8172055
 10957553410,Pevent Group,advertising_agency,,"Jalan Lebak Bulus I, 59, DKI Jakarta",,,-6.2969039,106.7878723
 1281767675,Pfizer,,Depok,,,,-6.4111685,106.859977
@@ -1584,6 +1649,7 @@ osm_id,name,category,city,address,phone,website,latitude,longitude
 5466218025,Politron,company,Surabaya,,,,-7.3340288,112.75946
 1100975483,Polychem Indonesia,,Tangerang,,,,-6.1663047,106.6643557
 1100975482,Polypack Indo Meyer,,Tangerang,,,,-6.1650127,106.6615042
+723179630,Polytron,,Kudus,,,,-6.780287,110.7871949
 14061116202,Polytron,company,,,,,-6.206576,106.8216624
 1357565573,Pool Bianglala Metropolitan Ciputat,,Jakarta,,,,-6.3394579,106.7482687
 824064084,Pool Bus Damri Jagir,,Surabaya,,,,-7.3072913,112.7563777
@@ -1608,6 +1674,7 @@ osm_id,name,category,city,address,phone,website,latitude,longitude
 12695972339,Produsen Supplier Bakso Solo,,Bekasi,,,,-6.1820101,106.9997663
 13726579301,Prolink,company,,,,,-6.1776034,106.8121043
 3669844909,Prudential,insurance,Denpasar,"Raya Puputan, Denpasar",,,-8.673591,115.2387141
+13668306456,Prudential,insurance,Serang,,,,-6.0340982,106.0816946
 635794997,Prysmian Cables Indonesia,,Karawang,"Indotaisei Indah Development, Blok G No. 1, Purwakarta",,https://asean.prysmiangroup.com/,-6.4196593,107.4096608
 5082852534,Pt balina agung perkasa,company,,Agung Timur 12,,,-6.140504,106.8836861
 381645552,Pt. Inditama,it,Bandung,"setra murni atas 2, Kota Bandung",,,-6.8746023,107.5799065
@@ -1621,6 +1688,7 @@ osm_id,name,category,city,address,phone,website,latitude,longitude
 491746204,Puninar Logistics,,Jakarta,,,,-6.1298714,106.9465304
 492726539,Pupuk Kaltim,company,Denpasar,"Jalan Bypass Ngurah Rai, 242, Denpasar",,,-8.6808318,115.2588375
 695665210,Pupuk Kujang,,Karawang,,,,-6.4056816,107.4282754
+1214851463,Purwakarta Indorama power station,,Purwakarta,,,,-6.5536782,107.4138664
 12715030393,Pusat Bahasa dan Multibudaya,research,Surabaya,,,,-7.2713812,112.7597652
 12927598785,Pusat Gadai Indonesia - Hankam,company,,,,,-6.2963814,106.921299
 119451616,Pusat Penelitian dan Pengembangan Sumber Daya Air Pusair,research,Bandung,"Jl. Ir. H. Juanda No.193, Dago, Kecamatan Coblong, Kota Bandung, Jawa Barat 40135, Bandung",,,-6.8827042,107.6142956
@@ -1704,6 +1772,9 @@ osm_id,name,category,city,address,phone,website,latitude,longitude
 13344062059,Seluas Tanah Merah,company,Bandung,,,,-6.8899673,107.6285949
 424226986,Selular Global Net,telecommunication,Denpasar,"Jalan Mahendradatta, 8XX, Denpasar",,,-8.6797373,115.1895529
 3870398984,Semarang Resilience Office,company,Semarang,Jalan Pemuda,,www.100rcsemarang.org,-6.9819914,110.4124335
+1381564788,Semen Gresik,,Gresik,,,,-7.1719821,112.6454805
+705296585,Semen Indonesia,,Gresik,,,,-7.1732475,112.6610117
+5014580122,Semen Indonesia,company,Gresik,Jalan Veteran,,https://www.sig.id,-7.1763415,112.6508581
 10097816854,Semidang Group,company,,,,https://semidang.com,-6.1790362,106.8747117
 422445507,Sentra Bengkel Las dan Bubut Jalan Bogor,,Bandung,Jalan Bogor,,,-6.9131341,107.6375152
 1433665745,Sentra Bisnis Terpadu I & II,,Jakarta,,,,-6.1275912,106.7475709
@@ -1735,6 +1806,7 @@ osm_id,name,category,city,address,phone,website,latitude,longitude
 5440509135,Smart GPS Jakarta,it,Jakarta,"Jl. Krendang Pulo III, DKI Jakarta",,,-6.1523155,106.807372
 185937171,Smartfren,telecommunication,Bandung,,,,-6.9435904,107.64931
 970764132,Smartfren Office,telecommunication,Medan,,,,3.6719446,98.6830799
+640066049,Smelting,,Gresik,,,,-7.1366582,112.6392067
 4246009411,Smesco Indonesia,company,,"Jalan Jenderal Gatot Subroto, 94, South Jakarta",,,-6.2417867,106.8362374
 639022521,Sociodreams,advertising_agency,Sidoarjo,"Griyo Taman Asri, Heliconia, EC 22, Sidoarjo",+6285134375758,https://www.sociodreams.com/,-7.3554769,112.6777772
 155962701,Sodetan Ciliwung,,Jakarta,,,,-6.2325612,106.8662444
@@ -1779,6 +1851,7 @@ osm_id,name,category,city,address,phone,website,latitude,longitude
 5006118423,Suraco Building,company,Makassar,"Jalan Andi Pangeran Pettarani, 20",+62 41-1432333,,-5.14514,119.4386107
 5116972923,Surganya Motor indonesia,company,Depok,,,,-6.4072401,106.8516156
 703199475,Suri Mulia Permai,,Surabaya,,,,-7.238464,112.693641
+1450074602,Suri Tani Pemuka,,Gresik,,,,-7.0998826,112.5926843
 927234553,Surya Cipta Jaya Makmur,,Bekasi,,,,-6.2690557,107.0068644
 6910823986,Surya Esa Perkasa,company,,,,,-6.2236481,106.822505
 1317822032,Surya Mandala,,Karawang,,,,-6.3420494,107.3390985
@@ -1823,6 +1896,7 @@ osm_id,name,category,city,address,phone,website,latitude,longitude
 122152135,Telkom Indonesia,company,,DKI Jakarta,,,-6.2193594,106.8165225
 6154722189,Telkom Indonesia STO & OPMC Pasar Baru,company,Tangerang,,,,-6.1690122,106.6264282
 311366982,Telkom Kandatel Bali,telecommunication,Denpasar,"Jalan Teuku Umar, Denpasar",,,-8.6690656,115.2142484
+1020877316,Telkom Kudus,telecommunication,Kudus,"Jalan Jend. Sudirman, Nganguk, Kramat, Kec. Kota Kudus,, 66-68, Kudus",,telkom.co.id,-6.8070714,110.8462417
 381655155,Telkom Lembong Bandung Office,company,Bandung,,,,-6.9167306,107.6112021
 120326895,Telkom Pasar Rebo,company,,,,,-6.3024416,106.8684469
 634635402,Telkom Rajawali,telecommunication,Bandung,,,,-6.9127089,107.5755824
@@ -1830,6 +1904,7 @@ osm_id,name,category,city,address,phone,website,latitude,longitude
 642178087,Telkom STO Sepanjang,telecommunication,Surabaya,,,,-7.3495453,112.6941641
 341681113,Telkom Simpang Lima Semarang,company,Semarang,,,,-6.9914277,110.4218943
 373180022,Telkomsel,telecommunication,Denpasar,"Jalan Gunung Agung, 30-34, Denpasar",,,-8.6531912,115.206261
+1323447767,Telkomsel,telecommunication,Kudus,"Jalan Jenderal Sudirman, 66-68",,,-6.8068328,110.8462361
 13999997002,Telkomsel Akses,telecommunication,Jakarta,,,,-6.2051886,106.7964743
 121370661,Telkomsel Card Production & Inventory,,Jakarta,"Jalan Tahi Bonar Simatupang, 4, Jakarta Selatan",,,-6.2932243,106.7995972
 236241828,Telkomsel Regional Bali Nusra,telecommunication,Denpasar,"Raya Puputan, 33, Denpasar",,,-8.6723011,115.2285898
@@ -1842,6 +1917,7 @@ osm_id,name,category,city,address,phone,website,latitude,longitude
 1089361497,Terminal Barang Denpasar,,Denpasar,"Jalan Cargo Permai, Denpasar",,,-8.6207694,115.18694
 669873136,Terminal Berlian,,Surabaya,,,,-7.206415,112.7268056
 1430916366,Terminal CDC-CCC,,Semarang,,,,-6.9549341,110.4260168
+705296587,Terminal Curah Kering dan Log,,Gresik,,,,-7.1506339,112.6601328
 983690158,Terminal Deli,,Semarang,,,,-6.9510582,110.4235847
 669873129,Terminal Jamrud,,Surabaya,,,,-7.1979908,112.729064
 669873118,Terminal Kalimas,,Surabaya,,,,-7.2095917,112.7362144
@@ -1858,6 +1934,7 @@ osm_id,name,category,city,address,phone,website,latitude,longitude
 138096139,Terminal Petikemas Surabaya,,Surabaya,,,,-7.2144608,112.7197886
 1466392015,Terminal Tanah Merah,,Jakarta,,,,-6.1410234,106.9072082
 29520887,Tetra Pak Stainless Equipment,,Jakarta,,,,-6.2101156,106.9578025
+1022369544,Texmaco,,Purwakarta,,,,-6.4641825,107.5642419
 6894784685,Thai Airways,company,,,,,-6.1940057,106.8236546
 6898407286,The British Institute,company,,,,,-6.2262851,106.8256245
 4458547911,The City Tower,company,,,,,-6.1991467,106.823518
@@ -1893,6 +1970,7 @@ osm_id,name,category,city,address,phone,website,latitude,longitude
 467923456,Tomton Busana,,Denpasar,"Jalan Imam Bonjol, 412, Denpasar",,,-8.6928678,115.1877535
 468408258,Toncity Furniture,,Denpasar,"Jalan Imam Bonjol, Denpasar",,,-8.7039997,115.1831665
 379900735,Toshiba,,Denpasar,"Jalan Soka, Denpasar",,,-8.6459197,115.2501727
+530201750,Toyota,company,Serang,,,,-6.0323668,106.079118
 381202770,Toyota Astra Motor,company,,,,,-6.1414815,106.8901077
 6219025287,Toyota Auto 2000,company,,,,,-6.1980367,106.8530333
 4438497612,Toyota Auto Finance,financial,Denpasar,"Jalan Bypass Gatot Subroto, Denpasar",,,-8.6389218,115.2043259
@@ -1921,6 +1999,7 @@ osm_id,name,category,city,address,phone,website,latitude,longitude
 522853241,UD Rimba Utama,company,Denpasar,"Jalan Bypass Gatot Subroto, Denpasar",,,-8.6373522,115.1776565
 342037860,UD Tirta Kencana,,Semarang,,,,-6.9717468,110.4288236
 1333439210,UD Tirta Kencana,,Semarang,,,,-6.97203,110.4288524
+476229042,UNITY PRINTING AND PACKAGING,,Kudus,KUDUS,+6285 186 186 555,,-6.8203075,110.8172469
 197781108,UPT Peralatan Dinas Bina Marga Prov. Sulawesi Selatan,,Makassar,,,,-5.0895844,119.5068151
 526702005,UPT Tempat Pengelolaan Sampah Terpadu,,Jakarta,DKI Jakarta,,,-6.1256001,106.8561783
 1126204055,UPTD Industri Logam,,Bandung,,,,-6.9348993,107.6995768
@@ -1969,6 +2048,7 @@ osm_id,name,category,city,address,phone,website,latitude,longitude
 1249643808,Wijaya Karya,,Tangerang,,,,-6.3073884,106.6877133
 696184898,Wilmar Nabati Indonesia,,Surabaya,,,,-7.1777484,112.6690245
 484640179,Wings Group Distribution Center,,Jakarta,,,,-6.2390546,106.8279419
+640066050,Wings Surya,,Gresik,,,,-7.1270252,112.6299514
 839531922,Wings Surya,,Surabaya,,,,-7.3095813,112.7874825
 517203887,Wirajaya,company,,,,,-6.3197525,106.8580435
 983690123,Woodsun Housewares Indonesia,,Semarang,"Jalan Gatot Subroto Kawasan Industri, Blok B No. 1, Semarang",,,-6.9915376,110.3637835
@@ -1995,9 +2075,11 @@ osm_id,name,category,city,address,phone,website,latitude,longitude
 11917158649,andimalik.id,it,Cikarang,,,,-6.3406829,107.054076
 6210540393,cermati.com,company,,,,,-6.1769095,106.8008235
 1472365761,distric 1,,Cikarang,,,,-6.2844981,107.1339055
+476228744,djarum,,Kudus,,,,-6.8344889,110.8778023
 7702115893,flitts,company,Tangerang,Jalan Boulevard Gading Serpong,,,-6.2475827,106.626586
 738127553,gudang kerupuk,,Medan,,,,3.5014083,98.7260348
 506077119,i-Cherry,,Medan,,,,3.6885527,98.7302323
+476228742,ice cream,,Kudus,,,,-6.8375762,110.8773506
 12280442797,iziRoam,company,,"Jalan Sultan Agung, 07, South Jakarta",+6281386303856,https://iziroam.com/,-6.20556,106.8340533
 6187462986,meiji,company,,,,,-6.1755058,106.8194294
 153314236,multicon indrajaya,,Jakarta,,,,-6.108132,106.9512137
@@ -2007,7 +2089,10 @@ osm_id,name,category,city,address,phone,website,latitude,longitude
 447020667,pabrik makanan,,Makassar,,,,-5.1317271,119.4354447
 155947040,pabrik tahu,,Jakarta,,,,-6.3099094,106.9208368
 447356391,pabrik tahu,,Jakarta,,,,-6.2827769,106.767639
+1214257348,perusahaan,company,Purwakarta,,,,-6.5542084,107.4054297
 340556953,rental buldozer,,Semarang,,,,-6.9662163,110.4279771
+1473355058,rungkut,,Kudus,,,,-6.8004496,110.8517868
+1473355484,rungkut,,Kudus,,,,-6.8161462,110.8356358
 528014078,save,,Jakarta,,,,-6.1166611,106.7658009
 1472130761,sier,,Surabaya,,,,-7.329558,112.7591146
 6203331099,skynet,company,,"Jalan DR Susilo I, 23, DKI Jakarta",+622129678222,,-6.165897,106.7932918
