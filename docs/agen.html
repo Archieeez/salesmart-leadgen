@@ -95,7 +95,7 @@ padding:8px 12px;margin:0 0 16px;font-size:12px;color:var(--ung)}
 <p class="cat">Ketiganya ketat pada hal yang berbeda, dan itu disengaja: sebuah kutipan pernah LOLOS lapis 3 karena pencocokan longgar menyamakan spasi tak-kasatmata dengan spasi biasa, tapi GUGUR di lapis 2 yang mencocokkan huruf demi huruf. Tidak ada lapisan yang boleh dibuang.</p>
 <h2>Yang terjadi pada tiap perusahaan</h2>
 <p class="cat">Kolom "Pembaca" adalah bacaan pertama; "Keputusan akhir" adalah yang bertahan setelah dibantah. Baris bertanda kuning berarti labelnya berubah.</p>
-<h3>jalan &ldquo;uji_agen&rdquo; &middot; 2026-09-03 04:43 UTC &middot; ditulis ke database</h3>
+<h3>jalan &ldquo;uji_agen&rdquo; &middot; <time datetime="2026-09-03T04:43:05+00:00">2026-09-03 04:43 UTC</time> &middot; ditulis ke database</h3>
 <article class="p">
 <div class="baris"><div class="nm">Indomaret</div><div class="gerak"><span class="sk">85</span><span class="tetap">bertahan</span><span class="bk">bukti 4/4</span></div></div>
 <h4>Yang dibantah pemeriksa</h4><div class="kor kosong">Pemeriksa menyerang bacaan ini dan tidak menemukan cacat. Tugasnya memang membantah, bukan menyetujui — jadi "nol koreksi" berarti serangannya patah, bukan tidak dicoba.</div>
@@ -120,7 +120,7 @@ padding:8px 12px;margin:0 0 16px;font-size:12px;color:var(--ung)}
 </tbody></table>
 <div class="tel"><span class="tl"><b>pembaca</b> 126.7 dtk &middot; 52,043 token &middot; 11 panggilan alat</span><span class="tl"><b>pemeriksa</b> 163.3 dtk &middot; 56,390 token &middot; 9 panggilan alat</span></div>
 </article>
-<h3>jalan &ldquo;artaboga2&rdquo; &middot; 2026-09-03 04:43 UTC &middot; ditulis ke database</h3>
+<h3>jalan &ldquo;artaboga2&rdquo; &middot; <time datetime="2026-09-03T04:43:05+00:00">2026-09-03 04:43 UTC</time> &middot; ditulis ke database</h3>
 <article class="p">
 <div class="baris"><div class="nm">PT Arta Boga Cemerlang</div><div class="gerak"><span class="sk">95</span><span class="tetap">bertahan</span><span class="bk">bukti 4/4</span></div></div>
 <h4>Yang dibantah pemeriksa <span class="jml">2</span></h4>
@@ -144,5 +144,15 @@ padding:8px 12px;margin:0 0 16px;font-size:12px;color:var(--ung)}
 <div class="tp"><div class="ang">72</div><div style="flex:1"><div class="lbl">Dinilai dari bukti situs</div><div class="ket">empat komponen, tiap komponen wajib punya kutipan</div></div><div class="bar" style="max-width:220px"><i style="width:3%"></i></div></div>
 <div class="tp"><div class="ang">56</div><div style="flex:1"><div class="lbl">Bukti cukup untuk dipercaya</div><div class="ket">minimal 3 dari 4 kutipan lolos verifikasi mesin</div></div><div class="bar" style="max-width:220px"><i style="width:2%"></i></div></div>
 </div>
-<div class="kaki">Dibuat otomatis dari <code>data/leads.db</code> tabel <code>jalan_agen</code> oleh <code>src/buat_agen.py</code> pada 03 Sep 2026 13:04. Tidak ada angka di halaman ini yang diketik tangan.</div>
+<div class="kaki">Dibuat otomatis dari <code>data/leads.db</code> tabel <code>jalan_agen</code> oleh <code>src/buat_agen.py</code> pada 03 Sep 2026 13:07. Tidak ada angka di halaman ini yang diketik tangan.</div>
+<script>
+(function(){
+  var n = document.querySelectorAll('time[datetime]');
+  for (var i = 0; i < n.length; i++){
+    var t = Date.parse(n[i].getAttribute('datetime'));
+    if (isNaN(t)) { continue; }
+    n[i].textContent = new Date(t).toLocaleString();
+  }
+})();
+</script>
 </div></body></html>

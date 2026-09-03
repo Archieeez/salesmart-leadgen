@@ -377,8 +377,9 @@ def bangun(con, pantau: bool) -> str:
                 jalan_kini = b["jalan"]
                 tulis = "ditulis ke database" if b["ditulis"] else "belum ditulis"
                 h.append(f'<h3>jalan &ldquo;{esc(jalan_kini)}&rdquo; &middot; '
-                         f'{esc(b["pada"][:16].replace("T", " "))} UTC &middot; '
-                         f'{tulis}</h3>')
+                         f'<time datetime="{esc(b["pada"])}">'
+                         f'{esc(b["pada"][:16].replace("T", " "))} UTC</time>'
+                         f' &middot; {tulis}</h3>')
             h.append(blok_perusahaan(b))
 
     h.append("<h2>Dari mana perusahaannya datang</h2>")
@@ -400,6 +401,20 @@ def bangun(con, pantau: bool) -> str:
              f'<code>src/buat_agen.py</code> pada '
              f'{datetime.now().strftime("%d %b %Y %H:%M")}. Tidak ada angka '
              f'di halaman ini yang diketik tangan.</div>')
+    # Jam ditulis UTC lalu diganti ke jam setempat pembaca. Halaman ini
+    # terbit lewat GitHub Pages dan bisa dibuka dari zona waktu mana pun,
+    # jadi mengonversinya saat membangkitkan halaman hanya memindahkan
+    # kesalahannya ke pembaca yang lain.
+    h.append("""<script>
+(function(){
+  var n = document.querySelectorAll('time[datetime]');
+  for (var i = 0; i < n.length; i++){
+    var t = Date.parse(n[i].getAttribute('datetime'));
+    if (isNaN(t)) { continue; }
+    n[i].textContent = new Date(t).toLocaleString();
+  }
+})();
+</script>""")
     h.append("</div></body></html>")
     return "\n".join(h)
 
