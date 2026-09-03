@@ -139,7 +139,22 @@ POLA_BUANG = re.compile(
     #   "Tanrise Westgate", "Pergudangan WIRA9" -> properti/kompleks
     r"|^pabrik$|^gudang$|^pergudangan\b|^kawasan\b"
     r"|industrial\s*(city|estate|park)|kawasan\s*industri"
-    r"|\bpergudangan\b|\bruko\b|\bsppbe\b)",
+    r"|\bpergudangan\b|\bruko\b|\bsppbe\b"
+
+    # INFRASTRUKTUR, bukan perusahaan. Ini panen `landuse=industrial` yang
+    # menyeretnya: pelabuhan, terminal BBM, pembangkit, pasar, dan stasiun
+    # semuanya berlahan industri, jadi ikut terjaring.
+    #
+    # Ditemukan 3 Sep 2026 saat memeriksa 202 lead yang siap masuk alur:
+    # delapan baris "SENTRA INDUSTRI ..." di Bandung ternyata SATU situs
+    # pemerintah kota (sentraindustribandung.com), bukan delapan perusahaan.
+    #
+    # DIJANGKAR DI AWAL NAMA dengan sengaja. Tanpa jangkar, perusahaan yang
+    # kebetulan memuat kata itu ikut terbuang. Dengan jangkar, yang kena
+    # hanyalah baris yang entitasnya MEMANG fasilitas itu -- "Pelabuhan
+    # Semen Indonesia" adalah dermaganya, bukan perusahaan semennya.
+    r"|^(sentra|kampung|pasar|terminal|pelabuhan|bandara|stasiun|depot"
+    r"|pltu|pltgu|pltd|pltmg|dermaga|jembatan)\b)",
     re.IGNORECASE,
 )
 

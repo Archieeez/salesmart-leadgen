@@ -24,22 +24,31 @@ Jalankan:  python bersihkan_db.py
 import re
 import shutil
 import sqlite3
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+import discover_osm  # noqa: E402
 
 # Script ada di src/, database ada di data/ — naik satu level lalu masuk data.
 # Tetap dikunci ke lokasi file .py, BUKAN ke folder kerja terminal.
 DB_PATH = Path(__file__).resolve().parent.parent / "data" / "leads.db"
 
-# --- Pola nama noise (sama dengan discover_osm.py v3) ----------------------
-POLA_NOISE = re.compile(
-    r"(service\s*cent(er|re)|customer\s*service|care\s*cent(er|re)"
-    r"|service,?\s*parts|authorized\s*service|pusat\s*servis"
-    r"|kelurahan|kecamatan|kantor\s*pos|puskesmas|polsek|polres"
-    r"|\bkpu\b|\bdprd\b|\bbpjs\b|\bsamsat\b"
-    r"|office\s*park|business\s*park|wisma\b|graha\b|menara\b|\bplaza\b)",
-    re.IGNORECASE,
-)
+# --- Pola nama noise: DIIMPOR, bukan disalin --------------------------------
+#
+# Dulu pola ini SALINAN dari discover_osm.py, dengan komentar yang
+# menyatakan "sama dengan discover_osm.py v3". Komentar itu benar sampai
+# 3 Sep 2026, hari polanya diperluas di discover_osm saja (^pabrik$,
+# kawasan industri, pergudangan, ruko, sppbe). Salinan di sini diam-diam
+# tertinggal, dan filter retroaktif melaporkan "0 dibuang" dengan penuh
+# percaya diri sementara "PT. Kawasan Industri Medan" dan "Green Lake City
+# Ruko Wallstreet" duduk tenang di tabel bersih.
+#
+# Dua sumber kebenaran untuk aturan yang sama selalu berakhir begitu, dan
+# yang tertinggal tidak pernah bersuara. Sekarang cuma ada satu.
+POLA_NOISE = discover_osm.POLA_BUANG
 
 # --- Pola kantor cabang / gerai ritel yang JELAS ----------------------------
 # Sengaja konservatif: hanya pola yang hampir mustahil salah tangkap.

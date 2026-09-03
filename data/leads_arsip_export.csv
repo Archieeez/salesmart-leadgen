@@ -1,8 +1,12 @@
 osm_id,name,category,city,phone,alasan
+195374404,-,warehouse,Makassar,,duplikat entitas (nama/telepon sama)
+257580239,-,industrial,Makassar,,duplikat entitas (nama/telepon sama)
+258038487,-,warehouse,Makassar,,duplikat entitas (nama/telepon sama)
 3786009242,AIA,insurance,Denpasar,,duplikat entitas (nama/telepon sama)
 6264009601,AIA,insurance,Tangerang,,duplikat entitas (nama/telepon sama)
 3251556085,AIA Insurance,insurance,Denpasar,,duplikat entitas (nama/telepon sama)
 4275635930,AIA Insurance,insurance,Denpasar,,duplikat entitas (nama/telepon sama)
+1430916357,AKR,industrial,Semarang,,duplikat entitas (nama/telepon sama)
 6357841390,Acer Service Center,company,,,nama cocok pola noise (gedung/pemerintah/service center)
 7890803873,Adira Finance,financial,Makassar,,duplikat entitas (nama/telepon sama)
 482882608,Aeon Mall,mall,,,"kategori mall (properti, bukan perusahaan)"
@@ -15,6 +19,8 @@ osm_id,name,category,city,phone,alasan
 99362081,Artha Gading Mall,mall,,+62 21 45858180; +62 21 45858182,"kategori mall (properti, bukan perusahaan)"
 9755222519,Ashta District 8,mall,,,"kategori mall (properti, bukan perusahaan)"
 13595525464,Astra,insurance,Bandung,,duplikat entitas (nama/telepon sama)
+357090872,Astra Daihatsu Motor,industrial,Karawang,,duplikat entitas (nama/telepon sama)
+622781309,Astra Daihatsu Motor,industrial,Karawang,,duplikat entitas (nama/telepon sama)
 6249962507,Astra Graphia,company,,,duplikat entitas (nama/telepon sama)
 3787169969,Asuransi Central Asia,insurance,Denpasar,,duplikat entitas (nama/telepon sama)
 363343441,Asuransi Jasa Raharja,insurance,Denpasar,,duplikat entitas (nama/telepon sama)
@@ -28,6 +34,7 @@ osm_id,name,category,city,phone,alasan
 159958655,Atria Mall,mall,,,"kategori mall (properti, bukan perusahaan)"
 119784539,Atrium Mall,mall,,+62 21 385 3985;+62 21 385 6650,"kategori mall (properti, bukan perusahaan)"
 6901370685,Avrist,company,,,duplikat entitas (nama/telepon sama)
+669873130,BJTI Port,industrial,Surabaya,,duplikat entitas (nama/telepon sama)
 6948625092,BNI Life,insurance,Jakarta,,duplikat entitas (nama/telepon sama)
 4373238608,BOLT! Zone Lippo Mall Puri,mall,,,"kategori mall (properti, bukan perusahaan)"
 6255540888,BRI Card Center,company,,,pola kantor cabang/gerai (bukan pengambil keputusan)
@@ -37,6 +44,9 @@ osm_id,name,category,city,phone,alasan
 121261399,Beltway Office Park Building A,company,,,nama cocok pola noise (gedung/pemerintah/service center)
 511618341,Beltway Office Park Building B,company,,,nama cocok pola noise (gedung/pemerintah/service center)
 121261402,Beltway Office Park Building C,company,,,nama cocok pola noise (gedung/pemerintah/service center)
+340410650,Bengkel Bubut Karya Usaha,works,Semarang,,duplikat entitas (nama/telepon sama)
+1333406772,Bengkel Bubut Karya Usaha,works,Semarang,,duplikat entitas (nama/telepon sama)
+1430916337,Berlian Eka Sakti Tangguh,industrial,Semarang,,duplikat entitas (nama/telepon sama)
 4148507697,Bintaro Plaza,mall,,,"kategori mall (properti, bukan perusahaan)"
 4240845890,Bintaro Trade Center,mall,,,"kategori mall (properti, bukan perusahaan)"
 355474629,Bintaro Xchange Mall 1,mall,,,"kategori mall (properti, bukan perusahaan)"
@@ -44,6 +54,7 @@ osm_id,name,category,city,phone,alasan
 7913603390,Biznet,telecommunication,Surabaya,,duplikat entitas (nama/telepon sama)
 539176312,Blok M Hub,mall,,,"kategori mall (properti, bukan perusahaan)"
 516775426,Blok M Square,mall,,,"kategori mall (properti, bukan perusahaan)"
+1444836011,Bogasari Flour Mills,industrial,Jakarta,,duplikat entitas (nama/telepon sama)
 6326910786,Brother Service Center,company,,,nama cocok pola noise (gedung/pemerintah/service center)
 118879679,Buaran Plaza,mall,,+62 21 86603438;+62 21 8660336,"kategori mall (properti, bukan perusahaan)"
 372062955,Bumiputera 1912,insurance,Denpasar,,duplikat entitas (nama/telepon sama)
@@ -72,7 +83,24 @@ osm_id,name,category,city,phone,alasan
 13047854601,DGTraffic (Branch Office),company,,,pola kantor cabang/gerai (bukan pengambil keputusan)
 6920828187,Daikin,company,,,duplikat entitas (nama/telepon sama)
 6326913885,Datascript Service Center,company,,,nama cocok pola noise (gedung/pemerintah/service center)
+1061093652,Delta Silicon 2,industrial,Cikarang,,duplikat entitas (nama/telepon sama)
+1431092011,Depot Air Ni Zannah,industrial,Bekasi,,nama cocok pola noise (gedung/pemerintah/service center)
+705296589,Depot BBM Gresik,industrial,Gresik,,nama cocok pola noise (gedung/pemerintah/service center)
+1360133929,Depot Bus Litha & CO,industrial,Makassar,,nama cocok pola noise (gedung/pemerintah/service center)
+30040717,Depot LPG Tanjung Priok,industrial,Jakarta,,nama cocok pola noise (gedung/pemerintah/service center)
+155962808,Depot Pertamina Halim,works,Jakarta,,nama cocok pola noise (gedung/pemerintah/service center)
+155962812,Depot Pertamina Halim,works,Jakarta,,duplikat entitas (nama/telepon sama)
+511874883,Dermaga Ex Presiden,industrial,Jakarta,,nama cocok pola noise (gedung/pemerintah/service center)
+850698164,Dermaga Linggom,industrial,Jakarta,,nama cocok pola noise (gedung/pemerintah/service center)
+1430916358,Dermaga Samudera 2,industrial,Semarang,,nama cocok pola noise (gedung/pemerintah/service center)
+705296580,Dharma Satya Nusantara,industrial,Surabaya,,duplikat entitas (nama/telepon sama)
+476642374,Djarum,works,Kudus,,duplikat entitas (nama/telepon sama)
+723179627,Djarum,industrial,Kudus,,duplikat entitas (nama/telepon sama)
+723179629,Djarum,industrial,Kudus,,duplikat entitas (nama/telepon sama)
+723179631,Djarum,industrial,Kudus,,duplikat entitas (nama/telepon sama)
+723179632,Djarum,industrial,Kudus,,duplikat entitas (nama/telepon sama)
 14093890917,Djarum,company,Bandung,,duplikat entitas (nama/telepon sama)
+5271050421,Duta Indah iconic,company,Tangerang,,duplikat entitas (nama/telepon sama)
 3181086706,ETrading Securities,financial,Jakarta,,duplikat entitas (nama/telepon sama)
 391476937,Emporium Pluit Mall,mall,,+62 21 66672999,"kategori mall (properti, bukan perusahaan)"
 4146957523,Emporium Pluit Mall Back Entrance,mall,,,"kategori mall (properti, bukan perusahaan)"
@@ -114,13 +142,29 @@ osm_id,name,category,city,phone,alasan
 377400062,Grapari,telecommunication,Bandung,,pola kantor cabang/gerai (bukan pengambil keputusan)
 6795217469,Grapari Kuta,telecommunication,Denpasar,,pola kantor cabang/gerai (bukan pengambil keputusan)
 13148918701,Grapari Telkomsel,telecommunication,Surabaya,,pola kantor cabang/gerai (bukan pengambil keputusan)
+6380674088,Green Lake City Ruko Wallstreet,company,,,nama cocok pola noise (gedung/pemerintah/service center)
 1075721000,Green Pramuka Square,mall,,,"kategori mall (properti, bukan perusahaan)"
+851723121,Green Sedayu Biz Park,industrial,Jakarta,,duplikat entitas (nama/telepon sama)
 1081176789,Green Sedayu Mall,mall,,,"kategori mall (properti, bukan perusahaan)"
+718980841,Gudang Depdiknas,industrial,Jakarta,,duplikat entitas (nama/telepon sama)
+1201028114,Gudang Depdiknas,warehouse,Jakarta,,duplikat entitas (nama/telepon sama)
 495425486,Gudang Garam,company,,,duplikat entitas (nama/telepon sama)
+701947629,Gudang Garam,industrial,Sidoarjo,,duplikat entitas (nama/telepon sama)
+541298328,Gudang Helm,warehouse,Tangerang,,duplikat entitas (nama/telepon sama)
+541298329,Gudang Helm,warehouse,Tangerang,,duplikat entitas (nama/telepon sama)
+541298331,Gudang Helm,warehouse,Tangerang,,duplikat entitas (nama/telepon sama)
+1333503978,Gudang Keramik,warehouse,Semarang,,duplikat entitas (nama/telepon sama)
+487947865,Gudang Pura,warehouse,Kudus,,duplikat entitas (nama/telepon sama)
+340579777,Gudang Toko Rajawali,warehouse,Semarang,,duplikat entitas (nama/telepon sama)
+357087588,HM Sampoerna,industrial,Karawang,,duplikat entitas (nama/telepon sama)
+619202529,HM Sampoerna,industrial,Surabaya,,duplikat entitas (nama/telepon sama)
 442212867,Harco Mangga Dua,mall,,,"kategori mall (properti, bukan perusahaan)"
 155110696,Harco Pasar Baru,mall,,+62 21 3804151,"kategori mall (properti, bukan perusahaan)"
 481725779,Holland Village,mall,,,"kategori mall (properti, bukan perusahaan)"
 9132842546,Holywings Group,company,Tangerang,,duplikat entitas (nama/telepon sama)
+622781306,Honda Prospect Motor,industrial,Karawang,,duplikat entitas (nama/telepon sama)
+933071052,Honda Prospect Motor,industrial,Karawang,,duplikat entitas (nama/telepon sama)
+933086157,Honda Prospect Motor,industrial,Karawang,,duplikat entitas (nama/telepon sama)
 650633752,Hotel Sibayak Internasional Sales Office,company,Medan,,pola kantor cabang/gerai (bukan pengambil keputusan)
 1098147938,Hublife,mall,,,"kategori mall (properti, bukan perusahaan)"
 4150307223,Hypermart Kelapa Gading Trade Center,mall,,,"kategori mall (properti, bukan perusahaan)"
@@ -134,9 +178,13 @@ osm_id,name,category,city,phone,alasan
 121716529,ITC Roxy Mas,mall,,+62 21 6305001; +62 21 6305002,"kategori mall (properti, bukan perusahaan)"
 6183158390,Indosat Ooredoo,telecommunication,Jakarta,,duplikat entitas (nama/telepon sama)
 6239516688,Indosat Ooredoo,telecommunication,Jakarta,,duplikat entitas (nama/telepon sama)
+1158487943,Instalasi Pengolahan Lumpur Tinja Duri Kosambi,industrial,Jakarta,,duplikat entitas (nama/telepon sama)
+1427562565,International Chemical Industry,industrial,Jakarta,,duplikat entitas (nama/telepon sama)
 10739467201,JNE,logistics,Jakarta,,duplikat entitas (nama/telepon sama)
 13529334492,JNE,logistics,Bekasi,,duplikat entitas (nama/telepon sama)
+1370426941,JNE Cabang Bandung,industrial,Bandung,,pola kantor cabang/gerai (bukan pengambil keputusan)
 3786009232,JNE Express,company,Denpasar,,duplikat entitas (nama/telepon sama)
+7483359285,JNE Warehouse,company,Sidoarjo,,duplikat entitas (nama/telepon sama)
 120908549,Jakarta Design Center,mall,,+62 21 5495130; +62 21 5495116,"kategori mall (properti, bukan perusahaan)"
 6471389611,Jakarta International Customer Service Institute,company,,+62215668061,nama cocok pola noise (gedung/pemerintah/service center)
 139858797,Jamkrindo,financial,Denpasar,,duplikat entitas (nama/telepon sama)
@@ -150,9 +198,17 @@ osm_id,name,category,city,phone,alasan
 154839201,KOJA TRADE MALL,mall,,,"kategori mall (properti, bukan perusahaan)"
 6274386106,KPU,company,,,nama cocok pola noise (gedung/pemerintah/service center)
 455241403,Kalibata City Square,mall,,+62 21 7975111; +62 21 7994880,"kategori mall (properti, bukan perusahaan)"
+292602206,Kantor,works,Medan,,duplikat entitas (nama/telepon sama)
+3933631160,Kantor,works,Semarang,,duplikat entitas (nama/telepon sama)
+4409596783,Kantor Cabang Indovision Denpasar,works,Denpasar,+62 815-7848-7046,pola kantor cabang/gerai (bukan pengambil keputusan)
+1320914940,Kantor MAXIM Cabang Karawang,company,Karawang,,pola kantor cabang/gerai (bukan pengambil keputusan)
 5068211209,Kelapa Gading Mall 3,mall,,,"kategori mall (properti, bukan perusahaan)"
 121919510,Kelapa Gading Trade Center,mall,,,"kategori mall (properti, bukan perusahaan)"
+1205943167,Kereta Cepat Indonesia–China,industrial,Bekasi,,duplikat entitas (nama/telepon sama)
+29392414,Kimia Farma,industrial,Bandung,,duplikat entitas (nama/telepon sama)
 121551457,Kimia Farma,company,,,duplikat entitas (nama/telepon sama)
+462153228,Kimia Farma,warehouse,Denpasar,,duplikat entitas (nama/telepon sama)
+1385692287,Kimia Farma Trading & Distribusi Cabang Makassar,industrial,Makassar,,pola kantor cabang/gerai (bukan pengambil keputusan)
 176433009,Kota Kasablanka,mall,,+62 21 83709888; +62 21 83706888,"kategori mall (properti, bukan perusahaan)"
 228763259,Kuningan City,mall,,+62 21 57905555; +62 21 57950906,"kategori mall (properti, bukan perusahaan)"
 6185591491,LG Customer Service,company,,14010,nama cocok pola noise (gedung/pemerintah/service center)
@@ -198,6 +254,7 @@ osm_id,name,category,city,phone,alasan
 881967800,Mall@Bassura,mall,,,"kategori mall (properti, bukan perusahaan)"
 391511052,Mangga Dua Square,mall,,+6281388713737,"kategori mall (properti, bukan perusahaan)"
 4152540737,Maple Park,mall,,,"kategori mall (properti, bukan perusahaan)"
+669873140,Masaji Tatanan Container,industrial,Surabaya,,duplikat entitas (nama/telepon sama)
 6190337088,Maspion Service Center,company,,+62216242112,nama cocok pola noise (gedung/pemerintah/service center)
 511934520,Mega Glodok Kemayoran,mall,,,"kategori mall (properti, bukan perusahaan)"
 534501112,Mega Mall Ciputat,mall,,,"kategori mall (properti, bukan perusahaan)"
@@ -210,76 +267,148 @@ osm_id,name,category,city,phone,alasan
 121129315,Menjangan Sakti,company,,,duplikat entitas (nama/telepon sama)
 293807197,Menteng Central,mall,,,"kategori mall (properti, bukan perusahaan)"
 481734017,Menteng Huis,mall,,,"kategori mall (properti, bukan perusahaan)"
+669873120,Meratus,industrial,Surabaya,,duplikat entitas (nama/telepon sama)
 121827997,Metro Sunter Plaza,mall,,,"kategori mall (properti, bukan perusahaan)"
 6953819186,Mitsubishi,company,,,duplikat entitas (nama/telepon sama)
 6218997088,"Mitsubishi Sales, Service, Parts",company,,+6285899997762,nama cocok pola noise (gedung/pemerintah/service center)
 6230792493,NS Battery Care Center,company,,,nama cocok pola noise (gedung/pemerintah/service center)
 6318643786,Nesco Service Center,company,,,nama cocok pola noise (gedung/pemerintah/service center)
+1444836020,New Priok Container Terminal 1,industrial,Jakarta,,duplikat entitas (nama/telepon sama)
+705296575,Nippon Paint,industrial,Surabaya,,duplikat entitas (nama/telepon sama)
 6948432494,Nokia,company,,,duplikat entitas (nama/telepon sama)
 447136631,One Belpark Mall,mall,,,"kategori mall (properti, bukan perusahaan)"
 1153739789,One District,mall,,,"kategori mall (properti, bukan perusahaan)"
 483395918,One Satrio,mall,,+62215220568,"kategori mall (properti, bukan perusahaan)"
+476214104,PASAR BITINGAN,company,Kudus,,nama cocok pola noise (gedung/pemerintah/service center)
 499661124,PDAM Kebalen,company,Bekasi,,duplikat entitas (nama/telepon sama)
 499661138,PDAM Kebalen,company,Bekasi,,duplikat entitas (nama/telepon sama)
 518494087,PDAM Kebalen,company,Bekasi,,duplikat entitas (nama/telepon sama)
 636819072,PDAM Tirtanadi,company,Medan,,duplikat entitas (nama/telepon sama)
+821269419,PDAM Tirtanadi,industrial,Medan,,duplikat entitas (nama/telepon sama)
 523247692,PDAM Tirtanadi Cabang Tuasan,company,Medan,,pola kantor cabang/gerai (bukan pengambil keputusan)
 343507744,PELNI,company,Semarang,,duplikat entitas (nama/telepon sama)
 421834551,PELNI,company,Surabaya,,duplikat entitas (nama/telepon sama)
 524571822,PIK Avenue,mall,,,"kategori mall (properti, bukan perusahaan)"
+564964971,PLN,company,,,duplikat entitas (nama/telepon sama)
 6222915885,PLN Distribusi Jakarta Raya,company,,,duplikat entitas (nama/telepon sama)
+1111244300,PLN UIKL Sulawesi (Unit Induk Pembangkitan & Penyaluran Sulawesi),industrial,Makassar,,duplikat entitas (nama/telepon sama)
+1111244301,PLN UIKL Sulawesi (Unit Induk Pembangkitan & Penyaluran Sulawesi),industrial,Makassar,,duplikat entitas (nama/telepon sama)
+524347910,PLTD Senayan,industrial,Jakarta,,nama cocok pola noise (gedung/pemerintah/service center)
+847485082,PLTD Tallo Lama,industrial,Makassar,,nama cocok pola noise (gedung/pemerintah/service center)
+549604296,PLTGU Bekasi Power,industrial,Cikarang,,nama cocok pola noise (gedung/pemerintah/service center)
+705296597,PLTGU Gresik,industrial,Gresik,,nama cocok pola noise (gedung/pemerintah/service center)
+694792625,PLTGU Jababeka,industrial,Cikarang,,nama cocok pola noise (gedung/pemerintah/service center)
+929881495,PLTGU Jawa-2 Power Project,industrial,Jakarta,,nama cocok pola noise (gedung/pemerintah/service center)
+29367652,PLTGU Muara Karang,industrial,Jakarta,,nama cocok pola noise (gedung/pemerintah/service center)
+662173157,PLTGU Priok,industrial,Jakarta,,nama cocok pola noise (gedung/pemerintah/service center)
+570139147,PLTGU Tambak Lorok,industrial,Semarang,,nama cocok pola noise (gedung/pemerintah/service center)
+894351150,PLTGU Tambak Lorok,industrial,Semarang,,duplikat entitas (nama/telepon sama)
+960747876,PLTU DSS,industrial,Karawang,,nama cocok pola noise (gedung/pemerintah/service center)
+530303610,PLTU Jawa 7,industrial,Serang,,nama cocok pola noise (gedung/pemerintah/service center)
+109924603,PLTU Tello,industrial,Makassar,,nama cocok pola noise (gedung/pemerintah/service center)
+1098612561,PLTU Tjiwi Kimia,industrial,Mojokerto,,nama cocok pola noise (gedung/pemerintah/service center)
 718995682,PPD,company,,,duplikat entitas (nama/telepon sama)
 3483900179,PT Asuransi Berdikari,insurance,Semarang,,duplikat entitas (nama/telepon sama)
 1361081721,PT BAKTI MANDIRI PERKASA,company,Surabaya,+62318296878,duplikat entitas (nama/telepon sama)
 12600062005,PT BAKTI MANDIRI PERKASA,company,Surabaya,+62318296878,duplikat entitas (nama/telepon sama)
 502718047,PT Bitung Inti Cemerlang (produksi Sendal),company,Tangerang,,duplikat entitas (nama/telepon sama)
+179746317,PT CMI,works,Bandung,,duplikat entitas (nama/telepon sama)
+179746318,PT CMI,works,Bandung,,duplikat entitas (nama/telepon sama)
 505707255,PT Djarum,company,,,duplikat entitas (nama/telepon sama)
+1434832042,"PT Fajar Surya Wisesa,Tbk",works,Cikarang,,duplikat entitas (nama/telepon sama)
 4351202175,PT Gudang Garam Tbk,company,Medan,,duplikat entitas (nama/telepon sama)
 5161242221,PT HM Sampoerna,company,Tangerang,,duplikat entitas (nama/telepon sama)
 540895307,PT HORISA (produksi jasa pencucian baju dan celana),company,Tangerang,,duplikat entitas (nama/telepon sama)
 4193069267,PT Herona Express,company,Surabaya,,duplikat entitas (nama/telepon sama)
 11290263610,PT International Chemical Industry,company,,,duplikat entitas (nama/telepon sama)
+13725585616,PT Maxistar Intermoda Indonesia,company,,,duplikat entitas (nama/telepon sama)
 514832250,PT PAM Lyonnaise Jaya,company,,,duplikat entitas (nama/telepon sama)
 493576274,PT PELNI,company,,,duplikat entitas (nama/telepon sama)
 4193079066,PT PLN Nusantara Power,company,Surabaya,+62318283180,duplikat entitas (nama/telepon sama)
 13344028580,PT PLN Nusantara Power,company,Surabaya,+62 31 8283180,duplikat entitas (nama/telepon sama)
+522853271,PT Padi Mas Prima,warehouse,Denpasar,,duplikat entitas (nama/telepon sama)
 389863872,PT Perusahaan Perdagangan Indonesia,company,Semarang,,duplikat entitas (nama/telepon sama)
 500830526,PT SWPP (produksi bingkai photo ekspor),company,Tangerang,,duplikat entitas (nama/telepon sama)
 3096759043,PT Sangkuriang Internasional,company,Bandung,,duplikat entitas (nama/telepon sama)
+642402491,PT Sinar Surabaya Sakti,works,Sidoarjo,,duplikat entitas (nama/telepon sama)
+642244132,PT Surabaya Indah Permai,works,Sidoarjo,,duplikat entitas (nama/telepon sama)
+642244334,PT Surabaya Indah Permai,works,Sidoarjo,,duplikat entitas (nama/telepon sama)
 507535939,PT TELKOM,company,,,duplikat entitas (nama/telepon sama)
+402035786,PT TOYOTA MOTOR MANUFACTURING INDONESIA,industrial,Jakarta,,duplikat entitas (nama/telepon sama)
 405594191,PT Telkom Indonesia,telecommunication,Denpasar,,duplikat entitas (nama/telepon sama)
+155961374,PT UNITED TRACTOR,industrial,Jakarta,,duplikat entitas (nama/telepon sama)
 421572118,PT Waskita Karya (Persero),company,Bandung,,duplikat entitas (nama/telepon sama)
 195766469,PT. Asabri,company,Makassar,,duplikat entitas (nama/telepon sama)
+1434981598,PT. Astra Otoparts,works,Cikarang,,duplikat entitas (nama/telepon sama)
+13189822636,PT. Astra Otoparts,works,Cikarang,,duplikat entitas (nama/telepon sama)
 9861885970,PT. BAKTI MANDIRI PERKASA,company,Surabaya,,duplikat entitas (nama/telepon sama)
+6864127822,PT. Benindo Winotama Persada,works,Tangerang,+62 21 5971 4759,duplikat entitas (nama/telepon sama)
+1040760656,PT. Charoen Pokphand Indonesia tbk.,industrial,Medan,,duplikat entitas (nama/telepon sama)
+155961690,PT. Cicero,industrial,Jakarta,,duplikat entitas (nama/telepon sama)
 5589552521,PT. Dharma Satya Nusantara,company,,,duplikat entitas (nama/telepon sama)
+155961697,PT. Eka Boga Inti/ Hokben,industrial,Jakarta,,duplikat entitas (nama/telepon sama)
+155957607,PT. Gamya,industrial,Jakarta,,duplikat entitas (nama/telepon sama)
 629367822,PT. Garuda Indonesia,company,Medan,,duplikat entitas (nama/telepon sama)
+11494049995,PT. Gemala Kempa Daya,works,Jakarta,,duplikat entitas (nama/telepon sama)
+155961699,PT. Indomarco,works,Jakarta,,duplikat entitas (nama/telepon sama)
 9677551922,PT. Insatek Maju Bersama - Administration Office,company,Bandung,+62 853 2222,duplikat entitas (nama/telepon sama)
 4574370098,PT. JIAEC,company,Depok,,duplikat entitas (nama/telepon sama)
+970764126,PT. Kawasan Industri Medan (Persero),company,Medan,,nama cocok pola noise (gedung/pemerintah/service center)
+155961710,PT. Mustika Ratu Tbk,industrial,Jakarta,,duplikat entitas (nama/telepon sama)
+1385588789,"PT. Nippon Indosari Corpindo, Tbk.",industrial,Makassar,,duplikat entitas (nama/telepon sama)
 13343995007,PT. PLN Nusantara Power,company,Surabaya,+62 31 8283180,duplikat entitas (nama/telepon sama)
+540899969,PT. Panton Pile,works,Tangerang,,duplikat entitas (nama/telepon sama)
 195254527,PT. Pelni Cabang Makassar,company,Makassar,,pola kantor cabang/gerai (bukan pengambil keputusan)
 498689344,PT. Pertamina,company,,,duplikat entitas (nama/telepon sama)
+1463032990,PT. Surya Madistrindo,industrial,Makassar,,duplikat entitas (nama/telepon sama)
 519589978,PT. TELKOM,company,,,duplikat entitas (nama/telepon sama)
+197882852,PT. United Tractors,company,Makassar,,duplikat entitas (nama/telepon sama)
+540899965,PT. Waskita Karya,works,Tangerang,,duplikat entitas (nama/telepon sama)
+487947862,PURA,works,Kudus,,duplikat entitas (nama/telepon sama)
 153751746,PX Pavilion,mall,,+62 21 5577777; +62 21 58358605,"kategori mall (properti, bukan perusahaan)"
+155949211,Pabrik Tahu,industrial,Jakarta,,duplikat entitas (nama/telepon sama)
+1507151943,Pabrik beton - Herstellung von Transportbeton - production of ready-mixed concrete,industrial,Makassar,,duplikat entitas (nama/telepon sama)
 125583159,Pacific Place Mall,mall,,+62 21 5152299; +62 21 51400988,"kategori mall (properti, bukan perusahaan)"
+1333415873,Palma Jaya,warehouse,Semarang,,duplikat entitas (nama/telepon sama)
 585901767,Pamulang Square,mall,,,"kategori mall (properti, bukan perusahaan)"
 4150378467,Pamulang Square,mall,,,"kategori mall (properti, bukan perusahaan)"
 6281159190,Panasonic Service Center,company,,+628041111111,nama cocok pola noise (gedung/pemerintah/service center)
 1096477744,Paradise Walk Serpong,mall,,+62 81250001300,"kategori mall (properti, bukan perusahaan)"
 1381288979,Park 8 Boulevard,mall,,,"kategori mall (properti, bukan perusahaan)"
+1089361187,Pasar Anyar Sari,industrial,Denpasar,,nama cocok pola noise (gedung/pemerintah/service center)
 4150442843,Pasar Jaya. PD,mall,,,"kategori mall (properti, bukan perusahaan)"
+156917199,Pasar Mangga Besar,industrial,Jakarta,,nama cocok pola noise (gedung/pemerintah/service center)
 529377488,Pasar Pagi Mangga Dua,mall,,,"kategori mall (properti, bukan perusahaan)"
 157360113,Pasar Raya Manggarai,mall,,,"kategori mall (properti, bukan perusahaan)"
 4244014955,Pasaraya,mall,,,"kategori mall (properti, bukan perusahaan)"
 516775418,Pasaraya Grande Blok M,mall,,,"kategori mall (properti, bukan perusahaan)"
 456688289,Pegadaian,company,Surabaya,,duplikat entitas (nama/telepon sama)
 6155479292,Pegadaian,company,Tangerang,,duplikat entitas (nama/telepon sama)
+705296588,Pelabuhan Barang Gresik,industrial,Gresik,,nama cocok pola noise (gedung/pemerintah/service center)
+489926413,Pelabuhan Ikan Nizam Zachman,industrial,Jakarta,,nama cocok pola noise (gedung/pemerintah/service center)
+317545071,Pelabuhan Makassar,industrial,Makassar,,nama cocok pola noise (gedung/pemerintah/service center)
+669873128,Pelabuhan Penyeberangan Ujung-Kamal,industrial,Surabaya,,nama cocok pola noise (gedung/pemerintah/service center)
+907371755,Pelabuhan Rakyat Paotere,industrial,Makassar,,nama cocok pola noise (gedung/pemerintah/service center)
+705296593,Pelabuhan Semen Indonesia,industrial,Gresik,,nama cocok pola noise (gedung/pemerintah/service center)
+1433576940,Pelabuhan Sunda Kelapa,industrial,Jakarta,,nama cocok pola noise (gedung/pemerintah/service center)
+1430916359,Pelabuhan Tanjung Emas,industrial,Semarang,,nama cocok pola noise (gedung/pemerintah/service center)
+30088883,Pelabuhan Tanjung Priok,industrial,Jakarta,,nama cocok pola noise (gedung/pemerintah/service center)
 6335494597,Pelni,company,,,duplikat entitas (nama/telepon sama)
 321796467,Permodalan Nasional Madani,company,Denpasar,,duplikat entitas (nama/telepon sama)
+138096133,Pertamina,industrial,Surabaya,,duplikat entitas (nama/telepon sama)
+292809863,Pertamina,works,Medan,,duplikat entitas (nama/telepon sama)
 342684105,Pertamina,company,Semarang,,duplikat entitas (nama/telepon sama)
+374819659,Pertamina,industrial,Denpasar,,duplikat entitas (nama/telepon sama)
+669873134,Pertamina,industrial,Surabaya,,duplikat entitas (nama/telepon sama)
+705296595,Pertamina,industrial,Gresik,,duplikat entitas (nama/telepon sama)
 1381042644,Pertamina,company,Surabaya,,duplikat entitas (nama/telepon sama)
 6230792398,Pertamina,company,,,duplikat entitas (nama/telepon sama)
 6239456597,Pertamina Training and Consulting,company,,,duplikat entitas (nama/telepon sama)
+1211749306,Perusahaan,company,Purwakarta,,duplikat entitas (nama/telepon sama)
+1214257346,Perusahaan,company,Purwakarta,,duplikat entitas (nama/telepon sama)
+1214257347,Perusahaan,company,Purwakarta,,duplikat entitas (nama/telepon sama)
 119762428,Perusahaan Listrik Negara,company,Bandung,,duplikat entitas (nama/telepon sama)
+6222915388,Petrokimia Gresik,company,,,duplikat entitas (nama/telepon sama)
 6898406886,Phapros,company,,,duplikat entitas (nama/telepon sama)
 11575592949,Pintu Masuk Utama Pusat Grosir Metro Tanah Abang,mall,,,"kategori mall (properti, bukan perusahaan)"
 381937362,Plasa Telkom,telecommunication,Denpasar,,pola kantor cabang/gerai (bukan pengambil keputusan)
@@ -315,6 +444,7 @@ osm_id,name,category,city,phone,alasan
 211383578,Pluit Village,mall,,,"kategori mall (properti, bukan perusahaan)"
 121370647,Poins Square,mall,,+62 21 7691 018,"kategori mall (properti, bukan perusahaan)"
 6213079012,Politron Service Center,company,,,nama cocok pola noise (gedung/pemerintah/service center)
+14061116202,Polytron,company,,,duplikat entitas (nama/telepon sama)
 158663677,Pondok Gede Plaza,mall,,,"kategori mall (properti, bukan perusahaan)"
 83489551,Pondok Indah Mall 1,mall,,+62 21 7506750;+62 21 7506969,"kategori mall (properti, bukan perusahaan)"
 83489722,Pondok Indah Mall 2,mall,,+62 21 7506750,"kategori mall (properti, bukan perusahaan)"
@@ -326,8 +456,15 @@ osm_id,name,category,city,phone,alasan
 3226250963,Prudential,insurance,Medan,,duplikat entitas (nama/telepon sama)
 3846419319,Prudential,insurance,Denpasar,,duplikat entitas (nama/telepon sama)
 4236863557,Prudential,insurance,Denpasar,,duplikat entitas (nama/telepon sama)
+13668306456,Prudential,insurance,Serang,,duplikat entitas (nama/telepon sama)
 12317663863,Pt hamengku karya,company,Denpasar,,duplikat entitas (nama/telepon sama)
+1111244356,Pt. Sermani Steel Corporation,industrial,Makassar,,duplikat entitas (nama/telepon sama)
+340573487,Pt. The Koei Liem,works,Semarang,,duplikat entitas (nama/telepon sama)
+1333544833,Pt. The Koei Liem,works,Semarang,,duplikat entitas (nama/telepon sama)
+1333544834,Pt. The Koei Liem,works,Semarang,,duplikat entitas (nama/telepon sama)
+1333544838,Pt. The Koei Liem,works,Semarang,,duplikat entitas (nama/telepon sama)
 155954026,Pulogadung Trade Center,mall,,+62 21 460 0387;+62 21 4605117,"kategori mall (properti, bukan perusahaan)"
+695665210,Pupuk Kujang,industrial,Karawang,,duplikat entitas (nama/telepon sama)
 493624223,Puri Indah Mall,mall,,+62 21 5822 582,"kategori mall (properti, bukan perusahaan)"
 4242314085,Puri Indah Mall (Back Entrance),mall,,,"kategori mall (properti, bukan perusahaan)"
 4242318761,Puri Indah Mall (Main Entrance),mall,,,"kategori mall (properti, bukan perusahaan)"
@@ -345,17 +482,39 @@ osm_id,name,category,city,phone,alasan
 155956221,Rawamangun Square,mall,,,"kategori mall (properti, bukan perusahaan)"
 494066797,Roxy Square,mall,,+62 21 5695 3500,"kategori mall (properti, bukan perusahaan)"
 217614698,Ruko Galaxy 2,mall,,,"kategori mall (properti, bukan perusahaan)"
+528267112,Rumah Kaca,warehouse,Jakarta,,duplikat entitas (nama/telepon sama)
+421884156,SENTRA INDUSTRI IKAN PINDANG CIJAWURA,industrial,Bandung,,nama cocok pola noise (gedung/pemerintah/service center)
+422428668,SENTRA INDUSTRI KASUR CIGONDEWAH,industrial,Bandung,,nama cocok pola noise (gedung/pemerintah/service center)
+421884486,SENTRA INDUSTRI OPAK CIGONDEWAH,industrial,Bandung,,nama cocok pola noise (gedung/pemerintah/service center)
+422427539,SENTRA INDUSTRI OVEN CIMINDI,industrial,Bandung,,nama cocok pola noise (gedung/pemerintah/service center)
+422428091,SENTRA INDUSTRI SIKAT DAN SAPU CIBIRU,industrial,Bandung,,nama cocok pola noise (gedung/pemerintah/service center)
+421882917,SENTRA INDUSTRI TELUR ASIN DERWATI,industrial,Bandung,,nama cocok pola noise (gedung/pemerintah/service center)
+421906645,SENTRA INDUSTRI TEMPE DAN ONCOM SITU SAEUR,industrial,Bandung,,nama cocok pola noise (gedung/pemerintah/service center)
+381615286,SND Racing,company,Bandung,,duplikat entitas (nama/telepon sama)
+381615776,SND Racing,works,Bandung,,duplikat entitas (nama/telepon sama)
+669873103,SPIL,industrial,Surabaya,,duplikat entitas (nama/telepon sama)
+669873105,SPIL,industrial,Surabaya,,duplikat entitas (nama/telepon sama)
+669873113,SPIL,industrial,Surabaya,,duplikat entitas (nama/telepon sama)
+669873123,SPIL,industrial,Surabaya,,duplikat entitas (nama/telepon sama)
 119772927,STC Senayan,mall,,,"kategori mall (properti, bukan perusahaan)"
 9647417071,Sansure,company,,,duplikat entitas (nama/telepon sama)
 97550317,Sarinah,mall,,,"kategori mall (properti, bukan perusahaan)"
+873115073,Sayap Mas Utama,industrial,Jakarta,,duplikat entitas (nama/telepon sama)
 489332606,Seasons City,mall,,,"kategori mall (properti, bukan perusahaan)"
 4148837498,Seasons City (Main Entrance),mall,,,"kategori mall (properti, bukan perusahaan)"
+705296585,Semen Indonesia,industrial,Gresik,,duplikat entitas (nama/telepon sama)
 48036723,Senayan City,mall,,+62 21 7237979; +62 21 7233399,"kategori mall (properti, bukan perusahaan)"
 754516405,Senayan Park,mall,,,"kategori mall (properti, bukan perusahaan)"
+422445507,Sentra Bengkel Las dan Bubut Jalan Bogor,industrial,Bandung,,nama cocok pola noise (gedung/pemerintah/service center)
+1433665745,Sentra Bisnis Terpadu I & II,industrial,Jakarta,,nama cocok pola noise (gedung/pemerintah/service center)
+488751934,Sentra Bisnis Terpadu III,industrial,Jakarta,,nama cocok pola noise (gedung/pemerintah/service center)
+420622652,Sentra Industri Baju Bayi Hantap,industrial,Bandung,,nama cocok pola noise (gedung/pemerintah/service center)
+422435166,Sentra Industri Peralatan Dapur Warungmuncang,industrial,Bandung,,nama cocok pola noise (gedung/pemerintah/service center)
 374691145,Sequislife,insurance,Denpasar,,duplikat entitas (nama/telepon sama)
 3755982238,Sequislife,insurance,Denpasar,,duplikat entitas (nama/telepon sama)
 319553890,Service Centre Omega,company,,,nama cocok pola noise (gedung/pemerintah/service center)
 121129218,Setiabudi One,mall,,+62 21 522 0568,"kategori mall (properti, bukan perusahaan)"
+357047151,Sharp Electronics Indonesia,industrial,Jakarta,,duplikat entitas (nama/telepon sama)
 6393447191,"Sharp Service, Parts",company,,+62 800 1 225 588,nama cocok pola noise (gedung/pemerintah/service center)
 4245860760,Sinarmas Land Plaza,company,,,nama cocok pola noise (gedung/pemerintah/service center)
 4245864705,Sinarmas Land Plaza II,company,,,nama cocok pola noise (gedung/pemerintah/service center)
@@ -364,12 +523,23 @@ osm_id,name,category,city,phone,alasan
 6354486986,Smartfren,telecommunication,Jakarta,,duplikat entitas (nama/telepon sama)
 4235112862,Soepomo Office Park,company,,,nama cocok pola noise (gedung/pemerintah/service center)
 4160750876,St.Moritz,mall,,,"kategori mall (properti, bukan perusahaan)"
+1329266564,Stasiun CNG Bitung,industrial,Tangerang,,nama cocok pola noise (gedung/pemerintah/service center)
+1329266561,"Stasiun Gas Bitung 2, 3 & 4",industrial,Tangerang,,nama cocok pola noise (gedung/pemerintah/service center)
+1329266560,Stasiun Kompresor Gas,industrial,Tangerang,,nama cocok pola noise (gedung/pemerintah/service center)
+703199464,Stasiun Penerima Gas Tandes,industrial,Surabaya,,nama cocok pola noise (gedung/pemerintah/service center)
+1293941896,Stasiun Pengumpul Gas Lapangan Jatinegara,industrial,Jakarta,,nama cocok pola noise (gedung/pemerintah/service center)
+1499530267,Stasiun Peti Kemas Ronggowarsito,industrial,Semarang,,nama cocok pola noise (gedung/pemerintah/service center)
+1430916340,Stasiun Pompa Drainase Kali Semarang,industrial,Semarang,,nama cocok pola noise (gedung/pemerintah/service center)
+8417996318,Stasiun Transmisi TV Indosiar Semarang,telecommunication,Semarang,,nama cocok pola noise (gedung/pemerintah/service center)
 318780679,Sucofindo,company,Denpasar,,duplikat entitas (nama/telepon sama)
+1386543275,Sumber Alfaria Trijaya,industrial,Tangerang,,duplikat entitas (nama/telepon sama)
 391510441,Summarecon Mall Kelapa Gading,mall,,+62 21 4531 101; +62 21 4531 305,"kategori mall (properti, bukan perusahaan)"
 263303987,Sunter Mall,mall,,+62 21 65832000; +62 21 65833000,"kategori mall (properti, bukan perusahaan)"
 398161546,TELKOM,telecommunication,Tangerang,,duplikat entitas (nama/telepon sama)
 494970788,TELKOM,telecommunication,Jakarta,,duplikat entitas (nama/telepon sama)
+1333439218,TOKO Kaca Surya,warehouse,Semarang,,duplikat entitas (nama/telepon sama)
 119901489,Tamini Square,mall,,+62 21 87785888;+62 21 87785999,"kategori mall (properti, bukan perusahaan)"
+6894760985,Tanto,company,,,duplikat entitas (nama/telepon sama)
 288427518,Telkom,telecommunication,Medan,,duplikat entitas (nama/telepon sama)
 288427527,Telkom,telecommunication,Medan,,duplikat entitas (nama/telepon sama)
 429077898,Telkom,telecommunication,Surabaya,,duplikat entitas (nama/telepon sama)
@@ -393,6 +563,7 @@ osm_id,name,category,city,phone,alasan
 573849800,Telkom Semarang,telecommunication,Semarang,,duplikat entitas (nama/telepon sama)
 455254839,Telkomsel,telecommunication,Surabaya,,duplikat entitas (nama/telepon sama)
 565277690,Telkomsel,telecommunication,Semarang,,duplikat entitas (nama/telepon sama)
+1323447767,Telkomsel,telecommunication,Kudus,,duplikat entitas (nama/telepon sama)
 6183160192,Telkomsel,telecommunication,Jakarta,,duplikat entitas (nama/telepon sama)
 6222915785,Telkomsel,telecommunication,Jakarta,,duplikat entitas (nama/telepon sama)
 7913603389,Telkomsel,telecommunication,Surabaya,,duplikat entitas (nama/telepon sama)
@@ -402,25 +573,64 @@ osm_id,name,category,city,phone,alasan
 9891586217,Telkomsel,telecommunication,Jakarta,,duplikat entitas (nama/telepon sama)
 9891594217,Telkomsel,telecommunication,Jakarta,,duplikat entitas (nama/telepon sama)
 391516115,Teras Benhil,mall,,+62 21 29017377; +62 21 29017366,"kategori mall (properti, bukan perusahaan)"
+850698168,Terminal BBM Pertamina,industrial,Jakarta,,nama cocok pola noise (gedung/pemerintah/service center)
+34637858,Terminal BBM Plumpang,industrial,Jakarta,,nama cocok pola noise (gedung/pemerintah/service center)
+239759320,Terminal BBM Sanggaran,industrial,Denpasar,,nama cocok pola noise (gedung/pemerintah/service center)
+1430916368,Terminal BBM Semarang,industrial,Semarang,,nama cocok pola noise (gedung/pemerintah/service center)
+761092785,Terminal BBM Ujung Berung,industrial,Bandung,,nama cocok pola noise (gedung/pemerintah/service center)
+1089361497,Terminal Barang Denpasar,industrial,Denpasar,,nama cocok pola noise (gedung/pemerintah/service center)
+669873136,Terminal Berlian,industrial,Surabaya,,nama cocok pola noise (gedung/pemerintah/service center)
+1430916366,Terminal CDC-CCC,industrial,Semarang,,nama cocok pola noise (gedung/pemerintah/service center)
+705296587,Terminal Curah Kering dan Log,industrial,Gresik,,nama cocok pola noise (gedung/pemerintah/service center)
+983690158,Terminal Deli,industrial,Semarang,,nama cocok pola noise (gedung/pemerintah/service center)
+669873129,Terminal Jamrud,industrial,Surabaya,,nama cocok pola noise (gedung/pemerintah/service center)
+669873118,Terminal Kalimas,industrial,Surabaya,,nama cocok pola noise (gedung/pemerintah/service center)
+1430916364,Terminal LPG Semarang,industrial,Semarang,,nama cocok pola noise (gedung/pemerintah/service center)
+669873131,Terminal Mirah,industrial,Surabaya,,nama cocok pola noise (gedung/pemerintah/service center)
+1444836009,Terminal Mobil Barang Tanah Merdeka,industrial,Jakarta,,nama cocok pola noise (gedung/pemerintah/service center)
+669873137,Terminal Nilam,industrial,Surabaya,,nama cocok pola noise (gedung/pemerintah/service center)
+1430916356,Terminal Nusantara,industrial,Semarang,,nama cocok pola noise (gedung/pemerintah/service center)
+1430916367,Terminal Pelabuhan Dalam,industrial,Semarang,,nama cocok pola noise (gedung/pemerintah/service center)
+755078033,Terminal Penumpang Tanjung Emas,industrial,Semarang,,nama cocok pola noise (gedung/pemerintah/service center)
+423759971,Terminal Petikemas Makassar,industrial,Makassar,,nama cocok pola noise (gedung/pemerintah/service center)
+546802395,Terminal Petikemas Semarang,industrial,Semarang,,nama cocok pola noise (gedung/pemerintah/service center)
+93850847,Terminal Petikemas Surabaya,industrial,Surabaya,,nama cocok pola noise (gedung/pemerintah/service center)
+138096139,Terminal Petikemas Surabaya,industrial,Surabaya,,duplikat entitas (nama/telepon sama)
+1466392015,Terminal Tanah Merah,industrial,Jakarta,,nama cocok pola noise (gedung/pemerintah/service center)
 121706055,Thamrin City,mall,,+62 21 3900988; +62 21 3917879,"kategori mall (properti, bukan perusahaan)"
 509344832,The Amboja,mall,,,"kategori mall (properti, bukan perusahaan)"
 391402193,The Dharmawangsa Square,mall,,+62 21 7205066; +62 21 72787250,"kategori mall (properti, bukan perusahaan)"
 157348300,The Park,mall,,+62 21 7822611; +62 21 7824822,"kategori mall (properti, bukan perusahaan)"
 6335494720,Tjokro Bersaudara,company,,,duplikat entitas (nama/telepon sama)
+1333544837,Toko Besi GC,works,Semarang,,duplikat entitas (nama/telepon sama)
+568349987,Toyota Motor Manufacturing Indonesia,industrial,Karawang,,duplikat entitas (nama/telepon sama)
 9728504528,Trade Mall Harco Glodok,mall,,,"kategori mall (properti, bukan perusahaan)"
 215103532,Transmart Carrefour,mall,,+62 21 78840111; +62 21 78840113,"kategori mall (properti, bukan perusahaan)"
 11945113650,Travoy Hub,mall,,,"kategori mall (properti, bukan perusahaan)"
 563917064,Tribeca Central Park Mall Jakarta,mall,,+62 21 56988888,"kategori mall (properti, bukan perusahaan)"
+5217967121,Tritan Point,company,Bandung,,duplikat entitas (nama/telepon sama)
 3207441967,Tupperware,company,Denpasar,,duplikat entitas (nama/telepon sama)
+1333439210,UD Tirta Kencana,works,Semarang,,duplikat entitas (nama/telepon sama)
+873115067,United Tractors,industrial,Jakarta,,duplikat entitas (nama/telepon sama)
 12608985068,Upperclicks,advertising_agency,,+62 813 1193 3191,duplikat entitas (nama/telepon sama)
 34334670,WTC Mangga Dua,mall,,+62 21 30018888; +62 21 30018887,"kategori mall (properti, bukan perusahaan)"
 4150989116,WTC Mangga Dua Side Entrance,mall,,,"kategori mall (properti, bukan perusahaan)"
 812921901,Wang Plaza Kedoya,mall,,,"kategori mall (properti, bukan perusahaan)"
+893617913,Warehouse Blibli Bandung,warehouse,Bandung,,duplikat entitas (nama/telepon sama)
+839531922,Wings Surya,industrial,Surabaya,,duplikat entitas (nama/telepon sama)
 1156199167,Wisma Bakrie,company,,,nama cocok pola noise (gedung/pemerintah/service center)
 121129250,Wisma Budi,company,,,nama cocok pola noise (gedung/pemerintah/service center)
 13741826002,Wisma Lumbini,company,,,nama cocok pola noise (gedung/pemerintah/service center)
 558959127,XL Axiata,telecommunication,Semarang,,duplikat entitas (nama/telepon sama)
+13452623262,XL Center,telecommunication,Sidoarjo,,pola kantor cabang/gerai (bukan pengambil keputusan)
+449495897,YKK,industrial,Cikarang,,duplikat entitas (nama/telepon sama)
+6274289689,YKK,company,,,duplikat entitas (nama/telepon sama)
+476228744,djarum,works,Kudus,,duplikat entitas (nama/telepon sama)
 4443683984,graha str building,company,,,nama cocok pola noise (gedung/pemerintah/service center)
 13764007601,hp Service Point,company,,,pola kantor cabang/gerai (bukan pengambil keputusan)
+347262012,pabrik Tahu,industrial,Jakarta,,duplikat entitas (nama/telepon sama)
+447356391,pabrik tahu,industrial,Jakarta,,duplikat entitas (nama/telepon sama)
+1214257348,perusahaan,company,Purwakarta,,duplikat entitas (nama/telepon sama)
+1473355484,rungkut,industrial,Kudus,,duplikat entitas (nama/telepon sama)
 780563902,ÆON Mall,mall,,+622150959888,"kategori mall (properti, bukan perusahaan)"
 498717449,Élysee,mall,,,"kategori mall (properti, bukan perusahaan)"
