@@ -1,0 +1,38 @@
+Terima kasih atas tanggapannya.
+
+Sebelum menjawab, izinkan saya meluruskan satu hal supaya tidak salah paham: daftar calon pelanggan itu sendiri tidak dikomersialkan. Daftar tersebut adalah catatan kerja internal tim penjualan kami, tidak dijual, tidak diserahkan kepada pihak lain, dan tidak menjadi bagian dari produk. Yang bersifat komersial adalah produk perangkat lunaknya (Salesmart, aplikasi manajemen tim penjualan lapangan). Daftar ini hanya dipakai untuk menentukan perusahaan mana yang kami hubungi untuk menawarkan produk tersebut.
+
+Berikut susunan daftarnya. Satu baris = satu perusahaan.
+
+A. Kolom identitas perusahaan
+1. Nama perusahaan
+2. Alamat / kota
+3. Situs web resmi
+4. Nomor telepon kantor
+
+B. Kolom hasil penilaian kami sendiri. Bukan data statistik, tidak berasal dari publikasi BPS, seluruhnya kesimpulan kami dari membaca situs resmi perusahaan yang bersangkutan:
+5. Model distribusi (punya jaringan sendiri / lewat distributor / tidak ada)
+6. Ada tidaknya tim penjualan lapangan
+7. Perkiraan skala operasi
+8. Kecocokan dengan produk kami
+9. Skor kebutuhan 0-100, hasil penjumlahan nomor 5 sampai 8
+10. Kutipan kalimat dari situs resmi perusahaan sebagai bukti tiap poin
+11. Catatan dan status tindak lanjut (sudah dihubungi / belum / tidak sesuai)
+
+Contoh satu baris yang sudah terisi. Perusahaan ini kami temukan dari sumber lain, bukan dari publikasi BPS:
+
+Nama: Garudafood | Situs: garudafood.com | Telepon: 021-7290110 | Model distribusi: jaringan sendiri | Tim lapangan: ada | Skor kebutuhan: 90 | Bukti: kutipan dari halaman resmi perusahaan.
+
+BAGIAN MANA YANG AKAN BERASAL DARI PUBLIKASI BPS
+
+Hanya nomor 1 dan 2, yaitu nama perusahaan dan alamatnya, dan hanya sebagai daftar awal yang tetap kami verifikasi ulang satu per satu ke situs resmi masing-masing perusahaan. Nomor 3 sampai 11 tidak ada di publikasi BPS dan tidak mungkin diambil dari sana.
+
+Yang tidak kami ambil dari publikasi: nilai produksi, jumlah tenaga kerja, kode KBLI, dan seluruh angka statistik lainnya. Kami juga tidak memakai data perseorangan, hanya identitas badan usaha.
+
+Ukurannya: daftar kami sekarang berisi 991 entri perusahaan yang berasal dari sumber lain (OpenStreetMap dan situs resmi perusahaan), 72 di antaranya sudah dinilai lengkap. Dari publikasi BPS kami memperkirakan menambah beberapa ribu nama sebagai kandidat awal.
+
+Satu hal yang perlu saya sampaikan terbuka: pengembangan alat ini saya kerjakan di repositori kode yang bersifat publik, sehingga berkas kerjanya saat ini dapat dilihat umum. Apabila izin diberikan, saya siap menyanggupi bahwa baris yang berasal dari publikasi BPS tidak akan disertakan dalam berkas publik tersebut, atau mengikuti ketentuan lain yang BPS tetapkan. Saya menyampaikannya di awal supaya tidak menjadi persoalan di kemudian hari.
+
+Pertanyaan saya tetap sama: apabila bentuk penggunaan seperti di atas dapat diizinkan, bagaimana cara memperoleh izin tertulisnya? Apakah lewat layanan berbayar di PST, perjanjian penggunaan data tersendiri, pengajuan ke Direktorat Statistik Industri selaku penyusun, atau kanal lain? Apabila tidak dapat diizinkan, mohon disampaikan juga, supaya saya tidak memakai publikasi tersebut.
+
+Terima kasih banyak atas waktunya.
