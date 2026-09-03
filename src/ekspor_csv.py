@@ -26,6 +26,9 @@ Pakai:
 import csv
 import sqlite3
 import sys
+from pathlib import Path as _P
+sys.path.insert(0, str(_P(__file__).resolve().parent))
+import sys
 from pathlib import Path
 
 BASE = Path(__file__).resolve().parent
@@ -71,6 +74,9 @@ EKSPOR = {
 }
 
 
+import publik  # noqa: E402
+
+
 def tabel_ada(con, nama: str) -> bool:
     return bool(con.execute(
         "SELECT 1 FROM sqlite_master WHERE type='table' AND name=?", (nama,)
@@ -111,6 +117,33 @@ def main():
 
     con.close()
     print("\nSelesai.")
+
+    # Gerbang terakhir, dan sengaja di sini: berkas publik baru saja
+    # ditulis, jadi inilah satu-satunya titik yang tahu isinya persis.
+    # Kalau bocor, ia exit 1 — lihat gerbang_publik() di bawah.
+    gerbang_publik()
+
+
+
+def gerbang_publik():
+    """Tolak jalan kalau ada baris berasal-BPS di keluaran publik.
+
+    Ditaruh SESUDAH penulisan, bukan sebelum: yang perlu diperiksa adalah
+    berkas yang baru saja ditulis, bukan yang lama. Kalau bocor, exit 1
+    supaya jalur apa pun yang memanggilnya ikut berhenti dan tidak ada
+    yang diam-diam melanjutkan ke commit.
+
+    Lihat src/publik.py untuk kenapa garis ini bukan kehati-hatian
+    pilihan sendiri.
+    """
+    masalah = publik.periksa()
+    if not masalah:
+        return
+    print("\nEKSPOR DITOLAK — ada yang tidak boleh terbit:")
+    for m in masalah:
+        print(f"  - {m}")
+    print("\nBerkas sudah ditulis, TAPI JANGAN DI-COMMIT sebelum ini beres.")
+    raise SystemExit(1)
 
 
 if __name__ == "__main__":

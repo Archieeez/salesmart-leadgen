@@ -44,3 +44,15 @@ data/*.pdf
 # dokumen bahan + hasil antara agen; hasil akhirnya sudah masuk leads.db
 # lewat terapkan.py, dan dokumennya bisa dirakit ulang kapan saja.
 kerja/
+
+# Baris nama+alamat yang diambil dari Direktori Industri Manufaktur BPS.
+# TIDAK dilacak, dan alasannya bukan ukuran berkas.
+#
+# BPS menjawab 3 Sep 2026 bahwa memakai nama dan alamat tidak butuh izin
+# tertulis -- yang dilarang adalah REPRODUKSI/PENERBITAN KEMBALI
+# publikasinya. Repo ini publik, jadi meng-commit baris itu adalah persis
+# penerbitan kembali. Kesanggupan menahannya sudah dikirim ke BPS.
+#
+# Penegaknya di src/publik.py; ekspor CSV menolak jalan kalau ada yang
+# bocor ke berkas publik.
+data/bps.db
