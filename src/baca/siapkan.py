@@ -62,6 +62,9 @@ import nilai_kebutuhan as nk       # noqa: E402
 import rubrik                      # noqa: E402
 import saring_bukti as sb          # noqa: E402
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import prompt as pr                # noqa: E402
+
 DATA = BASE / "data"
 
 # Konteks yang HANYA diketahui dari memori proyek, bukan dari situsnya.
@@ -212,15 +215,39 @@ def main():
                        "chars": len(dok)})
         print(f"{len(dok):>7}  {nama}")
 
+    # Prompt kedua agen dibangkitkan, TIDAK diketik ulang tiap kali alur
+    # dijalankan. Alasannya sama persis dengan alasan aturan.md
+    # dibangkitkan dari rubrik.PITA: yang diketik ulang akan melenceng,
+    # dan melencengnya tidak akan terlihat. Lihat baca/prompt.py.
+    aturan_f = (out / "aturan.md").resolve()
+    daftar_f = (out / "daftar.json").resolve()
+    for d in daftar:
+        dok_f = Path(d["file"])
+        sl = dok_f.stem
+        (out / f"prompt-pembaca-{sl}.md").write_text(
+            pr.prompt_pembaca(dok_f, aturan_f,
+                              (out / f"pembaca-{sl}.json").resolve(),
+                              d["nama"]), encoding="utf-8")
+        (out / f"prompt-pemeriksa-{sl}.md").write_text(
+            pr.prompt_pemeriksa(dok_f, aturan_f,
+                                (out / f"pembaca-{sl}.json").resolve(),
+                                daftar_f,
+                                (out / f"hasil-{sl}.json").resolve(),
+                                d["nama"]), encoding="utf-8")
+
     (out / "aturan.md").write_text(
         nk.SISTEM.format(aturan=nk.bangun_aturan()) + ATURAN_TAMBAHAN,
         encoding="utf-8")
     (out / "daftar.json").write_text(
         json.dumps(daftar, ensure_ascii=False, indent=1), encoding="utf-8")
     print(f"\n{len(daftar)} dokumen -> {out.resolve()}")
-    print("Berikutnya: jalankan agen pembaca + pemeriksa, simpan hasilnya")
-    print(f"sebagai {out}/hasil.json, lalu:")
-    print(f"  python src/baca/terapkan.py --dir {args.keluar}")
+    print("Prompt kedua agen ikut dibangkitkan (prompt-pembaca-*.md,")
+    print("prompt-pemeriksa-*.md) — pakai isinya apa adanya, jangan")
+    print("mengarang prompt sendiri.")
+    print("\nBerikutnya:")
+    print("  1. jalankan agen PEMBACA dengan prompt-pembaca-*.md")
+    print("  2. jalankan agen PEMERIKSA dengan prompt-pemeriksa-*.md")
+    print(f"  3. python src/baca/selesaikan.py --dir {args.keluar}")
 
 
 if __name__ == "__main__":

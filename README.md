@@ -19,8 +19,8 @@ Semua data bersumber legal, level perusahaan saja (patuh UU PDP).
 |------|--------|
 | Phase 0 — kalibrasi rubric manual | Selesai |
 | Phase 1 — pipeline data tanpa AI | Berjalan |
-| Phase 2 — ekstraksi sinyal via LLM | Belum |
-| Phase 3 — orkestrasi agen | Belum |
+| Phase 2 — ekstraksi sinyal via LLM | Berjalan (tanpa API — dibaca agen di sesi) |
+| Phase 3 — orkestrasi agen | Berjalan (`src/baca/`, skill `nilai-lead`) |
 | Phase 4 — pelacakan hasil & evaluasi pivot | Belum |
 
 Google Places API menunggu verifikasi billing. Sementara ini memakai
@@ -76,6 +76,10 @@ Dua database, sengaja dipisah:
 | `src/pindah_bukti.py` | Pindahkan `halaman_bukti` ke `bukti.db` (sekali jalan) |
 | `src/saring_bukti.py` | Penyaring pola: susun antrian baca dari ratusan situs |
 | `src/buat_antrian.py` | Hasilkan `docs/antrian.html` — dashboard untuk orang sales |
+| `src/baca/siapkan.py` | Rakit bahan baca + bangkitkan prompt kedua agen |
+| `src/baca/prompt.py` | Prompt pembaca & pemeriksa, dibangkitkan dari `rubrik.PITA` |
+| `src/baca/terapkan.py` | Verifikasi kutipan lalu tulis ke tabel `kebutuhan` |
+| `src/baca/selesaikan.py` | Gabung, verifikasi, tulis, bangkitkan ulang tampilan |
 
 Cara menjalankan: lihat `CARA_JALANKAN.md`.
 

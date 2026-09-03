@@ -196,14 +196,26 @@ Menghasilkan satu `.md` per perusahaan, plus `aturan.md` yang
 dibangkitkan dari `rubrik.PITA` (jadi tidak mungkin melenceng dari
 rubrik) dan `daftar.json`.
 
+Perintah ini sekaligus membangkitkan **prompt kedua agennya**:
+`prompt-pembaca-<slug>.md` dan `prompt-pemeriksa-<slug>.md`.
+
+Prompt itu dibangkitkan dari `rubrik.PITA` dan `rubrik.PENANDA_TOLAK`,
+sama seperti `aturan.md` — jadi label sah, bentuk field `penolakan`, dan
+daftar jebakan ikut berubah begitu rubriknya berubah. **Pakai isinya apa
+adanya; jangan mengetik prompt sendiri.** Sampai 3 Sep 2026 prompt itu
+diketik ulang tiap kali, artinya isinya bergantung pada ingatan orang
+yang mengetiknya saat itu.
+
 ### 2. Jalankan dua lapis agen
 
 **PEMBACA** menilai keempat komponen, wajib mengutip verbatim dari
-bagian "TEKS HALAMAN TERPANEN".
+bagian "TEKS HALAMAN TERPANEN". Hasilnya `pembaca-<slug>.json`.
 **PEMERIKSA** diberi satu tugas: **MEMBANTAH** penilaian pembaca —
-bukan meninjau, bukan menyempurnakan.
+bukan meninjau, bukan menyempurnakan. Hasilnya `hasil-<slug>.json`.
 
-Simpan hasil akhirnya sebagai `kerja/b1/hasil.json`.
+Satu berkas per perusahaan, bukan satu berkas bersama: dua agen yang
+jalan bersamaan akan saling menimpa, dan yang hilang tidak akan terlihat
+karena berkas yang tersisa tetap JSON yang sah.
 
 Kenapa dua lapis: pembaca tunggal terbukti berulang kali mengklaim
 melebihi buktinya. Nutrifood turun 80→70 (kalimat kesediaan penempatan
@@ -211,19 +223,26 @@ pelamar dikira klaim cakupan), Alfamart 85→70 (instruksi ke konsumen
 dikira bukti tim lapangan), TransTRACK pola 90 → bacaan 15 (statistik
 pelanggan dikira statistik perusahaan).
 
-### 3. Verifikasi mesin, lalu tulis
+### 3. Verifikasi mesin, tulis, bangkitkan ulang — satu perintah
 
 ```
-python src/baca/terapkan.py --dir kerja/b1            # periksa dulu
-python src/baca/terapkan.py --dir kerja/b1 --tulis    # baru tulis
+python src/baca/selesaikan.py --dir kerja/b1            # periksa dulu
+python src/baca/selesaikan.py --dir kerja/b1 --tulis    # baru tulis
 ```
+
+`selesaikan.py` menggabungkan `hasil-*.json`, memanggil `terapkan.py`,
+lalu membangkitkan ulang antrian + dasbor + CSV sekaligus. Sebelumnya
+kelima langkah itu diketik satu-satu, dan lupa satu tidak menimbulkan
+error — ia cuma membuat dasbor menampilkan angka kemarin.
+
+`terapkan.py` masih bisa dipanggil sendiri kalau cuma mau memverifikasi.
 
 Lapis ketiga: tiap kutipan dicek benar-benar ADA di dokumen. Mode
 `--tulis` **menolak jalan** kalau ada satu saja kutipan yang gagal —
 penilaian yang kutipannya tidak bisa ditemukan tidak bisa
 dipertanggungjawabkan waktu orang sales ditanya "dari mana Anda tahu?".
 
-### 4. Bangkitkan ulang tampilannya
+### 4. Kalau menjalankan langkahnya sendiri-sendiri
 
 ```
 python src/buat_antrian.py
