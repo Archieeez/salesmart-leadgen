@@ -330,6 +330,65 @@ PENANDA_CABANG = re.compile(
 JENDELA_CABANG = 200
 
 
+# Nama badan hukum yang berdiri di dalam teks halaman.
+#
+# KENAPA PERLU: 4 Sep 2026 pemanen nomor hampir menyimpan 021 3503881
+# sebagai kontak Agel Langgeng. Nomor itu berdiri persis di bawah
+# "PT. Kapal Api Global" di kapalapiglobal.com -- situs INDUK. Bentuk
+# nomornya sah, halamannya sah, label "Kantor Pusat" pun ada; yang
+# membuatnya salah cuma satu hal, dan hal itu TERTULIS di halaman:
+# nama perusahaan lain.
+#
+# Kesalahan yang sama sudah pernah nyaris masuk lewat pronas.co.id
+# (nomor PT Bahtera Wiraniaga Internusa). Dua kali, dan dua-duanya
+# ketahuan cuma karena ada orang yang memeriksa dengan tangan.
+PENANDA_BADAN_HUKUM = re.compile(
+    r"\b(?:PT|CV|UD)\.?\s+((?:[A-Z][\w'’\-]*)(?:\s+[A-Z][\w'’\-]*){0,5})")
+
+# Sejauh mana ke belakang nama badan hukum dicari dari posisi nomornya.
+# Selebar blok alamat: "PT X, Jl ..., Kota ..., Telp." muat, tapi tidak
+# menyeberang ke blok perusahaan berikutnya.
+JENDELA_BADAN = 240
+
+# Kata yang tidak membedakan satu perusahaan dari yang lain.
+_KATA_UMUM = {"PT", "CV", "UD", "TBK", "PERSERO", "INDONESIA", "GROUP",
+              "GLOBAL", "JAYA", "UTAMA", "MAKMUR", "SEJAHTERA", "MANDIRI",
+              "ABADI", "PERKASA", "INTERNATIONAL", "NUSANTARA", "PRIMA"}
+
+
+def _token(nama: str) -> set:
+    """Kata pembeda dari sebuah nama perusahaan."""
+    kata = re.findall(r"[A-Za-z][\w'’]*", (nama or "").upper())
+    return {k for k in kata if len(k) > 3 and k not in _KATA_UMUM}
+
+
+def entitas_asing(nama_lead: str, teks: str, posisi: int) -> str | None:
+    """Nama badan hukum LAIN yang berdiri paling dekat di depan nomor.
+
+    Return nama itu kalau ditemukan, None kalau tidak ada nama sama
+    sekali ATAU nama terdekatnya memang perusahaan yang dicari.
+
+    KETIADAAN NAMA BUKAN ALASAN MENOLAK. Halaman kontak Cimory menulis
+    "CIMORY TOWER ... Contact: (021) 5874630" tanpa menyebut badan
+    hukumnya sama sekali, dan nomor itu benar. Yang menolak hanyalah
+    nama LAIN yang hadir -- bukan nama sendiri yang absen.
+    """
+    if not nama_lead:
+        return None
+    milik = _token(nama_lead)
+    if not milik:
+        return None
+    awal = max(0, posisi - JENDELA_BADAN)
+    kandidat = list(PENANDA_BADAN_HUKUM.finditer(teks[awal:posisi]))
+    if not kandidat:
+        return None
+    m = kandidat[-1]                       # yang paling dekat ke nomor
+    ketemu = m.group(1)
+    if _token(ketemu) & milik:
+        return None
+    return f"PT {ketemu}".strip()
+
+
 def _label_terdekat(teks: str, posisi: int) -> str | None:
     """Label mana yang berdiri PALING DEKAT di depan sebuah nomor.
 
@@ -367,7 +426,7 @@ PENANDA_DAFTAR_CABANG = re.compile(
 AMBANG_DAFTAR_CABANG = 5
 
 
-def cari_kontak(website: str) -> dict:
+def cari_kontak(website: str, nama: str = "") -> dict:
     """
     Telusuri halaman kontak sampai ketemu JALUR KANTOR.
 
@@ -434,6 +493,28 @@ def cari_kontak(website: str) -> dict:
         kelas_awal = [
             (n, TURUN.get(label[pos], k) if k == "langsung" else k, pos)
             for n, k, pos in kelas_awal]
+
+        # NOMOR YANG BERDIRI DI BAWAH NAMA BADAN HUKUM LAIN DILAPORKAN,
+        # TIDAK DIBUANG. Percobaan pertama membuangnya, dan uji A/B ke 61
+        # nomor tersimpan langsung menolaknya: lima hasil berubah dan tiga
+        # di antaranya MUNDUR -- PT. Erela kembali ke nomor OSM yang sudah
+        # terbukti salah, TransTRACK turun dari jalur kantor ke seluler,
+        # dan R2plan jadi TERPOTONG SATU DIGIT karena nomor utuhnya dibuang
+        # lalu potongan yang tumpang tindih menang.
+        #
+        # Sebabnya jelas sesudah dilihat: halaman perusahaan wajar menyebut
+        # mitra, klien, atau anggota grup di dekat nomornya sendiri. Nama
+        # lain yang hadir BUKAN bukti nomor itu milik orang lain.
+        #
+        # Jadi sinyalnya disimpan, bukan dipakai memutus. Ia muncul di
+        # ringkasan jalan supaya orang yang menulis ke database melihatnya
+        # -- persis kasus Agel Langgeng, yang tertangkap 4 Sep 2026 hanya
+        # karena ada orang yang memeriksa dengan tangan.
+        for n, k, pos in kelas_awal:
+            asing = entitas_asing(nama, teks, pos)
+            if asing:
+                log(f"{n} berdiri di bawah {asing!r}, bukan {nama!r}")
+                catatan.setdefault("entitas_asing", []).append(f"{n}: {asing}")
 
         # Daftar cabang? Nomornya sah semua, tapi tidak satu pun kantor
         # pusat -- dan yang muncul pertama cuma kebetulan. Halaman kontak
@@ -618,6 +699,7 @@ def main():
 
     ringkasan = {"ok": 0, "tidak_ketemu": 0, "robots_disallowed": 0}
     kelas_hitung = {"langsung": 0, "seluler": 0, "layanan": 0}
+    peringatan_asing = []
 
     for i, row in enumerate(rows, 1):
         nama = row["nama"].strip()
@@ -625,10 +707,13 @@ def main():
         if not website:
             continue
 
-        hasil = cari_kontak(website)
+        hasil = cari_kontak(website, nama)
         hasil["nama"] = nama
         hasil["sumber_discovery"] = row.get("sumber", "")
 
+        asing = hasil.pop("entitas_asing", None)
+        if asing:
+            peringatan_asing.append((nama, asing))
         ringkasan[hasil["status"]] = ringkasan.get(hasil["status"], 0) + 1
         kk = hasil["kelas_kontak"]
         if kk:
@@ -663,6 +748,17 @@ def main():
     print(f"hit rate umum          {ok / total:6.1%}  ({ok}/{total})")
     print(f"hit rate JALUR KANTOR  {langsung / total:6.1%}  ({langsung}/{total})"
           f"   <-- angka yang dinilai")
+
+    # Peringatan situs induk. TIDAK menghentikan apa pun -- sinyalnya
+    # terlalu berisik untuk memutus (lihat cari_kontak), tapi cukup
+    # berguna untuk dibaca orang sebelum menulis ke database.
+    if peringatan_asing:
+        print(f"\nPERIKSA TANGAN — {len(peringatan_asing)} nomor berdiri di "
+              "bawah nama badan hukum LAIN:")
+        for nama, daftar in peringatan_asing:
+            for baris in daftar:
+                print(f"  {nama[:34]:<36} {baris[:70]}")
+        print("  (nomor tetap disimpan; ini bukan vonis, cuma sinyal)")
 
 
 if __name__ == "__main__":
