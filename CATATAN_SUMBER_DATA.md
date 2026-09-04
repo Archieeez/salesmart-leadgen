@@ -474,6 +474,48 @@ antrian tanpa jejak, `publik.periksa()` menyalak terpisah untuk asal
 yang kosong, dan `terapkan.py` menolak menulis baris yang asalnya tidak
 tercatat.
 
+### LANGIT-LANGIT KOLAM BPS, DIUKUR 4 SEPTEMBER 2026
+
+Pemanen diperbaiki tiga kali hari itu — frasa daftar-titik dikenali,
+duplikat garis-miring dibuang, halaman diambil bergilir per jenis.
+Bungasari Flour Mills membuktikan dampaknya: ia mendapat halaman
+`distribusi` (where-to-buy) yang sebelumnya tak dikenali, dan 50 dari
+65 poin bacaannya berasal dari halaman itu.
+
+Maka 47 kandidat BPS yang belum dinilai dipanen ulang. **Cakupannya
+tidak berubah sama sekali**: 46 dari 47 masih kehilangan halaman
+`distribusi` atau `karier`. Dari 47 situs, seluruhnya hanya menghasilkan
+3 halaman distribusi dan 11 halaman karier.
+
+**Itu bukan celah pemanen.** Produsen menengah Indonesia memang tidak
+menerbitkan halaman jaringan distribusi maupun lowongan di situsnya.
+Berhenti mencoba mengejarnya lewat pemanen; halamannya tidak ada.
+
+Konsekuensinya langsung ke rubrik: `dist_model` (35 poin) dan
+`field_sales` (30 poin) adalah dua komponen berbobot terbesar, dan
+keduanya paling sering disangga oleh dua jenis halaman itu.
+
+#### Tapi kolamnya tidak sia-sia — dan angkanya mengoreksi dugaan awal
+
+Dari 16 lead berasal-BPS yang sudah dinilai:
+
+| | n | rata skor |
+|---|---|---|
+| punya halaman distribusi DAN karier | 6 | 65,8 |
+| tidak punya salah satunya | 10 | 57,0 |
+
+Selisihnya **8,8 poin**, jauh lebih kecil daripada yang diduga. Dan 57
+masih di atas ambang yang berarti: skor 50-an dengan nomor jalur kantor
+sudah masuk kategori siap ditelepon — Citradimensi Arthali (50) dan
+Jasa Cargo NCT (50) membuktikannya hari itu juga.
+
+#### Urutan kerja karena itu dibalik
+
+Bukan *nilai dulu lalu cari nomor*, melainkan **nomor dulu baru dinilai**.
+Percuma menghabiskan dua jalan agen (~100 ribu token) untuk menilai
+perusahaan yang ternyata tidak mempublikasikan nomor mana pun. Pencarian
+nomor lewat `enrich_kontak.py` memakai nol token agen.
+
 ### Bentuk datanya (untuk menimbang layak-tidaknya mengejar izin)
 
 - 1.379 halaman, PDF teks (bukan pindaian), bisa dibaca `pdftotext`
