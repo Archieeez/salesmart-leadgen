@@ -342,8 +342,18 @@ JENDELA_CABANG = 200
 # Kesalahan yang sama sudah pernah nyaris masuk lewat pronas.co.id
 # (nomor PT Bahtera Wiraniaga Internusa). Dua kali, dan dua-duanya
 # ketahuan cuma karena ada orang yang memeriksa dengan tangan.
+# Kata pertama nama dipaksa >=3 huruf. Tanpa itu regex ini menangkap
+# potongan seperti "PT L" lalu melaporkannya sebagai badan hukum lain --
+# kena Lola Mina, 4 Sep 2026. Nama perusahaan tidak pernah sepatah huruf.
+#
+# BATAS YANG DIAKUI, bukan dibereskan: singkatan tidak dikenali. Nomor
+# "Industri Nuklir Indonesia" ditandai berdiri di bawah "PT INUKI" --
+# padahal INUKI adalah singkatan namanya sendiri. Mencocokkan singkatan
+# butuh kamus yang tidak kita punya, dan karena penjaga ini hanya
+# MELAPOR, positif palsu semacam itu cuma menambah satu baris untuk
+# dibaca orang, bukan membuang nomor yang benar.
 PENANDA_BADAN_HUKUM = re.compile(
-    r"\b(?:PT|CV|UD)\.?\s+((?:[A-Z][\w'’\-]*)(?:\s+[A-Z][\w'’\-]*){0,5})")
+    r"\b(?:PT|CV|UD)\.?\s+((?:[A-Z][\w'’\-]{2,})(?:\s+[A-Z][\w'’\-]*){0,5})")
 
 # Sejauh mana ke belakang nama badan hukum dicari dari posisi nomornya.
 # Selebar blok alamat: "PT X, Jl ..., Kota ..., Telp." muat, tapi tidak

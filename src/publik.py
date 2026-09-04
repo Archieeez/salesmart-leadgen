@@ -247,7 +247,36 @@ def _nama_terlindungi_persis() -> set:
                 continue
             (bebas if boleh_terbit(asal) else terlindungi).add(nama.strip())
     con.close()
-    return {n for n in terlindungi if n and n not in bebas}
+
+    # Nama yang TOKEN pembedanya sudah tercakup nama lain yang boleh
+    # terbit ikut dilepas -- bukan hanya yang sama persis.
+    #
+    # KENAPA: 4 Sep 2026 gerbang ini menyalak atas "BULOG" di
+    # leads_export.csv. Baris ber-asal BPS bernama persis "BULOG";
+    # tabel leads punya empat entri OSM ("Bulog Divisi Regional
+    # Sulselbar", "Gudang BULOG Purwasari II", ...) yang tidak sama
+    # persis dengannya, jadi pelepasan berbasis kesamaan-penuh tidak
+    # menolong. Yang cocok ternyata potongan di dalam ALAMAT baris OSM.
+    #
+    # Itu pengulangan masalah 'SAHABAT' yang sudah tercatat di modul ini,
+    # dan muncul lagi karena nama BPS-nya sangat pendek. Prinsipnya
+    # sendiri sudah benar dan tidak berubah: perusahaan yang juga kita
+    # kenal dari sumber lain tidak dilindungi, karena keberadaannya di
+    # daftar kita tidak berasal dari publikasi BPS.
+    def _token(nama):
+        kata = re.findall(r"[A-Z0-9]+", _norm(nama))
+        return {k for k in kata if len(k) > 3}
+
+    token_bebas = [_token(n) for n in bebas]
+    hasil = set()
+    for n in terlindungi:
+        if not n or n in bebas:
+            continue
+        t = _token(n)
+        if t and any(t <= b for b in token_bebas):
+            continue
+        hasil.add(n)
+    return hasil
 
 
 def _bocor_di_berkas() -> list:
