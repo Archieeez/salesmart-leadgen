@@ -55,6 +55,7 @@ sys.path.insert(0, str(BASE / "src"))
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 import rubrik  # noqa: E402
+import publik  # noqa: E402
 
 DB = BASE / "data" / "leads.db"
 KOMP = list(rubrik.MAKS_KOMPONEN)
@@ -152,12 +153,31 @@ def main():
             "website": h["website"], "skor": skor, "need": need,
             "bukti_kuat": bukti_kuat, "status": status, "rincian": rincian,
             "penanda": penanda, "catatan": catatan,
+            "asal": (daftar.get(nama) or {}).get("asal", ""),
             "dobel": rubrik.periksa_dobel_hitung(rincian),
         })
 
     baris.sort(key=lambda b: -b["need"])
     con = sqlite3.connect(DB)
     pastikan_kolom_penanda(con)
+    publik.pastikan_kolom_asal(con)
+
+    # Menolak menulis baris yang asal usulnya tidak tercatat. Bukan
+    # kehati-hatian: baris ber-asal kosong DIBUANG publik.klausa() dari
+    # antrian dan dari tiap berkas publik, jadi menulisnya berarti
+    # menghilangkan lead yang barusan dinilai empat agen -- tanpa satu
+    # pun pesan galat. Lebih baik berhenti di sini.
+    tanpa_asal = [b["nama"] for b in baris if not b["asal"].strip()]
+    if tanpa_asal:
+        print("\nDITOLAK: asal usul tidak tercatat untuk "
+              f"{len(tanpa_asal)} perusahaan:")
+        for n in tanpa_asal:
+            print(f"  - {n}")
+        print("\ndaftar.json dibuat siapkan.py versi lama (sebelum --asal "
+              "ada). Jalankan ulang siapkan.py dengan --asal, atau "
+              "tambahkan field \"asal\" ke tiap entri daftar.json.")
+        con.close()
+        raise SystemExit(1)
     lama = {n: need for n, need in con.execute(
         "SELECT nama, need_score FROM kebutuhan")}
 
@@ -201,8 +221,8 @@ def main():
             """INSERT INTO kebutuhan
                (nama_normal, nama, website, dist_model, field_sales, scale,
                 industry_fit, need_score, rincian, penanda, catatan, model,
-                bukti_kuat, status_nilai, dinilai_pada)
-               VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,CURRENT_TIMESTAMP)
+                asal, bukti_kuat, status_nilai, dinilai_pada)
+               VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,CURRENT_TIMESTAMP)
                ON CONFLICT(nama_normal) DO UPDATE SET
                  nama=excluded.nama, website=excluded.website,
                  dist_model=excluded.dist_model,
@@ -211,6 +231,7 @@ def main():
                  need_score=excluded.need_score, rincian=excluded.rincian,
                  penanda=excluded.penanda,
                  catatan=excluded.catatan, model=excluded.model,
+                 asal=excluded.asal,
                  bukti_kuat=excluded.bukti_kuat,
                  status_nilai=excluded.status_nilai,
                  dinilai_pada=CURRENT_TIMESTAMP""",
@@ -220,7 +241,7 @@ def main():
              json.dumps(b["rincian"], ensure_ascii=False),
              json.dumps(b["penanda"], ensure_ascii=False)
              if b["penanda"] else None,
-             cat, args.model, b["bukti_kuat"], b["status"]))
+             cat, args.model, b["asal"], b["bukti_kuat"], b["status"]))
     con.commit()
     n = con.execute("SELECT count(*) FROM kebutuhan").fetchone()[0]
     con.close()

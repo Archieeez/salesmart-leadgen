@@ -160,6 +160,17 @@ def main():
                     help="nama perusahaan, persis seperti di bukti.db")
     ap.add_argument("--keluar", required=True,
                     help="folder keluaran, mis. kerja/b1")
+    # ASAL USUL wajib disebut DI SINI, bukan waktu menulis ke database.
+    # Di sinilah orangnya masih tahu dari kolam mana nama-nama itu
+    # diambil; di langkah tulis, dua jam dan empat agen kemudian, ia
+    # sudah tidak tahu. Nilainya ikut ke daftar.json dan dibaca
+    # terapkan.py -- jadi tidak ada kesempatan lupa di tengah jalan.
+    #
+    # Yang berawalan 'bps' TIDAK akan terbit ke berkas publik; itu
+    # ditegakkan publik.klausa(), bukan oleh kehati-hatian.
+    ap.add_argument("--asal", required=True,
+                    help="asal usul kandidat: bps-direktori-manufaktur-2025, "
+                         "gapmmi, osm, riset-manual, ...")
     args = ap.parse_args()
 
     out = Path(args.keluar)
@@ -212,7 +223,7 @@ def main():
         f.write_text("\n".join(kepala), encoding="utf-8")
         daftar.append({"nama": nama, "nama_normal": p["nama_normal"],
                        "website": p["website"], "file": str(f.resolve()),
-                       "chars": len(dok)})
+                       "chars": len(dok), "asal": args.asal})
         print(f"{len(dok):>7}  {nama}")
 
     # Prompt kedua agen dibangkitkan, TIDAK diketik ulang tiap kali alur

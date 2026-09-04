@@ -120,6 +120,15 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--dir", default="kerja/nomor")
     ap.add_argument("--tulis", action="store_true")
+    # Sampai 4 Sep 2026 nilai ini HARDCODE 'nomor-4sep'. Itu aman selama
+    # semua nomor berasal dari kolam yang sama, dan berhenti aman di menit
+    # nomor untuk kandidat BPS dipanen: barisnya akan tercatat ber-asal
+    # 'nomor-4sep', lolos publik.klausa(), lalu terbit. Provenansi tidak
+    # boleh ditebak dari tanggal jalannya skrip.
+    ap.add_argument("--asal", required=True,
+                    help="asal usul kandidat, mis. bps-direktori-manufaktur-2025, "
+                         "gapmmi, riset-manual. Yang berawalan 'bps' tidak "
+                         "akan terbit ke berkas publik.")
     args = ap.parse_args()
 
     folder = BASE / args.dir
@@ -187,14 +196,15 @@ def main():
             "INSERT INTO kontak_web (nama_normal, nama, website, telepon, "
             " kelas_kontak, sumber_halaman, semua_nomor, status, "
             " sumber_discovery, diambil_pada) "
-            "VALUES (?,?,?,?,?,?,?,'ok','nomor-4sep',CURRENT_TIMESTAMP) "
+            "VALUES (?,?,?,?,?,?,?,'ok',?,CURRENT_TIMESTAMP) "
             "ON CONFLICT(nama_normal) DO UPDATE SET "
             "  telepon=excluded.telepon, kelas_kontak=excluded.kelas_kontak, "
             "  sumber_halaman=excluded.sumber_halaman, "
             "  sumber_discovery=excluded.sumber_discovery, "
             "  diambil_pada=CURRENT_TIMESTAMP",
             (ek.normalisasi_nama(nama), nama, dikenal.get(nama) or "",
-             digit, kelas, (r.get("sumber_url") or "").strip(), digit))
+             digit, kelas, (r.get("sumber_url") or "").strip(), digit,
+             args.asal))
     con.commit()
     n = con.execute("SELECT count(*) FROM kontak_web").fetchone()[0]
     con.close()

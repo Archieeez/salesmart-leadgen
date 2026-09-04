@@ -96,9 +96,16 @@ def main():
             print(f"  {tabel:<16} dilewati — tabel belum ada")
             continue
 
+        # Penyaring terbit ada DI QUERY, bukan sesudahnya. Kalau baris
+        # terlarang ikut terbaca lalu dibuang waktu menulis, satu
+        # `continue` yang lupa cukup untuk menerbitkannya — dan berkasnya
+        # tetap terlihat wajar. Lihat publik.klausa().
         baris = con.execute(
-            f"SELECT {', '.join(kolom)} FROM {tabel} ORDER BY {urut}"
+            f"SELECT {', '.join(kolom)} FROM {tabel} "
+            f"WHERE {publik.klausa(tabel)} ORDER BY {urut}"
         ).fetchall()
+        semua = con.execute(f"SELECT count(*) FROM {tabel}").fetchone()[0]
+        ditahan = semua - len(baris)
 
         tujuan = DATA / berkas
         with open(tujuan, "w", newline="", encoding="utf-8") as f:
@@ -107,7 +114,10 @@ def main():
             for r in baris:
                 w.writerow([r[k] for k in kolom])
 
-        print(f"  {tabel:<16} {len(baris):>5} baris -> {berkas}")
+        # Jumlah yang DITAHAN ikut dicetak. Penyaring yang bekerja diam-diam
+        # tidak bisa dibedakan dari penyaring yang membuang terlalu banyak.
+        tahan = f"  ({ditahan} ditahan, tidak boleh terbit)" if ditahan else ""
+        print(f"  {tabel:<16} {len(baris):>5} baris -> {berkas}{tahan}")
 
     if tabel_ada(con, "halaman_bukti"):
         n = con.execute("SELECT COUNT(*) FROM halaman_bukti").fetchone()[0]

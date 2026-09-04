@@ -54,6 +54,7 @@ from pathlib import Path
 import pembuka
 import agen_status as ag
 import rubrik
+import publik
 
 BASE = Path(__file__).resolve().parent.parent
 DB = BASE / "data" / "leads.db"
@@ -136,13 +137,15 @@ def kumpulkan():
         kontak = {r[0]: {"telepon": r[1], "kelas": r[2]}
                   for r in con.execute(
                       "SELECT nama_normal, telepon, kelas_kontak "
-                      "FROM kontak_web")}
+                      "FROM kontak_web "
+                      f"WHERE {publik.klausa('kontak_web')}")}
 
     # Telepon lead OSM ikut dipakai - sebagian sudah punya nomor dari OSM
     # sendiri, jadi sayang kalau tidak dimanfaatkan.
     osm = {}
     for n, p in con.execute(
-            "SELECT name, phone FROM leads WHERE phone IS NOT NULL AND phone != ''"):
+            "SELECT name, phone FROM leads WHERE phone IS NOT NULL "
+            f"AND phone != '' AND {publik.klausa('leads')}"):
         osm.setdefault(n.strip(), p)
 
     # Nomor dari riset manual (companies_prioritas.csv). Dipakai sebagai
@@ -167,7 +170,8 @@ def kumpulkan():
         for r in con.execute(
                 "SELECT nama, dist_model, field_sales, scale, industry_fit, "
                 "need_score, rincian, catatan, bukti_kuat, status_nilai, "
-                "penanda, nama_normal FROM kebutuhan"):
+                "penanda, nama_normal FROM kebutuhan "
+                f"WHERE {publik.klausa('kebutuhan')}"):
             nama = r[0]
             dinilai.add(nama)
             rincian = json.loads(r[6])

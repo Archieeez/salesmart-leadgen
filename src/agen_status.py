@@ -31,6 +31,8 @@ import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
+import publik
+
 BASE = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(BASE / "src"))
 
@@ -82,12 +84,15 @@ def denyut(con, batas=14):
 
     for nama, kelas, pada in _aman(
             con, "SELECT nama, COALESCE(kelas_kontak,'?'), diambil_pada "
-                 "FROM kontak_web ORDER BY diambil_pada DESC LIMIT ?", batas):
+                 "FROM kontak_web "
+                 f"WHERE {publik.klausa('kontak_web')} "
+                 "ORDER BY diambil_pada DESC LIMIT ?", batas):
         ev.append((_waktu(pada), "kontak",
                    f"menemukan nomor {kelas} untuk {nama}"))
 
     for nama, skor, pada in _aman(
             con, "SELECT nama, need_score, dinilai_pada FROM kebutuhan "
+                 f"WHERE {publik.klausa('kebutuhan')} "
                  "ORDER BY dinilai_pada DESC LIMIT ?", batas):
         ev.append((_waktu(pada), "nilai",
                    f"menilai {nama} — skor {skor}"))
@@ -95,7 +100,10 @@ def denyut(con, batas=14):
     if _tabel_ada(con, "jalan_agen"):
         for nama, sp, sa, pada in _aman(
                 con, "SELECT nama, skor_pembaca, skor_akhir, pada "
-                     "FROM jalan_agen ORDER BY pada DESC LIMIT ?", batas):
+                     "FROM jalan_agen WHERE nama IN "
+                     "  (SELECT nama FROM kebutuhan WHERE "
+                     f"   {publik.klausa('kebutuhan')}) "
+                     "ORDER BY pada DESC LIMIT ?", batas):
             if sp is not None and sp != sa:
                 t = f"pemeriksa mengubah {nama}: {sp} → {sa}"
             else:

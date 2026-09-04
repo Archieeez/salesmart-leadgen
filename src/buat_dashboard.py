@@ -29,6 +29,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import rubrik  # noqa: E402
+import publik  # noqa: E402
 
 BASE = Path(__file__).resolve().parent.parent
 DB = BASE / "data" / "leads.db"
@@ -173,12 +174,15 @@ def bagian_kontak(con):
     """Hasil enrichment nomor telepon dari situs resmi."""
     if not tabel_ada(con, "kontak_web"):
         return "", None
-    total = con.execute("SELECT COUNT(*) FROM kontak_web").fetchone()[0]
+    total = con.execute(
+        "SELECT COUNT(*) FROM kontak_web "
+        f"WHERE {publik.klausa('kontak_web')}").fetchone()[0]
     if not total:
         return "", None
     kelas = dict(con.execute(
         "SELECT COALESCE(kelas_kontak,'tidak ada'), COUNT(*) "
-        "FROM kontak_web GROUP BY 1").fetchall())
+        "FROM kontak_web "
+        f"WHERE {publik.klausa('kontak_web')} GROUP BY 1").fetchall())
     urut = [("langsung", "Jalur kantor", HIJAU),
             ("seluler", "Nomor HP", OKER),
             ("layanan", "Call center", UNGU),
@@ -198,6 +202,7 @@ def bagian_kebutuhan(con):
     rows = con.execute(
         "SELECT nama, dist_model, field_sales, scale, industry_fit, "
         "need_score, bukti_kuat, status_nilai, catatan FROM kebutuhan "
+        f"WHERE {publik.klausa('kebutuhan')} "
         "ORDER BY status_nilai, need_score DESC").fetchall()
     if not rows:
         return "", None
@@ -261,7 +266,8 @@ def bagian_penyaring(con):
         return "", None
 
     manusia = {n: (need, st) for n, need, st in con.execute(
-        "SELECT nama, need_score, status_nilai FROM kebutuhan")}
+        "SELECT nama, need_score, status_nilai FROM kebutuhan "
+        f"WHERE {publik.klausa('kebutuhan')}")}
     kategori = saring_bukti.muat_kategori()
 
     AMBANG = 50
@@ -319,7 +325,9 @@ def bagian_penolakan(con):
     tolak = []
     for nama, need, fit, catatan, penanda in con.execute(
             "SELECT nama, need_score, industry_fit, COALESCE(catatan,''), "
-            "penanda FROM kebutuhan ORDER BY need_score DESC"):
+            "penanda FROM kebutuhan "
+            f"WHERE {publik.klausa('kebutuhan')} "
+            "ORDER BY need_score DESC"):
         alasan = rubrik.tandai_penolakan(
             need, fit, catatan, json.loads(penanda) if penanda else None)
         if alasan:
@@ -391,14 +399,23 @@ def main():
     c = sqlite3.connect(DB)
     q = lambda s: c.execute(s).fetchall()
 
+    # Rekap pun disaring, walau menghitung baris bukan menerbitkan
+    # namanya. Bukan karena angkanya berbahaya, tapi supaya tidak ada
+    # query di berkas ini yang boleh melewati publik.klausa() -- begitu
+    # ada satu pengecualian yang sah, pengecualian kedua yang TIDAK sah
+    # akan menumpang di belakangnya dan terlihat sama saja.
+    kl_l, kl_a = publik.klausa("leads"), publik.klausa("leads_arsip")
     kota = q("SELECT city,COUNT(*),COUNT(phone) FROM leads WHERE city IS NOT NULL "
-             "GROUP BY city ORDER BY COUNT(*) DESC")
-    kat = q("SELECT category,COUNT(*),COUNT(phone) FROM leads GROUP BY category "
+             f"AND {kl_l} GROUP BY city ORDER BY COUNT(*) DESC")
+    kat = q("SELECT category,COUNT(*),COUNT(phone) FROM leads "
+            f"WHERE {kl_l} GROUP BY category "
             "ORDER BY COUNT(phone)*1.0/COUNT(*) DESC")
-    ars = q("SELECT alasan,COUNT(*) FROM leads_arsip GROUP BY alasan "
-            "ORDER BY COUNT(*) DESC")
-    tot = q("SELECT COUNT(*),COUNT(phone),COUNT(website) FROM leads")[0]
-    n_ars = c.execute("SELECT COUNT(*) FROM leads_arsip").fetchone()[0]
+    ars = q(f"SELECT alasan,COUNT(*) FROM leads_arsip WHERE {kl_a} "
+            "GROUP BY alasan ORDER BY COUNT(*) DESC")
+    tot = q("SELECT COUNT(*),COUNT(phone),COUNT(website) FROM leads "
+            f"WHERE {kl_l}")[0]
+    n_ars = c.execute(
+        f"SELECT COUNT(*) FROM leads_arsip WHERE {kl_a}").fetchone()[0]
 
     html_kontak, n_langsung = bagian_kontak(c)
     html_kebutuhan, n_tegak = bagian_kebutuhan(c)

@@ -1,6 +1,16 @@
-# Backup database — jangan di-commit, ukurannya berlipat tiap kali bersihkan_db
-# dijalankan. leads.db utama SENGAJA dilacak supaya hasil kerja terekam.
+# SELURUH database kerja tidak dilacak, termasuk data/leads.db yang utama.
+#
+# Keputusan Bryan 4 Sep 2026, dan sebabnya struktural: begitu lead
+# berasal-BPS masuk pipeline, leads.db memuat baris yang tidak boleh
+# terbit ulang di repo publik — dan berkas BINER tidak bisa disaring
+# sebagian. Ia memuatnya atau tidak.
+#
+# Hasil kerja tetap terekam: ekspor CSV (leads_export, kebutuhan_export,
+# kontak_web_export, leads_arsip_export) DILACAK dan tiap barisnya sudah
+# lewat gerbang src/publik.py. Yang hilang cuma berkas biner yang toh
+# tidak pernah bisa dibaca di diff.
 leads_backup_*.db
+data/leads.db
 *.db-journal
 
 # Python

@@ -60,11 +60,76 @@ KELUARAN_PUBLIK = [
 # ingatan orang yang menulis query berikutnya.
 DB_BPS = BASE / "data" / "bps.db"
 
+# Sejak 4 Sep 2026 data/leads.db JUGA tidak dilacak git. Bryan memutuskan
+# itu waktu lead berasal-BPS mulai masuk pipeline, dan sebabnya
+# struktural: berkas BINER tidak bisa disaring sebagian — ia memuat baris
+# terlarang atau tidak. Yang dilacak sebagai gantinya adalah ekspor CSV,
+# yang tiap barisnya lewat klausa() di bawah.
+DB_UTAMA = BASE / "data" / "leads.db"
+
+# Kolom yang mencatat ASAL USUL baris di tiap tabel yang ikut terbit.
+#
+# Didaftar di satu tempat karena ketiga kolomnya bernama BERBEDA-BEDA,
+# dan satu di antaranya pernah salah dipilih dengan akibat yang tidak
+# kelihatan: sampai 4 Sep 2026 gerbang ini memeriksa
+# `kebutuhan.model LIKE 'bps%'` — padahal kolom `model` menyimpan nama
+# model LLM yang menilai ("claude-opus-5 (pembaca+pemeriksa)"), bukan
+# sumber datanya. Nilai berawalan 'bps' tidak akan PERNAH muncul di sana,
+# jadi gerbangnya hijau apa pun isi tabelnya. Kolom `kebutuhan.asal`
+# ditambahkan persis untuk menutup itu.
+#
+# Pelajaran yang sama dengan robots.txt kemarin: gerbang yang memeriksa
+# kolom yang salah tidak terlihat berbeda dari gerbang yang lolos.
+KOLOM_ASAL = {
+    "leads": "source",
+    "leads_arsip": "source",
+    "kontak_web": "sumber_discovery",
+    "kebutuhan": "asal",
+}
+
 
 def boleh_terbit(sumber) -> bool:
     """False kalau baris dari sumber ini tidak boleh masuk berkas publik."""
     s = (sumber or "").strip().lower()
-    return not s.startswith(SUMBER_DILINDUNGI)
+    return bool(s) and not s.startswith(SUMBER_DILINDUNGI)
+
+
+def klausa(tabel: str, alias: str = "") -> str:
+    """Potongan SQL untuk WHERE — benar hanya untuk baris yang boleh terbit.
+
+    WAJIB dipakai setiap modul yang menulis berkas publik: ekspor_csv.py,
+    buat_antrian.py (docs/index.html tayang di GitHub Pages) dan
+    buat_dashboard.py. Sengaja satu fungsi dan bukan kalimat WHERE yang
+    disalin ke tiap query — penyaring yang disalin akan ketinggalan di
+    satu tempat, dan tempat itulah yang terbit.
+
+    MENUTUP WAKTU TIDAK TAHU: baris ber-asal kosong ikut terbuang, sama
+    seperti baris ber-asal BPS. Kalau ia ikut terbit, satu kolom yang
+    lupa diisi cukup untuk menerbitkan baris yang tidak boleh terbit.
+    Supaya baris begitu tidak hilang diam-diam, periksa() menyalak
+    terpisah untuk asal yang kosong.
+    """
+    k = f"{alias}.{KOLOM_ASAL[tabel]}" if alias else KOLOM_ASAL[tabel]
+    pola = " AND ".join(
+        f"lower(COALESCE({k},'')) NOT LIKE '{s}%'" for s in SUMBER_DILINDUNGI)
+    return f"(COALESCE({k},'') <> '' AND {pola})"
+
+
+def pastikan_kolom_asal(con):
+    """Tambahkan `kebutuhan.asal` kalau belum ada.
+
+    Ditaruh di publik.py dan bukan di skrip migrasi tersendiri supaya
+    setiap jalur yang menyentuh kolom ini — jalur tulis maupun jalur
+    ekspor — bisa memanggilnya. Sengaja TIDAK mengisi baris lama:
+    mengisi otomatis berarti baris yang asalnya lupa dicatat diam-diam
+    dianggap boleh terbit, dan itu persis kegagalan yang mau dicegah.
+    Baris lama diisi sekali lewat migrasi yang tercatat di git.
+    """
+    kolom = {r[1] for r in con.execute("PRAGMA table_info(kebutuhan)")}
+    if "asal" not in kolom:
+        con.execute("ALTER TABLE kebutuhan ADD COLUMN asal TEXT")
+        con.commit()
+        print("kolom `asal` ditambahkan ke tabel kebutuhan.")
 
 
 def _norm(nama: str) -> str:
@@ -123,36 +188,34 @@ def _dilacak_git(jalur: str) -> bool:
     return r.returncode == 0
 
 
-def _asal_bps_di_db() -> dict:
-    """Berapa baris ber-ASAL BPS di tiap tabel yang ikut terbit.
+NAMA_KOLOM = {"leads": "name", "leads_arsip": "name",
+              "kontak_web": "nama", "kebutuhan": "nama"}
 
-    Ini pemeriksaan UTAMA, dan sengaja tidak mencocokkan nama sama
-    sekali. Percobaan pertama (3 Sep 2026) memindai teks berkas publik
-    dan mencari nama yang ada di bps.db. Hasilnya tujuh "kebocoran" yang
-    semuanya SALAH:
 
-      - 'SAHABAT' cocok sebagai potongan di dalam nama lain mana pun
-      - 'NUTRIFOOD' masuk pipeline dari GAPMMI, bukan dari BPS; ia
-        kebetulan juga tercantum di direktori
+def _con_utama():
+    if not DB_UTAMA.exists():
+        return None
+    return sqlite3.connect(f"file:{DB_UTAMA}?mode=ro", uri=True)
 
-    Pelajarannya sama dengan yang sudah mahal di proyek ini: yang
-    diperiksa harus PENGAMATAN, bukan kesimpulan. Asal-usul sebuah baris
-    adalah fakta yang dicatat waktu baris itu masuk; kemiripan nama cuma
-    dugaan. Dan gerbang yang sering salah pada akhirnya dimatikan orang.
+
+def _asal_kosong() -> dict:
+    """Berapa baris yang asal-usulnya TIDAK tercatat, per tabel.
+
+    Baris begini tidak berbahaya bagi berkas publik — klausa() sudah
+    membuangnya. Yang berbahaya adalah ia HILANG DIAM-DIAM: lead yang
+    sah tidak muncul di antrian dan tidak ada yang bertanya kenapa.
+    Jadi ini dilaporkan sebagai masalah tersendiri, bukan digabung
+    dengan kebocoran.
     """
-    dbl = BASE / "data" / "leads.db"
-    if not dbl.exists():
+    con = _con_utama()
+    if con is None:
         return {}
-    con = sqlite3.connect(f"file:{dbl}?mode=ro", uri=True)
     hasil = {}
-    for tabel, kolom in (("leads", "source"),
-                         ("leads_arsip", "source"),
-                         ("kontak_web", "sumber_discovery"),
-                         ("kebutuhan", "model")):
+    for tabel, kolom in KOLOM_ASAL.items():
         try:
             n = con.execute(
                 f"SELECT count(*) FROM {tabel} "
-                f"WHERE lower(COALESCE({kolom},'')) LIKE 'bps%'").fetchone()[0]
+                f"WHERE COALESCE({kolom},'') = ''").fetchone()[0]
             if n:
                 hasil[tabel] = n
         except sqlite3.Error:
@@ -161,25 +224,97 @@ def _asal_bps_di_db() -> dict:
     return hasil
 
 
+def _nama_terlindungi_persis() -> set:
+    """Nama PERSIS (apa adanya, bukan dinormalkan) dari baris ber-asal BPS.
+
+    Nama yang juga dipegang baris LAIN yang boleh terbit dikeluarkan:
+    keberadaannya di daftar kita tidak berasal dari publikasi BPS, jadi
+    menerbitkannya bukan menerbitkan ulang publikasi itu.
+    """
+    con = _con_utama()
+    if con is None:
+        return set()
+    terlindungi, bebas = set(), set()
+    for tabel, kolom in KOLOM_ASAL.items():
+        nk = NAMA_KOLOM[tabel]
+        try:
+            baris = con.execute(
+                f"SELECT {nk}, COALESCE({kolom},'') FROM {tabel}").fetchall()
+        except sqlite3.Error:
+            continue
+        for nama, asal in baris:
+            if not nama:
+                continue
+            (bebas if boleh_terbit(asal) else terlindungi).add(nama.strip())
+    con.close()
+    return {n for n in terlindungi if n and n not in bebas}
+
+
+def _bocor_di_berkas() -> list:
+    """Nama terlindungi yang BENAR-BENAR ada di berkas yang terbit.
+
+    Ini PENGAMATAN atas berkas yang sudah ditulis, bukan kesimpulan dari
+    isi database — dan itu bedanya dengan percobaan 3 Sep 2026 yang
+    menghasilkan tujuh "kebocoran" palsu. Yang dicari sekarang adalah
+    string nama PENUH milik baris yang provenansinya tercatat BPS,
+    bukan potongan nama mana pun yang kebetulan ada di bps.db:
+
+      'SAHABAT'    dulu cocok sebagai potongan nama lain -> tidak lagi,
+                   yang dicocokkan nama penuh satu baris nyata
+      'NUTRIFOOD'  masuk dari GAPMMI -> barisnya ber-asal 'gapmmi',
+                   jadi ia tidak pernah masuk daftar terlindungi
+
+    Penyaring sesungguhnya tetap klausa() di jalur tulis. Fungsi ini
+    jaring kedua: ia memeriksa apakah penyaring itu benar-benar bekerja,
+    dengan melihat hasilnya alih-alih mempercayainya.
+    """
+    nama = _nama_terlindungi_persis()
+    if not nama:
+        return []
+    temuan = []
+    for jalur in KELUARAN_PUBLIK:
+        f = BASE / jalur
+        if not f.exists():
+            continue
+        teks = f.read_text(encoding="utf-8", errors="replace")
+        kena = sorted(n for n in nama if n in teks)
+        if kena:
+            temuan.append((jalur, kena))
+    return temuan
+
+
 def periksa() -> list:
     """Cari kebocoran. Return daftar masalah; kosong berarti aman."""
     masalah = []
 
-    # 1. UTAMA: adakah baris ber-asal BPS di tabel yang ikut terbit?
-    for tabel, n in _asal_bps_di_db().items():
+    # 1. UTAMA: nama ber-asal BPS yang benar-benar muncul di berkas terbit.
+    for jalur, kena in _bocor_di_berkas():
+        contoh = ", ".join(kena[:5]) + (" ..." if len(kena) > 5 else "")
         masalah.append(
-            f"tabel {tabel} di leads.db memuat {n} baris ber-asal BPS. "
-            "leads.db dilacak git dan diekspor ke CSV publik; pindahkan "
-            "ke data/bps.db atau tandai supaya tidak ikut terbit.")
+            f"{jalur} memuat {len(kena)} nama ber-asal BPS: {contoh}. "
+            "Berkas ini terbit publik; jalur yang menulisnya belum "
+            "memakai publik.klausa().")
 
-    # 2. leads.db tidak boleh dilacak git begitu ia memuat baris BPS.
-    #    Berkas biner tidak bisa disaring sebagian: ia memuatnya atau
-    #    tidak.
-    if masalah and _dilacak_git("data/leads.db"):
+    # 2. data/leads.db TIDAK BOLEH dilacak git — tanpa syarat, bukan
+    #    "begitu ia memuat baris BPS". Sampai 4 Sep 2026 syarat itulah
+    #    yang dipakai, dan syarat begitu menaruh gerbangnya SESUDAH
+    #    kebocoran: begitu satu baris BPS masuk, berkas biner yang
+    #    memuatnya sudah ada di riwayat git dan tidak bisa ditarik lagi.
+    #    Berkas biner tidak bisa disaring sebagian.
+    if _dilacak_git("data/leads.db"):
         masalah.append(
-            "data/leads.db DILACAK GIT sementara ia memuat baris BPS. "
-            "Keluarkan dari git (git rm --cached) sebelum commit "
-            "berikutnya.")
+            "data/leads.db DILACAK GIT. Berkas biner tidak bisa disaring "
+            "sebagian, jadi ia tidak boleh dilacak sama sekali. "
+            "Keluarkan dengan: git rm --cached data/leads.db")
+
+    # 3. Baris tanpa asal. Tidak bocor — klausa() membuangnya — tapi
+    #    justru itu masalahnya: ia lenyap dari antrian tanpa jejak.
+    for tabel, n in _asal_kosong().items():
+        masalah.append(
+            f"tabel {tabel} punya {n} baris tanpa kolom "
+            f"`{KOLOM_ASAL[tabel]}` terisi. Baris itu DIBUANG dari semua "
+            "keluaran publik oleh publik.klausa(); isi asalnya supaya "
+            "tidak hilang diam-diam.")
 
     return masalah
 
