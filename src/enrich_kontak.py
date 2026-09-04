@@ -54,6 +54,35 @@ KANDIDAT_PATH = [
 
 TEKS_KONTAK = re.compile(r"(kontak|contact|hubungi|reach\s*us)", re.IGNORECASE)
 
+# Halaman yang menyebut LOKASI/ALAMAT. Dipakai sebagai langkah terakhir
+# sebelum menebak path -- lihat cari_kontak() langkah 3b untuk alasannya
+# dan untuk kenapa polanya boleh lebih longgar di posisi itu.
+TEKS_LOKASI = re.compile(
+    r"(\blokasi\b|\blocation(s)?\b|\balamat\b|kantor\s*kami|our\s*office"
+    r"|office\s*location|alamat\s*kantor)", re.IGNORECASE)
+
+# Halaman yang MENDAFTAR TEMPAT MILIK ORANG LAIN. Dikecualikan dari
+# TEKS_LOKASI, dan bukan karena kehati-hatian teoretis.
+#
+# Waktu langkah 3b pertama dipasang (4 Sep 2026), uji A/B-nya langsung
+# menunjukkan satu perbaikan dan satu KEMUNDURAN. Epson Indonesia
+# berpindah dari nomor seluler ke
+#     https://www.epson.co.id/Support/ServiceCenterLocator
+# yang memuat 160+ nomor -- dan yang terpilih milik PT LAYSANDER
+# TECHNOLOGY, mitra servis, bukan Epson. Deteksi daftar cabang menahannya
+# dari kelas `langsung`, tapi nomor yang tersimpan tetap milik
+# perusahaan lain: pola kegagalan Pronas, kali ini dibuat sendiri.
+#
+# Locator, dealer, dan daftar toko memang MENDAFTAR PIHAK LAIN. Itu
+# sifat halamannya, bukan kecelakaan, jadi disaring dari judulnya.
+BUKAN_LOKASI_SENDIRI = re.compile(
+    r"(locator|service\s*cent|pusat\s*servis|dealer|reseller|distributor"
+    r"|store\s*list|daftar\s*toko|mitra|partner)", re.IGNORECASE)
+
+# Ditahan kecil: ini langkah cadangan, bukan penelusuran utama, dan
+# polanya lebih longgar sehingga lebih mungkin menunjuk halaman keliru.
+MAKS_LINK_LOKASI = 3
+
 
 def link_kontak(html: str, root: str) -> list[str]:
     return cari_link(html, root, TEKS_KONTAK)
@@ -444,6 +473,33 @@ def cari_kontak(website: str) -> dict:
         html, _ = ambil_html(beranda)
         if html:
             for url in link_kontak(html, root)[:MAKS_LINK_KONTAK]:
+                if periksa(url):
+                    selesai = True
+                    break
+
+    # 3b. Halaman LOKASI/ALAMAT — hanya kalau halaman kontak gagal.
+    #
+    # KENAPA ADA, dan kenapa baru di sini: nomor kantor PT Madusari
+    # Nusaperdana (lead berskor 95, tertinggi yang kami punya) ada di
+    #     https://www.madusarifoods.com/page/lokasi
+    # di bawah judul "Marketing Office" bersama nama badan hukumnya.
+    # Halaman /kontak-nya sendiri NOL nomor telepon. Modul ini cuma
+    # menelusuri link ber-teks kontak/contact/hubungi, jadi halaman itu
+    # tidak pernah dilihat, dan nomornya akhirnya ditemukan agen.
+    #
+    # Ditaruh SESUDAH langkah 3 dan dijaga `if not selesai` karena
+    # polanya lebih longgar daripada TEKS_KONTAK: diukur 4 Sep 2026, ia
+    # cocok di 24 situs tapi sebagian besar derau (publikasi BCG, SDK
+    # TomTom, artikel berita ber-judul "lokasi"). Sebagai langkah
+    # terakhir, derau itu cuma memakan satu-dua request pada situs yang
+    # memang belum memberi apa pun — dan nomor yang salah tetap disaring
+    # _label_terdekat serta pemeriksaan bentuk di bawah.
+    if not selesai:
+        html, _ = ambil_html(beranda)
+        if html:
+            kandidat = [u for u in cari_link(html, root, TEKS_LOKASI)
+                        if not BUKAN_LOKASI_SENDIRI.search(u)]
+            for url in kandidat[:MAKS_LINK_LOKASI]:
                 if periksa(url):
                     selesai = True
                     break
