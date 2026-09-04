@@ -95,9 +95,9 @@ transition:none!important}}
 <h1>Bagaimana angka di antrian itu diputuskan</h1>
 <p class="sub">Setiap skor di antrian dinilai oleh agen yang membaca situs resmi perusahaannya, lalu <b>dibantah oleh agen kedua</b>, lalu kutipannya dicocokkan huruf-per-huruf oleh mesin. Halaman ini menunjukkan ketiganya apa adanya — termasuk waktu bantahannya berhasil dan skornya turun.</p>
 <div class="rk">
-<div><div class="k">Perusahaan dinilai agen</div><div class="v">9</div><div class="n">lewat alur tiga lapis</div></div>
-<div><div class="k">Dibantah pemeriksa</div><div class="v">5</div><div class="n">15 koreksi, 4 label diubah</div></div>
-<div><div class="k">Kutipan diverifikasi mesin</div><div class="v">31/36</div><div class="n">dicocokkan harfiah ke halaman aslinya</div></div>
+<div><div class="k">Perusahaan dinilai agen</div><div class="v">10</div><div class="n">lewat alur tiga lapis</div></div>
+<div><div class="k">Dibantah pemeriksa</div><div class="v">6</div><div class="n">18 koreksi, 4 label diubah</div></div>
+<div><div class="k">Kutipan diverifikasi mesin</div><div class="v">33/40</div><div class="n">dicocokkan harfiah ke halaman aslinya</div></div>
 </div>
 <h2>Tiga lapis, dan masing-masing ketat pada hal berbeda</h2>
 <div class="lapis">
@@ -108,6 +108,22 @@ transition:none!important}}
 <p class="cat">Ketiganya ketat pada hal yang berbeda, dan itu disengaja: sebuah kutipan pernah LOLOS lapis 3 karena pencocokan longgar menyamakan spasi tak-kasatmata dengan spasi biasa, tapi GUGUR di lapis 2 yang mencocokkan huruf demi huruf. Tidak ada lapisan yang boleh dibuang.</p>
 <h2>Yang terjadi pada tiap perusahaan</h2>
 <p class="cat">Kolom "Pembaca" adalah bacaan pertama; "Keputusan akhir" adalah yang bertahan setelah dibantah. Baris bertanda kuning berarti labelnya berubah.</p>
+<h3>jalan &ldquo;mondelez-4sep&rdquo; &middot; <time datetime="2026-09-04T05:28:17+00:00">2026-09-04 05:28 UTC</time> &middot; ditulis ke database</h3>
+<article class="p">
+<div class="baris"><div class="nm">Mondelez Indonesia</div><div class="gerak"><span class="sk">25</span><span class="tetap">bertahan</span><span class="bk">bukti 2/4</span></div></div>
+<h4>Yang dibantah pemeriksa <span class="jml">3</span></h4>
+<div class="kor">Kutipan scale pembaca tidak menopang labelnya. Pembaca memilih &#x27;multi_kota&#x27; (butuh 3-9 kota) tapi kutipannya hanya blok &#x27;Office Locations&#x27; yang memuat DUA kota: Jakarta (head office) dan Bandung (plant). Kota ketiga, Cikarang, cuma disebut di prosa catatan, tidak pernah dikutip. Label melampaui kutipan. Diperbaiki dengan memperluas kutipan ke belakang sampai kalimat &#x27;Our biscuit plant in Cikarang, West Java...&#x27;, yang saya verifikasi harfiah ada di bagian TEKS HALAMAN TERPANEN. Label &#x27;multi_kota&#x27; saya PERTAHANKAN karena setelah kutipannya benar teks memang menyebut tiga kota operasi (Jakarta, Cikarang, Bandung), bukan karena klaim pembaca.</div>
+<div class="kor">Kutipan industry_fit pembaca berlingkup GLOBAL, bukan entitas Indonesia. Kalimat &#x27;... Indonesia is part of ... International, a global snacking leader with categories such as chocolate, biscuit, gum, candy and powdered drink products.&#x27; isinya mendeskripsikan INDUK GLOBAL; bagian Indonesianya cuma &#x27;is part of&#x27;. Di situs berdomain global (mondelezinternational.com) itu persis titik rawan aturan lingkup entitas. Kutipan diperluas ke kalimat berikutnya yang benar-benar berlingkup Indonesia (&#x27;Biskuat as its local innovative jewel brand&#x27;), dan penopang manufaktur Indonesianya (pabrik Cikarang) berdiri di kutipan scale. Label 15 poin tetap berdiri, tapi sekarang di atas bukti yang lulus uji lingkup entitas.</div>
+<div class="kor">Catatan pembaca memuat penalaran di luar teks (&#x27;Secara logika bisnis, produsen biskuit dengan pabrik ekspor... hampir pasti punya distribusi dan sales kanvas besar&#x27;), yang dilarang aturan bukti. Tidak mengubah skor karena pembaca tidak memakainya menaikkan label, tapi kalimat itu saya buang dari catatan final supaya tidak dipakai sebagai dasar oleh pembaca berikutnya.</div>
+<h4>Per komponen: bacaan pertama, lalu keputusan akhir</h4>
+<table class="komp"><thead><tr><th>Komponen</th><th>Pembaca</th><th>Keputusan akhir</th><th>Kutipannya</th></tr></thead><tbody>
+<tr class=""><td>Model distribusi</td><td class="lb">tanpa_jaringan_distribusi <i>0</i></td><td class="lb">tanpa_jaringan_distribusi <i>0</i></td><td class="kt"><span class="netral">tidak diklaim</span><div class="q"><i>tidak ada kutipan — pita terendah yang bisa dipertahankan</i></div><div class="src"></div></td></tr>
+<tr class=""><td>Tim sales lapangan</td><td class="lb">tanpa_lapangan <i>0</i></td><td class="lb">tanpa_lapangan <i>0</i></td><td class="kt"><span class="netral">tidak diklaim</span><div class="q"><i>tidak ada kutipan — pita terendah yang bisa dipertahankan</i></div><div class="src"></div></td></tr>
+<tr class=""><td>Skala operasi</td><td class="lb">multi_kota <i>10</i></td><td class="lb">multi_kota <i>10</i></td><td class="kt"><span class="ok">cocok harfiah</span><div class="q">Our biscuit plant in Cikarang, West Java, which is a world-class manufacturing facility exporting to more than 40 countries, is a testament how the company is committed to grow and invest in…</div><div class="src">https://www.mondelezinternational.com/indonesia</div></td></tr>
+<tr class=""><td>Kecocokan industri</td><td class="lb">produsen_barang_konsumsi <i>15</i></td><td class="lb">produsen_barang_konsumsi <i>15</i></td><td class="kt"><span class="ok">cocok harfiah</span><div class="q">MondelÄz Indonesia is part of MondelÄz International, a global snacking leader with categories such as chocolate, biscuit, gum, candy and powdered drink products. Proud to have global icon…</div><div class="src">https://www.mondelezinternational.com/indonesia</div></td></tr>
+</tbody></table>
+<div class="tel"><span class="tl"><b>pembaca</b> 229.4 dtk &middot; 67,176 token &middot; 14 panggilan alat</span><span class="tl"><b>pemeriksa</b> 244.2 dtk &middot; 61,137 token &middot; 14 panggilan alat</span></div>
+</article>
 <h3>jalan &ldquo;antrian-4sep&rdquo; &middot; <time datetime="2026-09-03T12:20:12+00:00">2026-09-03 12:20 UTC</time> &middot; ditulis ke database</h3>
 <article class="p">
 <div class="baris"><div class="nm">Agel Langgeng</div><div class="gerak"><span class="sk">15</span><span class="tetap">bertahan</span><span class="bk">bukti 1/4</span></div></div>
@@ -243,7 +259,7 @@ transition:none!important}}
 <div class="tp"><div class="ang">78</div><div style="flex:1"><div class="lbl">Dinilai dari bukti situs</div><div class="ket">empat komponen, tiap komponen wajib punya kutipan</div></div><div class="bar" style="max-width:220px"><i style="width:3%"></i></div></div>
 <div class="tp"><div class="ang">61</div><div style="flex:1"><div class="lbl">Bukti cukup untuk dipercaya</div><div class="ket">minimal 3 dari 4 kutipan lolos verifikasi mesin</div></div><div class="bar" style="max-width:220px"><i style="width:2%"></i></div></div>
 </div>
-<div class="kaki">Dibuat otomatis dari <code>data/leads.db</code> tabel <code>jalan_agen</code> oleh <code>src/buat_agen.py</code> pada 04 Sep 2026 12:02. Tidak ada angka di halaman ini yang diketik tangan.</div>
+<div class="kaki">Dibuat otomatis dari <code>data/leads.db</code> tabel <code>jalan_agen</code> oleh <code>src/buat_agen.py</code> pada 04 Sep 2026 12:35. Tidak ada angka di halaman ini yang diketik tangan.</div>
 <script>
 (function(){
   var n = document.querySelectorAll('time[datetime]');

@@ -275,6 +275,32 @@ PENANDA_LAYANAN = re.compile(
 JENDELA_LAYANAN = 200
 
 
+# Penanda bahwa nomor di dekatnya milik CABANG, bukan kantor pusat.
+#
+# Anggota ketiga dari keluarga yang sama, dan ditemukan dengan cara yang
+# sama: halaman kontak airnavindonesia.co.id memuat
+#
+#   "AirNav Kantor Cabang JATSC Gedung 611 ... Telp. +62 21-5506122
+#    AirNav Kantor Cabang MATSC ... Telp. +62 411-4813210
+#    Head Office Gedung AirNav Indonesia Jl. Ir. H. Juanda No.1 ..."
+#
+# Nomor pertama landline Jakarta yang sah, dan kantor pusatnya memang
+# ADA di halaman itu — tapi berdiri SESUDAHNYA. Deteksi daftar cabang
+# yang lama tidak menolong: ia menuntut 5+ nomor kantor, sementara
+# halaman ini cuma punya tiga.
+#
+# PENANDA_PUSAT menengok ke belakang dan tidak menemukan apa-apa, jadi
+# nomor cabang menang. Yang menyelesaikannya bukan menambah jendela,
+# melainkan mengenali label cabang itu sendiri.
+PENANDA_CABANG = re.compile(
+    r"(kantor\s*cabang|cabang\s+[A-Z]|branch\s*office|kantor\s*perwakilan|"
+    r"kantor\s*wilayah)",
+    re.IGNORECASE,
+)
+
+JENDELA_CABANG = 200
+
+
 def _label_terdekat(teks: str, posisi: int) -> str | None:
     """Label mana yang berdiri PALING DEKAT di depan sebuah nomor.
 
@@ -283,15 +309,18 @@ def _label_terdekat(teks: str, posisi: int) -> str | None:
     yang paling akhir sebelum ia -- bukan label mana pun yang kebetulan
     ada di halaman itu.
 
-    Return 'pusat', 'layanan', atau None.
+    Return 'pusat', 'layanan', 'cabang', atau None.
     """
     awal_p = max(0, posisi - JENDELA_PUSAT)
     awal_l = max(0, posisi - JENDELA_LAYANAN)
+    awal_c = max(0, posisi - JENDELA_CABANG)
     cocok = []
     for m in PENANDA_PUSAT.finditer(teks[awal_p:posisi]):
         cocok.append((awal_p + m.end(), "pusat"))
     for m in PENANDA_LAYANAN.finditer(teks[awal_l:posisi]):
         cocok.append((awal_l + m.end(), "layanan"))
+    for m in PENANDA_CABANG.finditer(teks[awal_c:posisi]):
+        cocok.append((awal_c + m.end(), "cabang"))
     if not cocok:
         return None
     return max(cocok)[1]
@@ -368,9 +397,13 @@ def cari_kontak(website: str) -> dict:
         # Landline yang berdiri di bawah judul layanan konsumen TURUN
         # kelas sebelum apa pun dihitung -- termasuk sebelum jumlah
         # "nomor kantor" dipakai menebak halaman daftar cabang.
+        # Landline turun kelas menurut label terdekat di depannya:
+        # judul layanan konsumen -> `layanan`, judul kantor cabang ->
+        # `cabang`. Keduanya sebelum apa pun dihitung, termasuk sebelum
+        # jumlah "nomor kantor" dipakai menebak halaman daftar cabang.
+        TURUN = {"layanan": "layanan", "cabang": "cabang"}
         kelas_awal = [
-            (n, "layanan" if (k == "langsung"
-                              and label[pos] == "layanan") else k, pos)
+            (n, TURUN.get(label[pos], k) if k == "langsung" else k, pos)
             for n, k, pos in kelas_awal]
 
         # Daftar cabang? Nomornya sah semua, tapi tidak satu pun kantor
