@@ -249,6 +249,12 @@ publikasi.
 **Maka aturannya TIDAK berubah: `data/direktori-industri-manufaktur-2025.pdf`
 tetap tidak disentuh, dan pengekstrak tetap tidak dibangun.**
 
+> **DIBATALKAN 3 September 2026** oleh jawaban PST — lihat "BPS MENJAWAB"
+> di bawah. Paragraf di atas sengaja dibiarkan apa adanya karena catatan
+> ini kronologis: ia mencatat apa yang diketahui saat itu, dan urutan
+> tahunya justru bagian dari isinya. Penunjuk ini ada supaya tidak ada
+> yang berhenti membaca di sini lalu mengira larangannya masih berdiri.
+
 #### Yang justru berguna dari jawaban ini
 
 Pengalihannya bukan jalan buntu — ia menunjuk kanal yang sebelumnya tidak
@@ -404,6 +410,69 @@ Jalur 2 sebaiknya ditahan dulu sampai PST menjawab. Mengajukan keberatan
 atas surat yang secara formal "tidak menolak" lebih lemah posisinya
 daripada menunjukkan bahwa kanal yang mereka tunjuk sendiri pun tidak
 menyelesaikan pertanyaannya.
+
+#### GARISNYA DIJALANKAN MESIN — 4 September 2026
+
+Jawaban BPS memisahkan dua hal, dan pemisahan itulah yang harus dipasang
+di kode: **memakai** nama dan alamat boleh; **menerbitkan ulang** isi
+publikasinya tidak. Repo ini publik, jadi tiap berkas yang dilacak git
+atau tayang di GitHub Pages adalah penerbitan.
+
+Keputusan Bryan: **`data/leads.db` tidak lagi dilacak git.** Berkas biner
+tidak bisa disaring sebagian — ia memuat baris terlarang atau tidak.
+Yang dilacak sebagai gantinya adalah ekspor CSV, yang tiap barisnya
+lewat `publik.klausa()`. Berkas kerja yang memuat baris BPS ditaruh di
+`kerja/` (sudah di-gitignore), tidak pernah di `data/`.
+
+Tiga hal yang baru kelihatan waktu penegaknya benar-benar dipasang:
+
+**1. Gerbang lama memeriksa kolom yang salah, dan itu tidak kelihatan.**
+`publik.periksa()` mencari `kebutuhan.model LIKE 'bps%'`. Kolom `model`
+menyimpan nama model LLM yang menilai — `claude-opus-5
+(pembaca+pemeriksa)` — bukan asal usul barisnya. Nilai berawalan `bps`
+tidak akan pernah muncul di sana. Gerbang itu hijau apa pun isi
+tabelnya, dan gerbang yang selalu hijau tidak terlihat berbeda dari
+gerbang yang lolos. Kolom `kebutuhan.asal` ditambahkan; 78 baris lama
+diisi `pra-bps` lewat migrasi sekali jalan, bukan lewat nilai bawaan —
+nilai bawaan akan diam-diam meloloskan baris masa depan yang lupa
+mencatat asalnya.
+
+**2. Uji negatif menemukan jalur yang tidak terpikir.** Sesudah
+`ekspor_csv`, `buat_antrian` dan `buat_dashboard` disaring, satu baris
+palsu ber-asal BPS dimasukkan ke database, seluruh keluaran dibangkitkan
+ulang, dan namanya dicari di berkas hasilnya. **Ketemu di
+`docs/index.html`** — panel denyut agen di `agen_status.py` menyusun
+kalimat "menilai ⟨nama⟩ — skor 100" dari tiga tabel sekaligus. Tiga
+modul yang diperiksa satu-satu tidak memuat kebocorannya.
+
+Pelajaran yang sudah mahal di proyek ini, berulang lagi: **yang
+diperiksa harus pengamatan, bukan daftar tempat yang kita ingat.**
+
+**3. Provenansi pernah ditebak dari tanggal.** `terap_nomor.py` menulis
+`sumber_discovery` hardcode `'nomor-4sep'`. Itu aman selama semua nomor
+berasal dari kolam yang sama, dan berhenti aman di menit nomor untuk
+kandidat BPS dipanen: barisnya akan tercatat ber-asal `nomor-4sep`,
+lolos penyaring, lalu terbit. `terap_nomor.py` dan `baca/siapkan.py`
+sekarang sama-sama minta `--asal`.
+
+Yang berdiri sekarang, tiga lapis:
+
+| lapis | berkas | yang diperiksa |
+|---|---|---|
+| penyaring | `publik.klausa()` | tiap query yang menulis berkas publik |
+| lint | `src/uji_gerbang.py` | query baru yang lupa memakai klausa — membaca KODE |
+| pengamatan | `src/publik.py` | nama ber-asal BPS di berkas yang SUDAH ditulis |
+
+Lint-nya perlu ada karena lapis pengamatan cuma menyalak kalau kebetulan
+ada baris terlarang di database saat itu. Selama belum ada satu pun lead
+BPS masuk, query baru yang lupa menyaring akan lolos diam-diam
+berbulan-bulan.
+
+Penyaring menutup waktu tidak tahu: baris ber-asal KOSONG ikut dibuang,
+sama seperti baris ber-asal BPS. Supaya baris begitu tidak lenyap dari
+antrian tanpa jejak, `publik.periksa()` menyalak terpisah untuk asal
+yang kosong, dan `terapkan.py` menolak menulis baris yang asalnya tidak
+tercatat.
 
 ### Bentuk datanya (untuk menimbang layak-tidaknya mengejar izin)
 
