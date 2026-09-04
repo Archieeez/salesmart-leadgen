@@ -82,7 +82,23 @@ POLA_INDUK = re.compile(
     r"tidak punya situs sendiri"
     r"|situs induk"
     r"|situs grup"
-    r"|dialihkan ke .{0,40}situs induk",
+    r"|dialihkan ke .{0,40}situs induk"
+    # Ditambahkan 4 Sep 2026 setelah dua kandidat lolos sebagai "milik
+    # sendiri" padahal catatan penemuannya menyangkalnya dengan kalimat
+    # yang tidak terduga:
+    #   CJ Feed and Care -> deheus.id, "Ini PEMILIK BARU (akuisisi
+    #     tuntas 2025), BUKAN SITUS PERUSAHAAN ITU SENDIRI"
+    #   Indoroti Prima Cemerlang -> mrbread.co.id, "SITUS MEREK, BUKAN
+    #     SITUS BADAN HUKUM; nama PT tidak tercantum di situs"
+    # Keduanya persis kasus yang aturan 4 Sep larang dinilai, dan
+    # keduanya ketahuan hanya karena saya membaca catatannya waktu
+    # memilih batch. Daftar frasa yang ditulis dari ingatan akan selalu
+    # ketinggalan cara baru orang menulis hal yang sama.
+    r"|bukan situs perusahaan itu sendiri"
+    r"|bukan situs (resmi )?(perusahaan|badan hukum)"
+    r"|situs merek, bukan situs"
+    r"|pemilik baru"
+    r"|nama PT tidak tercantum",
     re.I,
 )
 
