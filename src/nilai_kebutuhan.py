@@ -236,12 +236,57 @@ def muat_perusahaan(db_path: str) -> list[dict]:
 
 
 def rakit_dokumen(p: dict) -> str:
-    """Gabungkan halaman jadi satu dokumen, dengan batas ukuran."""
-    bagian, total = [], 0
+    """Gabungkan halaman jadi satu dokumen, dengan batas ukuran.
+
+    HALAMAN DIAMBIL BERGILIR PER JENIS, bukan berurutan.
+
+    KENAPA: sampai 4 Sep 2026 halaman diambil apa adanya dari query yang
+    ber-`ORDER BY nama_normal, jenis` — jadi urutannya ALFABETIS menurut
+    nama jenis, dan yang terbuang waktu pagu habis ditentukan abjad.
+
+    Akibatnya nyata dan terukur. Dokumen Mondelez memuat 7 dari 11
+    halaman, dan yang dibuang termasuk
+
+        https://www.mondelezinternational.com/indonesia
+
+    satu-satunya halaman yang paling mungkin memuat isi entitas
+    Indonesia — dibuang karena jenisnya `seed`, dan huruf s datang
+    setelah p. Sementara dua halaman `karier` memakan 12.000 karakter
+    penuh karena huruf k datang lebih dulu. Pembacanya lalu menyimpulkan
+    "tidak ada satu pun lokasi Indonesia disebut", dan kesimpulan itu
+    jujur terhadap dokumen yang ia terima.
+
+    Bergilir memperbaikinya tanpa memilih favorit: tiap JENIS dapat
+    halaman pertamanya lebih dulu, baru ada jenis yang boleh punya
+    halaman kedua. Cakupan jenis dijamin, dan yang dikorbankan waktu
+    sempit adalah halaman KEDUA dari satu jenis — bukan seluruh jenis.
+
+    Sengaja BUKAN daftar prioritas jenis yang ditulis tangan: rubrik
+    butuh keempat komponen, dan tiap komponen punya jenis halamannya
+    sendiri (karier -> field_sales, distribusi -> dist_model). Daftar
+    prioritas apa pun akan melaparkan satu komponen demi komponen lain.
+
+    `continue`, bukan `break`: satu halaman besar yang tidak muat tidak
+    boleh ikut membuang halaman kecil sesudahnya.
+    """
+    # Kelompokkan per jenis sambil menjaga urutan kemunculan aslinya.
+    per_jenis: dict[str, list] = {}
     for h in p["halaman"]:
+        per_jenis.setdefault(h["jenis"], []).append(h)
+
+    # Bergilir: putaran 1 ambil halaman ke-1 tiap jenis, putaran 2 ambil
+    # halaman ke-2 tiap jenis, dan seterusnya.
+    urut = []
+    for i in range(max((len(v) for v in per_jenis.values()), default=0)):
+        for jenis in per_jenis:
+            if i < len(per_jenis[jenis]):
+                urut.append(per_jenis[jenis][i])
+
+    bagian, total = [], 0
+    for h in urut:
         teks = (h["teks"] or "")[:MAKS_CHAR_PER_HALAMAN]
         if total + len(teks) > MAKS_CHAR_PER_PERUSAHAAN:
-            break
+            continue
         bagian.append(f"--- halaman [{h['jenis']}] {h['url']}\n{teks}")
         total += len(teks)
     return "\n\n".join(bagian)
