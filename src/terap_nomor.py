@@ -45,6 +45,7 @@ sys.path.insert(0, str(BASE / "src"))
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 import enrich_kontak as ek  # noqa: E402
+import publik  # noqa: E402
 
 DB = BASE / "data" / "leads.db"
 
@@ -168,6 +169,17 @@ def periksa(r):
     # tidak bisa membedakan pernyataan dari penyangkalan, dan dua nomor
     # yang benar sudah pernah ditolak karenanya (Madusari, Sarimelati,
     # 4 Sep 2026).
+    # `entitas_cocok` menjawab SATU pertanyaan: apakah nomor ini milik
+    # badan hukum yang dinilai? Ia BUKAN tempat menaruh keraguan lain.
+    #
+    # Batas itu ditegaskan agen pencari nomor Canning 4 Sep 2026, dan
+    # alasannya benar: ia ragu apakah nomor dari portal bursa kerja masih
+    # DIANGKAT, bukan apakah nomor itu MILIK Canning. Kalau keraguan
+    # kesegaran ikut dialirkan ke sini, kolom ini berhenti berarti "milik
+    # entitas lain" dan berubah jadi "saya agak ragu" -- dan gerbang ini
+    # kehilangan sinyal yang justru dibangun untuk menangkap kasus
+    # Bahtera Wiraniaga. Keraguan kesegaran tempatnya di `catatan`, dan
+    # panggilan pertama yang membuktikannya.
     cocok = (r.get("entitas_cocok") or "").strip().lower()
     if cocok:
         if cocok not in ("ya", "yes", "true", "1"):
@@ -235,6 +247,47 @@ def main():
             kosong += 1
         else:
             lolos.append((nama, r))
+
+    # SATU FOLDER = SATU ASAL, dan itu ditegakkan, bukan diingat.
+    #
+    # `--asal` berlaku untuk SELURUH folder. 4 Sep 2026 sebuah agen
+    # menyalin hasilnya ke DUA folder sekaligus supaya aman, dan itu
+    # justru membuat berkas Canning (asal riset-manual) duduk di folder
+    # batch BPS. Menjalankan ulang folder itu akan menulis Canning
+    # ber-asal 'bps-...' -- provenansi rusak, dan lead yang sah malah
+    # ikut DITAHAN dari dasbor publik oleh publik.klausa().
+    #
+    # Diperiksa terhadap asal yang SUDAH tercatat di database, karena itu
+    # fakta, bukan tebakan.
+    con = sqlite3.connect(f"file:{DB}?mode=ro", uri=True)
+    asal_lama = {}
+    for tabel, kolom in (("kebutuhan", "asal"),
+                         ("kontak_web", "sumber_discovery")):
+        try:
+            for n, a in con.execute(f"SELECT nama, {kolom} FROM {tabel}"):
+                if a:
+                    asal_lama.setdefault(n, a)
+        except sqlite3.Error:
+            pass
+    con.close()
+
+    # Yang dibandingkan bukan teks asalnya, melainkan AKIBATNYA: boleh
+    # terbit atau tidak. 'gapmmi' vs 'riset-manual' sama-sama boleh
+    # terbit dan tidak perlu diributkan; 'bps-...' vs apa pun yang lain
+    # mengubah apakah barisnya muncul di dasbor publik, dan itu yang
+    # harus berhenti.
+    bentrok = [(n, asal_lama[n]) for n, _ in lolos
+               if n in asal_lama
+               and publik.boleh_terbit(asal_lama[n]) is not
+                   publik.boleh_terbit(args.asal)]
+    if bentrok:
+        print(f"\nDITOLAK: --asal '{args.asal}' bentrok dengan asal yang "
+              "sudah tercatat:")
+        for n, a in bentrok:
+            print(f"  {n[:44]:<46} sudah ber-asal {a!r}")
+        print("\nSatu folder = satu asal. Pindahkan baris yang tidak "
+              "sekelompok ke foldernya sendiri.")
+        raise SystemExit(1)
 
     from collections import Counter
     kel = Counter((r.get("kelas") or "").lower() for _, r in lolos)
