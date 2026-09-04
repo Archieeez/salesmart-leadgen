@@ -68,6 +68,56 @@ ENTITAS_LAIN = re.compile(
     r"(milik\s+(pt|cv)\s|bukan\s+(pt|cv|nomor|milik)|entitas\s+(lain|berbeda)"
     r"|perusahaan\s+lain|induk(nya)?\b)", re.IGNORECASE)
 
+# Kata yang MEMBALIK arti frasa di atas.
+#
+# KENAPA PERLU, dan kenapa ini bukan kehati-hatian teoretis: 4 Sep 2026
+# gerbang ini menolak DUA nomor yang benar sekaligus. Agen Madusari
+# menulis "Nama perusahaan yang dicari benar-benar menempel pada nomor,
+# BUKAN ENTITAS LAIN", dan agen Sarimelati menulis "jadi BUKAN NOMOR
+# ENTITAS LAIN". Keduanya PENYANGKALAN — persis penegasan yang kita
+# inginkan — dan regex membacanya sebagai peringatan.
+#
+# Cacatnya ada di regex itu sendiri: alternatif `bukan\s+nomor` dipasang
+# untuk menangkap "bukan nomor Canning", tapi ia juga menangkap "bukan
+# nomor entitas lain" yang artinya kebalikannya.
+#
+# Ini pengulangan pelajaran Arta Boga: kalimat penyangkalan yang dibaca
+# regex sebagai pernyataan. Obat yang benar sudah dipakai di sana — field
+# TERSTRUKTUR — dan dipasang di bawah sebagai `entitas_cocok`. Penanganan
+# penyangkalan ini untuk baris yang tidak punya field itu.
+
+# Penyangkalnya sering berjarak satu-dua kata dari frasanya:
+# "bukan NOMOR entitas lain", "tidak ADA INDIKASI perusahaan lain".
+# Dibatasi dua kata supaya "bukan" yang berjarak satu kalimat tidak
+# ikut dianggap menyangkal.
+NEGASI = re.compile(r"(bukan|tidak|nol|tanpa)(\s+\w+){0,2}\W*$",
+                    re.IGNORECASE)
+
+# Jendela ke belakang untuk mencari penyangkalnya. Sempit: "bukan" yang
+# berjarak satu kalimat tidak sedang menyangkal frasa ini.
+JENDELA_NEGASI = 24
+
+
+def sebut_entitas_lain(teks: str) -> str | None:
+    """Return frasa yang menuduh nomor ini milik entitas lain, atau None.
+
+    Frasa yang DISANGKAL diabaikan. Frasa `bukan ...` yang ternyata
+    diikuti "entitas lain"/"perusahaan lain" juga diabaikan: itu
+    penyangkalan bertingkat, bukan tuduhan.
+    """
+    for m in ENTITAS_LAIN.finditer(teks or ""):
+        frasa = m.group(0)
+        sebelum = teks[max(0, m.start() - JENDELA_NEGASI):m.start()]
+        if NEGASI.search(sebelum):
+            continue
+        if frasa.lower().startswith(("bukan", "tidak")):
+            sesudah = teks[m.end():m.end() + 30].lower()
+            if "entitas lain" in sesudah or "perusahaan lain" in sesudah:
+                continue
+        return frasa
+    return None
+
+
 # Kelas yang dipakai agen -> kelas yang dipakai tabel kontak_web.
 # "kantor" dan "cabang" keduanya jalur langsung, tapi dibedakan supaya
 # antrian tidak menaikkan nomor cabang ke prioritas tertinggi -- pelajaran
@@ -110,9 +160,25 @@ def periksa(r):
     if not (r.get("bukti") or "").strip():
         salah.append("tidak ada bukti konteks yang dicatat")
 
-    catatan = (r.get("catatan") or "")
-    if ENTITAS_LAIN.search(catatan):
-        salah.append("agennya sendiri menandai nomor ini milik ENTITAS LAIN")
+    # FIELD TERSTRUKTUR LEBIH DULU, prosa cuma jalur warisan.
+    #
+    # Kalau agen mengisi `entitas_cocok`, itu yang BERDAULAT dan prosa
+    # tidak dibaca sama sekali — termasuk waktu isinya "ya". Persis
+    # rancangan `penanda` di rubrik, dan alasannya sama: regex prosa
+    # tidak bisa membedakan pernyataan dari penyangkalan, dan dua nomor
+    # yang benar sudah pernah ditolak karenanya (Madusari, Sarimelati,
+    # 4 Sep 2026).
+    cocok = (r.get("entitas_cocok") or "").strip().lower()
+    if cocok:
+        if cocok not in ("ya", "yes", "true", "1"):
+            salah.append("agen menyatakan entitas_cocok bukan 'ya': "
+                         f"{cocok!r}")
+        return salah
+
+    frasa = sebut_entitas_lain(r.get("catatan") or "")
+    if frasa:
+        salah.append("agennya sendiri menandai nomor ini milik ENTITAS "
+                     f"LAIN ({frasa!r})")
     return salah
 
 
