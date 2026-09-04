@@ -246,6 +246,56 @@ PENANDA_PUSAT = re.compile(
 # blok alamat, tapi tidak sampai menyeberang ke blok cabang berikutnya.
 JENDELA_PUSAT = 300
 
+# Penanda bahwa nomor di dekatnya LAYANAN KONSUMEN, bukan jalur kantor.
+#
+# KENAPA PERLU, dan kenapa bentuk nomornya tidak cukup: halaman kontak
+# sasa.co.id memuat
+#
+#   "Layanan Konsumen  Untuk pertanyaan terkait produk, saran, ...
+#    silakan menghubungi layanan konsumen kami.  +62 21 5616293
+#    Kantor Pusat Sasa Inti  Jl. Letjen S. Parman Kav. 32-34 ..."
+#
+# Nomornya landline Jakarta biasa -- tidak 1500, tidak 0804 -- jadi
+# klasifikasi_telepon() menyebutnya 'langsung'. Dan blok "Kantor Pusat"
+# di bawahnya justru TIDAK memuat nomor sama sekali. Hasilnya: nomor
+# layanan konsumen naik jadi jalur kantor prioritas tertinggi.
+#
+# Ini pengulangan pelajaran TIKI dan Pronas dengan wajah ketiga: yang
+# menentukan sebuah nomor itu APA bukan bentuknya, melainkan label yang
+# berdiri di depannya.
+PENANDA_LAYANAN = re.compile(
+    r"(layanan\s*(konsumen|pelanggan)|customer\s*(service|care)|"
+    r"call\s*center|pusat\s*layanan|hubungi\s*layanan)",
+    re.IGNORECASE,
+)
+
+# Lebih sempit daripada JENDELA_PUSAT. Judul "Layanan Konsumen" berdiri
+# tepat di atas nomornya; jendela lebar justru membuat satu judul di
+# puncak halaman menurunkan setiap nomor di bawahnya.
+JENDELA_LAYANAN = 200
+
+
+def _label_terdekat(teks: str, posisi: int) -> str | None:
+    """Label mana yang berdiri PALING DEKAT di depan sebuah nomor.
+
+    Bukan sekadar "ada atau tidak": satu halaman kontak sering memuat
+    kedua label, dan yang menentukan arti sebuah nomor adalah label
+    yang paling akhir sebelum ia -- bukan label mana pun yang kebetulan
+    ada di halaman itu.
+
+    Return 'pusat', 'layanan', atau None.
+    """
+    awal_p = max(0, posisi - JENDELA_PUSAT)
+    awal_l = max(0, posisi - JENDELA_LAYANAN)
+    cocok = []
+    for m in PENANDA_PUSAT.finditer(teks[awal_p:posisi]):
+        cocok.append((awal_p + m.end(), "pusat"))
+    for m in PENANDA_LAYANAN.finditer(teks[awal_l:posisi]):
+        cocok.append((awal_l + m.end(), "layanan"))
+    if not cocok:
+        return None
+    return max(cocok)[1]
+
 # Halaman yang isinya DAFTAR CABANG, bukan kontak perusahaan.
 PENANDA_DAFTAR_CABANG = re.compile(
     r"(kontak\s*cabang|daftar\s*cabang|cabang\s*kami|lokasi\s*cabang|"
@@ -311,9 +361,17 @@ def cari_kontak(website: str) -> dict:
 
         kelas_awal = [(n, klasifikasi_telepon(n, tipe), posisi)
                       for n, tipe, posisi in nomor]
-        pusat = {posisi: bool(PENANDA_PUSAT.search(
-            teks[max(0, posisi - JENDELA_PUSAT):posisi]))
-            for _, _, posisi in kelas_awal}
+        label = {posisi: _label_terdekat(teks, posisi)
+                 for _, _, posisi in kelas_awal}
+        pusat = {pos: (lab == "pusat") for pos, lab in label.items()}
+
+        # Landline yang berdiri di bawah judul layanan konsumen TURUN
+        # kelas sebelum apa pun dihitung -- termasuk sebelum jumlah
+        # "nomor kantor" dipakai menebak halaman daftar cabang.
+        kelas_awal = [
+            (n, "layanan" if (k == "langsung"
+                              and label[pos] == "layanan") else k, pos)
+            for n, k, pos in kelas_awal]
 
         # Daftar cabang? Nomornya sah semua, tapi tidak satu pun kantor
         # pusat -- dan yang muncul pertama cuma kebetulan. Halaman kontak
