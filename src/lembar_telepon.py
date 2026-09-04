@@ -179,7 +179,28 @@ h3{font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;
   font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--tinta3);
   line-height:1.8}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
-@media print{body{background:#fff}.lead{break-inside:avoid}}
+/* CETAK / SIMPAN-JADI-PDF.
+   Seluruh palet dipaksa balik ke terang, bukan cuma latar body. Kalau
+   hanya body yang dipaksa putih, peramban yang sedang bermode gelap
+   tetap memakai --tinta terang -> tulisan putih di atas kertas putih,
+   dan PDF-nya kosong. Ini jalur yang dipakai orang untuk mengirim
+   lembar ini lewat WhatsApp, jadi ia harus benar. */
+@media print{
+  :root{
+    --kertas:#FFFFFF; --panel:#FFFFFF; --tinta:#111111; --tinta2:#444444;
+    --tinta3:#666666; --garis:#CCCCCC; --garis2:#999999;
+    --aksen:#14503E; --aksen-lembut:#EDF4F1;
+    --hati:#7A4E0C; --hati-lembut:#F7F0E2;
+    --bps:#3D3859; --bps-lembut:#EEECF5;
+  }
+  body{background:#fff}
+  .lead{break-inside:avoid; border:1px solid #CCC}
+  .grup{break-before:auto}
+  /* Nomor tidak bisa diklik di kertas, jadi ia harus terbaca sebagai
+     angka biasa, bukan tombol. */
+  .tel{background:none;padding:0;font-size:1.15rem}
+  .kop{border-bottom:2px solid #111}
+}
 </style>"""
 
 
