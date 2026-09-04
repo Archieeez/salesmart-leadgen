@@ -56,6 +56,7 @@ PENULIS_PUBLIK = [
     "src/buat_antrian.py",
     "src/buat_dashboard.py",
     "src/agen_status.py",
+    "src/buat_agen.py",
 ]
 
 # jalan_agen tidak punya kolom asal sendiri; ia disaring lewat subquery

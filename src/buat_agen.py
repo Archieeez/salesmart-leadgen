@@ -43,6 +43,7 @@ sys.path.insert(0, str(BASE / "src"))
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 import rubrik  # noqa: E402
+import publik  # noqa: E402
 
 DB = BASE / "data" / "leads.db"
 KELUAR = BASE / "docs" / "agen.html"
@@ -68,7 +69,10 @@ def muat(con):
     for r in con.execute(
             "SELECT jalan, nama, pada, ditulis, pemeriksa_gagal, "
             "skor_pembaca, skor_akhir, bukti_kuat, komponen, koreksi, "
-            "telemetri FROM jalan_agen ORDER BY pada DESC, nama"):
+            "telemetri FROM jalan_agen WHERE nama IN "
+            "  (SELECT nama FROM kebutuhan WHERE "
+            f"   {publik.klausa('kebutuhan')}) "
+            "ORDER BY pada DESC, nama"):
         baris.append({
             "jalan": r[0], "nama": r[1], "pada": r[2], "ditulis": r[3],
             "pemeriksa_gagal": r[4], "skor_pembaca": r[5],
@@ -88,8 +92,10 @@ def jalur_pipa(con):
         except sqlite3.Error:
             return 0
 
-    bersih = hitung("SELECT count(*) FROM leads")
-    dibuang = hitung("SELECT count(*) FROM leads_arsip")
+    bersih = hitung("SELECT count(*) FROM leads "
+                    f"WHERE {publik.klausa('leads')}")
+    dibuang = hitung("SELECT count(*) FROM leads_arsip "
+                     f"WHERE {publik.klausa('leads_arsip')}")
 
     # Berapa perusahaan yang halaman buktinya benar-benar dipanen. Isinya
     # ada di bukti.db yang TIDAK dilacak git (teks mentah, bisa dipanen
@@ -119,10 +125,13 @@ def jalur_pipa(con):
              "halaman Tentang/Distribusi/Karier diambil sebagai bukti"))
     tahap += [
         ("Dinilai dari bukti situs", hitung(
-            "SELECT count(*) FROM kebutuhan"),
+            "SELECT count(*) FROM kebutuhan "
+            f"WHERE {publik.klausa('kebutuhan')}"),
          "empat komponen, tiap komponen wajib punya kutipan"),
         ("Bukti cukup untuk dipercaya", hitung(
-            "SELECT count(*) FROM kebutuhan WHERE status_nilai='nilai_tegak'"),
+            "SELECT count(*) FROM kebutuhan WHERE "
+            "status_nilai='nilai_tegak' AND "
+            f"{publik.klausa('kebutuhan')}"),
          "minimal 3 dari 4 kutipan lolos verifikasi mesin"),
     ]
     return tahap

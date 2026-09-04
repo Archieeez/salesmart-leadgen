@@ -7,7 +7,7 @@ dengan rubriknya.
 KENAPA MODUL INI ADA:
     Sampai 3 Sep 2026, kedua prompt itu DIKETIK ULANG setiap kali alur
     dijalankan. Artinya isinya bergantung pada ingatan orang yang
-    mengetiknya saat itu — termasuk apakah ia ingat menyebutkan keempat
+    mengetiknya saat itu — termasuk apakah ia ingat menyebutkan SEMUA
     jebakan, ingat melarang kutipan dari bagian petunjuk, dan ingat
     bahwa field `penolakan` sekarang boolean.
 
@@ -63,6 +63,13 @@ KEGAGALAN = [
      "(U+2028 jadi spasi biasa). Verifikasi mesin memakai regex meloloskannya; "
      "pencocokan HARFIAH menangkapnya.",
      "Ajinomoto"),
+    ("NAMA TEMPAT DI DALAM NAMA PRODUK",
+     'Penyaring pola menduga "5 provinsi, 13 kota" dari daftar RESEP: '
+     '"Nasi Bali", "Sop Ikan Khas Batam", "Gulai Rebung Asam Bengkulu '
+     'Pendap". Nama daerah di situs produsen makanan sering nama MASAKAN, '
+     "bukan lokasi operasi. Periksa kalimat tempat nama itu berdiri "
+     "sebelum memakainya untuk scale.",
+     "Sasa Inti, ditangkap pemeriksa 4 Sep 2026"),
 ]
 
 
@@ -184,7 +191,7 @@ YANG WAJIB DIPERIKSA, satu per satu:
 7. Field `penolakan`: apakah booleannya benar? Periksa sendiri, jangan
    percaya pembaca.
 
-JEBAKAN YANG SUDAH PERNAH MELOLOSKAN PENILAIAN SALAH — serang keempatnya:
+JEBAKAN YANG SUDAH PERNAH MELOLOSKAN PENILAIAN SALAH — serang SEMUANYA ({len(KEGAGALAN)} jebakan):
 {_jebakan()}
 
 LABEL YANG SAH:
