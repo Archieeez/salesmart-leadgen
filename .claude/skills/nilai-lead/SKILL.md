@@ -24,10 +24,22 @@ tapi GUGUR di `grep -F` lapis 2. Yang literal ternyata lebih benar.
 ### 1. Rakit bahan
 
 ```
-python src/baca/siapkan.py --nama "Nama A" "Nama B" --keluar kerja/<label>
+python src/baca/siapkan.py --nama "Nama A" "Nama B" \
+    --asal <asal-usul> --keluar kerja/<label>
 ```
 
 Pakai `<label>` yang menyebut isinya dan tanggalnya, misal `antrian-3sep`.
+
+`--asal` WAJIB dan menyebut dari kolam mana nama-nama itu diambil:
+`bps-direktori-manufaktur-2025`, `gapmmi`, `osm`, `riset-manual`. Ia
+ikut ke `daftar.json` dan dibaca `terapkan.py`, jadi tidak ada kesempatan
+lupa di langkah tulis — dua jam dan empat agen kemudian, orang yang
+menjalankannya sudah tidak ingat.
+
+Yang berawalan `bps` **tidak akan terbit** ke CSV maupun dasbor publik;
+itu ditegakkan `publik.klausa()`. Satu batch = satu asal; kalau
+kandidatnya campuran, jalankan `siapkan.py` dua kali.
+
 Nama perusahaan harus **persis** seperti di database. Kalau `siapkan.py`
 bilang "LEWAT (belum dipanen)", situsnya belum dipanen — jalankan
 `panen_bukti.py` dulu, jangan mengarang penilaian tanpa bukti.

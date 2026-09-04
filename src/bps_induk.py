@@ -186,6 +186,60 @@ def klasifikasi(rows):
     return hasil
 
 
+def tabrakan_pipeline(rows, db_leads: Path):
+    """Kandidat BPS yang SUDAH ada di pipeline dengan nama lain.
+
+    Direktori BPS memakai nama badan hukum lengkap; pipeline memakai
+    nama yang dipakai orang. Satu perusahaan bisa masuk dua kali:
+
+        BPS 'GARUDA FOOD PUTRA PUTRI JAYA, PT'   <- garudafood.com
+        pipeline 'Garudafood' (dari GAPMMI, 90)  <- garudafood.com
+
+    Kalau keduanya ditulis, orang sales melihat satu perusahaan dua
+    kali — dan yang lebih buruk, yang berasal-BPS TIDAK terbit sementara
+    yang lama terbit, jadi bacaan yang lebih baru justru yang tidak
+    terlihat.
+
+    DUA SYARAT, dan syarat kedua yang menyelamatkan:
+
+      nama    salah satu bentuk normalnya awalan yang lain
+      host    situsnya host yang sama
+
+    Nama saja tidak cukup, dan ini bukan kehati-hatian teoretis:
+    'SINAR MAS AGRO RESOURCES AND TECHNOLOGY TBK' berawalan sama dengan
+    'Sinar Mas' yang sudah ada di pipeline, padahal keduanya perusahaan
+    BERBEDA — yang satu konglomeratnya (sinarmas.com), yang satu anak
+    usaha agrinya (smart-tbk.com). Host-nya yang memisahkan mereka.
+
+    Ini pengulangan pelajaran yang sudah dibayar di publik.py: kemiripan
+    nama itu dugaan. Bedanya di sini dugaannya bisa dikuatkan pengamatan
+    lain yang murah — alamat situs yang sama-sama sudah kita simpan.
+    """
+    con = sqlite3.connect(f"file:{db_leads}?mode=ro", uri=True)
+    ada = {}
+    for tabel in ("kebutuhan", "kontak_web"):
+        try:
+            for nama, web in con.execute(
+                    f"SELECT nama, website FROM {tabel}"):
+                ada[kunci_nama(nama)] = (nama, host(web or ""))
+        except sqlite3.Error:
+            pass
+    con.close()
+
+    hasil = []
+    for nama, web, _ in rows:
+        kb, hb = kunci_nama(nama), host(web)
+        for ka, (na, ha) in ada.items():
+            if len(ka) < 8 or len(kb) < 8:
+                continue
+            if not (kb.startswith(ka) or ka.startswith(kb)):
+                continue
+            if hb and ha and hb == ha:
+                hasil.append((nama, na, hb))
+            break
+    return hasil
+
+
 def muat(db: Path):
     con = sqlite3.connect(f"file:{db}?mode=ro", uri=True)
     rows = con.execute(
@@ -222,11 +276,24 @@ def main():
     hasil = klasifikasi(rows)
     induk = {n for n, (s, _) in hasil.items() if not s}
 
+    # Tabrakan diperiksa HANYA untuk kandidat yang situsnya milik
+    # sendiri: yang bersitus induk sudah dibuang lebih dulu, dan
+    # memeriksanya cuma menghasilkan laporan yang sama dua kali.
+    milik_sendiri = [r for r in rows if r[0] not in induk]
+    tabrak = tabrakan_pipeline(milik_sendiri, BASE / "data" / "leads.db")
+    for nama, lama, h in tabrak:
+        induk.add(nama)
+        hasil[nama] = (False, f"sudah ada di pipeline sebagai '{lama}' "
+                              f"(host sama: {h}) — jangan ditulis dua kali")
+
     n_kembar = sum(1 for n in induk if "ejaan kembar" in hasil[n][1])
+    n_tabrak = len(tabrak)
     print(f"{len(rows)} kandidat BPS bersitus")
     print(f"  milik sendiri  {len(rows) - len(induk)}  <- boleh dibaca")
-    print(f"  situs induk    {len(induk) - n_kembar}  <- bukti milik entitas lain")
+    print(f"  situs induk    {len(induk) - n_kembar - n_tabrak}"
+          "  <- bukti milik entitas lain")
     print(f"  ejaan kembar   {n_kembar}  <- entitas yang sama, dibaca sekali")
+    print(f"  sudah ada      {n_tabrak}  <- ada di pipeline dengan nama lain")
     print()
     for nama in sorted(induk):
         print(f"  x  {nama[:44]:<46} {hasil[nama][1][:60]}")
