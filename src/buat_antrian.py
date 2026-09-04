@@ -118,9 +118,18 @@ def tabel_ada(con, nama):
         (nama,)).fetchone())
 
 
-def kumpulkan():
-    """Gabungkan penilaian bukti, hasil enrichment kontak, dan riset manual."""
+def kumpulkan(saring: bool = True):
+    """Gabungkan penilaian bukti, hasil enrichment kontak, dan riset manual.
+
+    `saring=False` mematikan penyaring terbit -- HANYA untuk halaman kerja
+    lokal yang tidak pernah masuk git. Lihat bangun().
+    """
     con = sqlite3.connect(DB)
+
+    # Satu titik keputusan untuk ketiga tabel. Waktu saring=False,
+    # nilainya "1=1": halamannya memuat semua, termasuk lead berasal-BPS.
+    kl = {tabel: (publik.klausa(tabel) if saring else "1=1")
+          for tabel in ("leads", "kontak_web", "kebutuhan")}
 
     # DIKUNCI PADA nama_normal, BUKAN nama.
     #
@@ -138,14 +147,14 @@ def kumpulkan():
                   for r in con.execute(
                       "SELECT nama_normal, telepon, kelas_kontak "
                       "FROM kontak_web "
-                      f"WHERE {publik.klausa('kontak_web')}")}
+                      f"WHERE {kl['kontak_web']}")}
 
     # Telepon lead OSM ikut dipakai - sebagian sudah punya nomor dari OSM
     # sendiri, jadi sayang kalau tidak dimanfaatkan.
     osm = {}
     for n, p in con.execute(
             "SELECT name, phone FROM leads WHERE phone IS NOT NULL "
-            f"AND phone != '' AND {publik.klausa('leads')}"):
+            f"AND phone != '' AND {kl['leads']}"):
         osm.setdefault(n.strip(), p)
 
     # Nomor dari riset manual (companies_prioritas.csv). Dipakai sebagai
@@ -171,7 +180,7 @@ def kumpulkan():
                 "SELECT nama, dist_model, field_sales, scale, industry_fit, "
                 "need_score, rincian, catatan, bukti_kuat, status_nilai, "
                 "penanda, nama_normal FROM kebutuhan "
-                f"WHERE {publik.klausa('kebutuhan')}"):
+                f"WHERE {kl['kebutuhan']}"):
             nama = r[0]
             dinilai.add(nama)
             rincian = json.loads(r[6])
@@ -373,9 +382,27 @@ def blok_agen():
     return "\n".join(h)
 
 
-def bangun(pantau: bool = False) -> int:
-    """Tulis docs/index.html sekali. Return jumlah lead."""
-    lead = kumpulkan()
+def bangun(pantau: bool = False, keluar: Path = None,
+           saring: bool = True) -> int:
+    """Tulis halaman antrian sekali. Return jumlah lead.
+
+    KENAPA ADA MODE TIDAK TERSARING:
+        docs/index.html terbit publik lewat GitHub Pages, jadi lead
+        berasal-BPS dibuang darinya oleh publik.klausa(). Itu benar --
+        tapi berarti lead yang baru dinilai TIDAK TERLIHAT SIAPA PUN,
+        termasuk orang yang harus meneleponnya. Kepatuhan yang membuat
+        hasil kerjanya lenyap bukan kepatuhan, itu kehilangan.
+
+        Jadi ada halaman kedua: kerja/antrian-lengkap.html, isinya
+        SEMUA lead, ditulis ke folder yang di-gitignore dan tidak pernah
+        terbit. Satu halaman untuk publik, satu untuk yang bekerja.
+    """
+    keluar = keluar or OUT
+    if not saring and "docs" in keluar.parts:
+        raise SystemExit(
+            "DITOLAK: halaman tidak tersaring tidak boleh ditulis ke docs/ "
+            "-- folder itu terbit lewat GitHub Pages.")
+    lead = kumpulkan(saring)
     if not lead:
         print("Belum ada lead yang bisa ditampilkan.")
         print("Jalankan panen_bukti.py lalu nilai_kebutuhan.py dulu.")
@@ -400,8 +427,13 @@ def bangun(pantau: bool = False) -> int:
             + segar + HEAD + "</head><body>\n" + isi
             + "<script>\n" + js + "\n</script>\n</body></html>")
 
-    OUT.parent.mkdir(exist_ok=True)
-    OUT.write_text(html, encoding="utf-8")
+    keluar.parent.mkdir(parents=True, exist_ok=True)
+    keluar.write_text(html, encoding="utf-8")
+
+    if not saring:
+        print("Antrian LENGKAP (termasuk lead berasal-BPS) -> " + str(keluar))
+        print("Halaman ini TIDAK terbit dan tidak dilacak git.")
+        return len(lead)
 
     # Pengalih di alamat lama. Ditulis ulang tiap kali supaya tidak ada
     # file yatim yang harus diurus tangan.
@@ -439,11 +471,19 @@ def main():
     ap.add_argument("--segar", action="store_true",
                     help="bangkitkan sekali dengan penyegaran otomatis; "
                          "untuk dipakai pemantau di luar")
+    ap.add_argument("--lengkap", action="store_true",
+                    help="tulis kerja/antrian-lengkap.html berisi SEMUA lead "
+                         "termasuk yang berasal-BPS; tidak terbit, tidak "
+                         "dilacak git")
     args = ap.parse_args()
 
     if not DB.exists():
         print("Database tidak ada: " + str(DB))
         raise SystemExit(1)
+
+    if args.lengkap:
+        bangun(False, BASE / "kerja" / "antrian-lengkap.html", saring=False)
+        return
 
     if args.segar:
         bangun(True)
