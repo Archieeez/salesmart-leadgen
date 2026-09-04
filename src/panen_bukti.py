@@ -59,14 +59,31 @@ JENIS_HALAMAN = {
     "bisnis": re.compile(
         r"(bisnis|business|our\s*business|unit\s*usaha|divisi|division|"
         r"operasi|operation|what\s*we\s*do)", re.I),
+    # Halaman DAFTAR TITIK ikut masuk di sini, dan sengaja lewat frasa
+    # yang sempit. Ditambahkan 4 Sep 2026 setelah dua pemeriksa melapor
+    # halaman yang mereka butuhkan ada di navigasi tapi tidak terpanen:
+    # "LOCATION OF OPERATION" (Malindo, muncul 7x di nav) dan
+    # "Store Location" (Akur Pratama). Daftar titik adalah bukti scale
+    # paling keras — rubrik menyebutnya sah secara eksplisit.
+    #
+    # Percobaan pertama memakai KATA TUNGGAL (lokasi|location|pabrik|
+    # plant|facilit) dan menghasilkan 39 kecocokan yang sebagian besar
+    # salah: halaman colocation ISP, service center locator Epson,
+    # sertifikasi Musim Mas, lini-bisnis/energi Waskita. Frasa sempit
+    # menghasilkan 4, dan keempatnya benar. Pola yang menangkap terlalu
+    # banyak membuat panen jadi berisik dan situs orang jadi korbannya.
     "distribusi": re.compile(
         r"(distribusi|distribution|jaringan|network|distributor|logistik|"
-        r"logistics|supply\s*chain|rantai\s*pasok|cabang|branch|depo)", re.I),
+        r"logistics|supply\s*chain|rantai\s*pasok|cabang|branch|depo|"
+        r"store\s*locator|where\s*to\s*buy|daftar\s*(gerai|outlet|toko)|"
+        r"lokasi\s*(gerai|outlet|toko|operasi)|location\s*of\s*operation|"
+        r"our\s*locations?)", re.I),
     "produk": re.compile(
         r"(produk|product|brand|merek|portfolio|portofolio)", re.I),
     "karier": re.compile(
         r"(karier|karir|career|lowongan|vacanc|job|rekrutmen|recruitment|"
-        r"bergabung|join\s*us|work\s*with\s*us)", re.I),
+        r"bergabung|join\s*us|work\s*with\s*us|peluang\s*(kerja|karir))",
+        re.I),
 }
 
 # Berapa halaman per jenis yang diambil. Ditahan kecil supaya sopan —
@@ -159,9 +176,21 @@ def panen_situs(website: str) -> list[dict]:
 
     def ambil(url: str, jenis: str) -> bool:
         url = url.split("#")[0]
-        if url in diperiksa:
+        # Garis miring di ujung dibuang SEBELUM dedup. Situs menautkan
+        # halaman yang sama dengan dan tanpa "/" di menu yang berbeda,
+        # dan tanpa langkah ini keduanya dianggap dua halaman: Malindo
+        # menyimpan location-of-operation DUA KALI, lalu career-2 dua
+        # kali. MAKS_PER_JENIS = 2, jadi kedua jatah `distribusi`-nya
+        # habis untuk satu halaman yang sama — dan halaman distribusi
+        # kedua yang sungguhan tidak pernah diambil.
+        #
+        # Yang diminta ke server tetap URL asli; yang dinormalkan hanya
+        # kunci pembandingnya, supaya kita tidak menebak-nebak bentuk
+        # URL yang dianggap benar oleh situs orang.
+        kunci = url.rstrip("/") or url
+        if kunci in diperiksa:
             return False
-        diperiksa.add(url)
+        diperiksa.add(kunci)
 
         if not boleh_ambil(url):
             log(f"robots melarang {url}")
@@ -218,7 +247,7 @@ def panen_situs(website: str) -> list[dict]:
         log(f"homepage cuma {jml_link} link — coba pintu alternatif")
         for path in PINTU_ALTERNATIF:
             url = urljoin(root, path)
-            if url in diperiksa or not boleh_ambil(url):
+            if (url.rstrip("/") or url) in diperiksa or not boleh_ambil(url):
                 continue
             h, _ = ambil_html(url)
             jeda_halaman(url)
